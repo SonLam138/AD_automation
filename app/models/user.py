@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class CreateUserRequest(BaseModel):
@@ -28,3 +28,7 @@ class CreateUserRequest(BaseModel):
     description: str | None = None
 
     dry_run: bool = False
+    
+    groups: list[str] = Field(
+        default_factory=list
+    )

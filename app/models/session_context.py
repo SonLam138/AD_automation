@@ -1,6 +1,8 @@
 from pydantic import BaseModel
 from datetime import datetime
 
+from typing import Optional
+
 
 class SessionRequested(BaseModel):
 
@@ -71,3 +73,14 @@ class AuditSessionContext(BaseModel):
     failure_code: str | None = None
 
     failure_reason: str | None = None
+    
+    # =====================================================
+    # Approval Information
+    # =====================================================
+    approved_by: Optional[str] = None
+
+    approved_name: Optional[str] = None
+
+    approval_type: Optional[str] = None
+
+    approval_time: Optional[datetime] = None
