@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 from fastapi import Depends
 
-from app.auth.rbac import require_role
+from app.auth.rbac import require_group
 
 router = APIRouter()
 
@@ -18,8 +18,8 @@ def health():
 def admin_only(
 
     current_user = Depends(
-        require_role(
-            ["ad.admin"]
+        require_group(
+            ["Administrators"]
         )
     )
 ):

@@ -11,9 +11,9 @@ users = {
         "role": "ad.admin"
     },
 
-    "operator01": {
-        "username": "operator01",
-        "full_name": "AD Operator",
+    "approver": {
+        "username": "approver",
+        "full_name": "Onboard Approver",
         "password_hash": bcrypt.hashpw(
             "123456".encode(),
             bcrypt.gensalt()

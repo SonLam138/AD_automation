@@ -2,7 +2,7 @@ from fastapi import APIRouter
 from fastapi import Depends
 from fastapi import HTTPException
 
-from app.auth.rbac import require_role
+from app.auth.rbac import require_group
 
 from app.adapters.ldap_adapter import LDAPAdapter
 
@@ -30,10 +30,8 @@ def get_user(
     sam_account_name: str,
 
     current_user=Depends(
-        require_role([
-            "ad.viewer",
-            "ad.operator",
-            "ad.admin"
+        require_group([
+            "Domain Users",
         ])
     )
 ):

@@ -6,25 +6,29 @@ from app.auth.dependencies import (
 )
 
 
-def require_role(
-    allowed_roles: list[str]
+def require_group(
+    allowed_groups: list[str]
 ):
 
-    def role_checker(
+    def checker(
         current_user=Depends(
             get_current_user
         )
     ):
 
-        role = current_user.get("role")
+        user_groups = current_user.get(
+            "groups",
+            []
+        )
 
-        if role not in allowed_roles:
+        for group in allowed_groups:
 
-            raise HTTPException(
-                status_code=403,
-                detail="Permission denied"
-            )
+            if group in user_groups:
+                return current_user
 
-        return current_user
+        raise HTTPException(
+            status_code=403,
+            detail="Permission denied"
+        )
 
-    return role_checker
+    return checker

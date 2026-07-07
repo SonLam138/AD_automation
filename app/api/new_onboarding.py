@@ -2,7 +2,7 @@ from fastapi import APIRouter
 from fastapi import Depends
 from fastapi import HTTPException
 
-from app.auth.rbac import require_role
+from app.auth.rbac import require_group
 
 from app.models.user import (
     CreateUserRequest
@@ -52,10 +52,9 @@ def new_onboarding(
     request: CreateUserRequest,
 
     current_user=Depends(
-        require_role(
+        require_group(
             [
-                "ad.operator",
-                "ad.admin"
+                "Onboard_Execute"
             ]
         )
     )

@@ -81,6 +81,8 @@ class AuditSessionContext(BaseModel):
 
     approved_name: Optional[str] = None
 
+    edited_by_approver: bool = False
+
     approval_type: Optional[str] = None
 
     approval_time: Optional[datetime] = None

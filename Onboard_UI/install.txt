@@ -1,0 +1,20 @@
+Tạo file schemas/auth.py
+tạo file services/auth_service.py
+
+React + Axios
+npm create vite@latest Onboard_UI_React -- --template react
+Chọn :  React
+        JavaScript
+
+chạy server : npm run dev
+npm install axios
+
+Tạo file src/api/axiosClient.js --> Sau này toàn bộ React sẽ gọi backend qua file này
+
+
+
+Authentication build:
+
+config file
+ad_service.py
+

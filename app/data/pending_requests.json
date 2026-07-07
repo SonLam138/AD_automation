@@ -17,8 +17,7 @@
       "display_name": "Truong Thao Nguyen (K.KHCN-SGN)",
       "target_ou_dn": "OU=HO,DC=Automate,DC=com,DC=vn",
       "groups": [
-        "khcn.saigon",
-        "office.e3"
+        "CN=Test_grp,OU=HO,DC=Automate,DC=com,DC=vn"
       ]
     }
   },
@@ -40,29 +39,7 @@
       "display_name": "Truong Thao Nguyen (K.KHCN-SGN)",
       "target_ou_dn": "OU=HO,DC=Automate,DC=com,DC=vn",
       "groups": [
-        "khcn.saigon"
-      ]
-    }
-  },
-  {
-    "request_id": "REQ-DCF2B8EC",
-    "status": "PENDING",
-    "created_at": "2026-07-05T11:32:43.886996",
-    "hr_input": {
-      "employee_id": "00017019",
-      "full_name": "Truong Thao Nguyen",
-      "birth_date": "2003-11-01",
-      "title": "Chuyen vien khach hang uu tien",
-      "position": "Chuyen vien khach hang uu tien",
-      "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
-      "division": "Khoi Khach Hang Ca Nhan"
-    },
-    "resolved_result": {
-      "sam_account_name": "nguyentt",
-      "display_name": "Truong Thao Nguyen (K.KHCN-SGN)",
-      "target_ou_dn": "OU=HO,DC=Automate,DC=com,DC=vn",
-      "groups": [
-        "khcn.saigon"
+        "CN=Test_grp,OU=HO,DC=Automate,DC=com,DC=vn"
       ]
     }
   }

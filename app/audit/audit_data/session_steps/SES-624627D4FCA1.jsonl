@@ -1,0 +1,1 @@
+{"session_id": "SES-624627D4FCA1", "step_name": "add_user", "status": "FAILED", "started_at": "2026-07-07T06:59:44.252156", "completed_at": "2026-07-07T06:59:44.254586", "duration_ms": 2, "error_code": "32", "error_message": "noSuchObject", "details": null}

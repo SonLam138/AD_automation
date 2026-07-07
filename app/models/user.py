@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field
-
+from typing import Optional
 
 class CreateUserRequest(BaseModel):
 
@@ -27,7 +27,9 @@ class CreateUserRequest(BaseModel):
 
     description: str | None = None
 
-    dry_run: bool = False
+    edited_by_approver: bool = False
+
+    dry_run: bool = True
     
     groups: list[str] = Field(
         default_factory=list

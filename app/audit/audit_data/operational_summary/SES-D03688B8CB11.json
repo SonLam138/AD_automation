@@ -1,0 +1,46 @@
+{
+  "session_id": "SES-D03688B8CB11",
+  "capability": "new_onboarding",
+  "result": "SUCCESS",
+  "summary_category": "SUCCESS",
+  "execution_time_ms": 34,
+  "generated_at": "2026-07-07T06:18:16.116627",
+  "business_summary": {
+    "case_type": "NEW_ONBOARDING",
+    "employee_id": "00017019",
+    "employee_name": "Truong Thao Nguyen",
+    "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+    "title": "Chuyen vien khach hang uu tien",
+    "requested_account": "nguyennm",
+    "actual_account": "nguyennm",
+    "requested_display_name": "Truong Thao Nguyen",
+    "actual_display_name": "Truong Thao Nguyen 12",
+    "requested_ou": "OU=HO,DC=Automate,DC=com,DC=vn",
+    "actual_ou": "OU=HO,DC=Automate,DC=com,DC=vn",
+    "result": "SUCCESS",
+    "added_groups": [
+      "CN=Test_grp,OU=HO,DC=Automate,DC=com,DC=vn"
+    ],
+    "failed_groups": []
+  },
+  "technical_summary": {
+    "total_steps": 5,
+    "success_steps": 5,
+    "failed_steps": 0,
+    "executed_steps": [
+      "add_user",
+      "set_password",
+      "enable_user",
+      "force_change_password",
+      "add_groups"
+    ],
+    "last_completed_step": "add_groups",
+    "failure_stage": null,
+    "execution_time_ms": 34
+  },
+  "error_summary": null,
+  "approved_by": "onboard.approve",
+  "approved_name": "onboard.approve",
+  "approval_type": "MANUAL",
+  "approval_time": "2026-07-07T06:18:16.081783"
+}

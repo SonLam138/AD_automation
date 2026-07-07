@@ -1,7 +1,7 @@
 import jwt
 from datetime import datetime, timedelta
 
-SECRET_KEY = "ad-capability-secret"
+SECRET_KEY = "ad-capability-secret-automation platform"
 
 ALGORITHM = "HS256"
 
@@ -12,13 +12,14 @@ def create_access_token(user):
 
     payload = {
         "sub": user["username"],
-        "name": user["full_name"],
-        "role": user["role"],
+        "name": user["display_name"],
+        "groups": user["groups"],
+
         "iat": datetime.utcnow(),
         "exp": datetime.utcnow()
-               + timedelta(
+            + timedelta(
                     minutes=ACCESS_TOKEN_EXPIRE_MINUTES
-                 )
+                )
     }
 
     return jwt.encode(

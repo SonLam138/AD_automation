@@ -1,0 +1,38 @@
+{
+  "schema_version": "1.0",
+  "session_id": "SES-001775999688",
+  "event_category": "IDENTITY",
+  "event_type": "NEW_ONBOARDING",
+  "source_type": "HR_EMAIL_SVD",
+  "source_id": null,
+  "capability": "new_onboarding",
+  "status": "RUNNING",
+  "started_at": "2026-07-07T07:35:42.144845",
+  "completed_at": null,
+  "duration_ms": null,
+  "requested": {
+    "employee_id": "00017019",
+    "first_name": "Truong Thao",
+    "last_name": "Nguyen",
+    "full_name": "Truong Thao Nguyen",
+    "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+    "title": "Chuyen vien khach hang uu tien",
+    "account": "NguyenNNMM",
+    "display_name": "Truong Thao Nguyen",
+    "ou": "OU=HO,DC=Automate,DC=com,DC=vn"
+  },
+  "actual": {
+    "account": null,
+    "display_name": null,
+    "user_dn": null,
+    "ou_dn": null
+  },
+  "failure_stage": null,
+  "failure_code": null,
+  "failure_reason": null,
+  "approved_by": "onboard.approve",
+  "approved_name": "onboard.approve",
+  "edited_by_approver": true,
+  "approval_type": "MANUAL",
+  "approval_time": "2026-07-07T07:35:42.144845"
+}

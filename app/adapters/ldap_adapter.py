@@ -17,6 +17,7 @@ from app.models.session_context import (
 from app.core.session import generate_session_id
 
 from app.config import LDAP_BASE_DN
+from app.audit.audit_writer import save_context, save_step, save_summary
 
 class LDAPAdapter:
 
@@ -117,6 +118,8 @@ class LDAPAdapter:
 
             approved_name=approved_name,
 
+            edited_by_approver=request.edited_by_approver,
+
             approval_type=approval_type,
 
             approval_time=started_at,
@@ -180,6 +183,10 @@ class LDAPAdapter:
                 session_context.failure_reason = str(
                     failure_reason
                 )
+        
+        save_context(
+            session_context
+        )
 
         def append_step(
             step_name,
@@ -457,7 +464,7 @@ class LDAPAdapter:
             )
 
             summary = build_and_print_summary()
-
+            save_step(session_steps[-1])
             return {
 
                 "success":
@@ -497,6 +504,7 @@ class LDAPAdapter:
             step_started=step_started,
             step_completed=step_completed
         )
+        save_step(session_steps[-1])
 
         # =====================================================
         # STEP : set_password
@@ -538,7 +546,7 @@ class LDAPAdapter:
             )
 
             summary = build_and_print_summary()
-
+            save_step(session_steps[-1])
             return {
 
                 "success":
@@ -578,6 +586,7 @@ class LDAPAdapter:
             step_started=step_started,
             step_completed=step_completed
         )
+        save_step(session_steps[-1])
 
         # =====================================================
         # STEP : enable_user
@@ -618,7 +627,7 @@ class LDAPAdapter:
             )
 
             summary = build_and_print_summary()
-
+            save_step(session_steps[-1])
             return {
 
                 "success":
@@ -658,6 +667,7 @@ class LDAPAdapter:
             step_started=step_started,
             step_completed=step_completed
         )
+        save_step(session_steps[-1])
 
         # =====================================================
         # STEP : force_change_password
@@ -698,7 +708,7 @@ class LDAPAdapter:
             )
 
             summary = build_and_print_summary()
-
+            save_step(session_steps[-1])
             return {
 
                 "success":
@@ -738,6 +748,7 @@ class LDAPAdapter:
             step_started=step_started,
             step_completed=step_completed
         )
+        save_step(session_steps[-1])
 
         # =====================================================
         # STEP : Add user to groups
@@ -797,7 +808,7 @@ class LDAPAdapter:
             )
 
             summary = build_and_print_summary()
-
+            save_step(session_steps[-1])
             return {
                 "success": False,
 
@@ -844,6 +855,7 @@ class LDAPAdapter:
                 }
             )
         )
+        save_step(session_steps[-1])
 
 
 
@@ -856,7 +868,7 @@ class LDAPAdapter:
         )
 
         summary = build_and_print_summary()
-
+        save_summary(summary)
         return {
 
             "success":

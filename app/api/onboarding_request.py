@@ -84,4 +84,3 @@ def reject_request(
         "request_id": request_id,
         "action": "REJECTED"
     }
-

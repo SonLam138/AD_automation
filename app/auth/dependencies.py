@@ -17,20 +17,23 @@ security = HTTPBearer()
 def get_current_user(
     credentials: HTTPAuthorizationCredentials = Depends(security)
 ):
-
+    print("TOKEN =", credentials.credentials)
     try:
 
         token = credentials.credentials
-
+        print("TOKEN =", token)
         payload = jwt.decode(
             token,
             SECRET_KEY,
             algorithms=[ALGORITHM]
         )
-
+        print("PAYLOAD =", payload)
         return payload
 
-    except Exception:
+    
+    except Exception as e:
+
+        print("JWT ERROR =", repr(e))
 
         raise HTTPException(
             status_code=401,
