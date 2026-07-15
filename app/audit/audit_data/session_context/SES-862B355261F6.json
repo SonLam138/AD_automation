@@ -1,0 +1,38 @@
+{
+  "schema_version": "1.0",
+  "session_id": "SES-862B355261F6",
+  "event_category": "IDENTITY",
+  "event_type": "NEW_ONBOARDING",
+  "source_type": "HR_EMAIL_SVD",
+  "source_id": null,
+  "capability": "new_onboarding",
+  "status": "RUNNING",
+  "started_at": "2026-07-15T08:45:46.311998",
+  "completed_at": null,
+  "duration_ms": null,
+  "requested": {
+    "employee_id": "00017013",
+    "first_name": "Tran Huu",
+    "last_name": "Tuan",
+    "full_name": "Tran Huu Tuan",
+    "department": "PVcomBank Tan Binh - Phong Khach Hang Ca Nhan - Bo Phan Khach Hang Doanh Nghiep Sieu Nho",
+    "title": "Chuyen vien khach hang doanh nghiep sieu nho",
+    "account": "TuanTH",
+    "display_name": "Tran Huu Tuan",
+    "ou": "OU=PVCB Tan Binh,OU=CN-Azure,OU=Chi nhanh,DC=pvcb,DC=vn"
+  },
+  "actual": {
+    "account": null,
+    "display_name": null,
+    "user_dn": null,
+    "ou_dn": null
+  },
+  "failure_stage": null,
+  "failure_code": null,
+  "failure_reason": null,
+  "approved_by": "Onboard.approve",
+  "approved_name": "Onboard.approve",
+  "edited_by_approver": false,
+  "approval_type": "MANUAL",
+  "approval_time": "2026-07-15T08:45:46.311998"
+}

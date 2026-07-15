@@ -1,0 +1,38 @@
+{
+  "schema_version": "1.0",
+  "session_id": "SES-A05F4A6B480E",
+  "event_category": "IDENTITY",
+  "event_type": "NEW_ONBOARDING",
+  "source_type": "HR_EMAIL_SVD",
+  "source_id": null,
+  "capability": "new_onboarding",
+  "status": "RUNNING",
+  "started_at": "2026-07-15T11:24:40.028266",
+  "completed_at": null,
+  "duration_ms": null,
+  "requested": {
+    "employee_id": "00017014",
+    "first_name": "Nguyen Thi Hong",
+    "last_name": "Van",
+    "full_name": "Nguyen Thi Hong Van",
+    "department": "Phong Khach Hang Ca Nhan",
+    "title": "Chuyen vien Khach hang Ca nhan",
+    "account": "VanNTH",
+    "display_name": "Nguyen Thi Hong Van",
+    "ou": "OU=PVCB Khanh Hoa,OU=CN-Azure,OU=Chi nhanh,DC=automate,DC=com,DC=vn"
+  },
+  "actual": {
+    "account": null,
+    "display_name": null,
+    "user_dn": null,
+    "ou_dn": null
+  },
+  "failure_stage": null,
+  "failure_code": null,
+  "failure_reason": null,
+  "approved_by": "onboard.approve",
+  "approved_name": "onboard.approve",
+  "edited_by_approver": false,
+  "approval_type": "MANUAL",
+  "approval_time": "2026-07-15T11:24:40.028266"
+}

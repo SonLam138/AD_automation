@@ -1,45 +1,183 @@
 [
   {
-    "request_id": "REQ-F3DDEED2",
+    "request_id": "REQ-5F7A150A",
     "status": "PENDING",
-    "created_at": "2026-07-05T10:04:44.791124",
+    "created_at": "2026-07-15T14:10:15.761924",
     "hr_input": {
-      "employee_id": "00017019",
-      "full_name": "Truong Thao Nguyen",
-      "birth_date": "2003-11-01",
-      "title": "Chuyen vien khach hang uu tien",
-      "position": "Chuyen vien khach hang uu tien",
-      "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+      "employee_id": "00017014",
+      "full_name": "Nguyen Thi Hong Van",
+      "birth_date": "30/05/1998",
+      "title": "Chuyen vien Khach hang Ca nhan",
+      "position": "Chuyen vien Khach hang Ca nhan",
+      "department": "Bo Phan Khach Hang Ca Nhan - Khoi KHCN - Test",
       "division": "Khoi Khach Hang Ca Nhan"
     },
     "resolved_result": {
-      "sam_account_name": "nguyentn",
-      "display_name": "Truong Thao Nguyen (K.KHCN-SGN)",
-      "target_ou_dn": "OU=HO,DC=Automate,DC=com,DC=vn",
+      "firstname": "Van",
+      "lastname": "Nguyen Thi Hong",
+      "sam_account_name": "VanNTH",
+      "display_name": "Nguyen Thi Hong Van (K.KHCN-KHA)",
+      "title": "Chuyen vien Khach hang Ca nhan",
+      "department": "Phong Khach Hang Ca Nhan",
+      "target_ou_dn": "OU=PVCB Khanh Hoa,OU=CN-Azure,OU=Chi nhanh,DC=automate,DC=com,DC=vn",
       "groups": [
-        "CN=Test_grp,OU=HO,DC=Automate,DC=com,DC=vn"
+        "khanhhoa.khcn"
       ]
     }
   },
   {
-    "request_id": "REQ-F9A6B064",
+    "request_id": "REQ-4DC370BA",
     "status": "PENDING",
-    "created_at": "2026-07-05T11:31:59.700644",
+    "created_at": "2026-07-15T14:21:44.495181",
     "hr_input": {
-      "employee_id": "00017019",
-      "full_name": "Truong Thao Nguyen",
-      "birth_date": "2003-11-01",
-      "title": "Chuyen vien khach hang uu tien",
-      "position": "Chuyen vien khach hang uu tien",
-      "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+      "employee_id": "00017012",
+      "full_name": "Tran Thi Mai Thi",
+      "birth_date": "05/12/1997",
+      "title": "Kiem soat vien",
+      "position": "Kiem soat vien",
+      "department": "Phong Dich Vu Khach Hang",
       "division": "Khoi Khach Hang Ca Nhan"
     },
     "resolved_result": {
-      "sam_account_name": "nguyentt",
-      "display_name": "Truong Thao Nguyen (K.KHCN-SGN)",
-      "target_ou_dn": "OU=HO,DC=Automate,DC=com,DC=vn",
+      "firstname": "Thi",
+      "lastname": "Tran Thi Mai",
+      "sam_account_name": "ThiTTM",
+      "display_name": "Tran Thi Mai Thi (K.KHCN-KHI)",
+      "title": "Kiem soat vien",
+      "department": "Phong Dich Vu Khach Hang",
+      "target_ou_dn": "OU=PVCB Khanh Hoi,OU=CN-Azure,OU=Chi nhanh,DC=automate,DC=com,DC=vn",
       "groups": [
-        "CN=Test_grp,OU=HO,DC=Automate,DC=com,DC=vn"
+        "khanhhoi.dvkh"
+      ]
+    }
+  },
+  {
+    "request_id": "REQ-1680245B",
+    "status": "PENDING",
+    "created_at": "2026-07-15T14:21:44.566944",
+    "hr_input": {
+      "employee_id": "00017013",
+      "full_name": "Tran Huu Tuan",
+      "birth_date": "17/02/1994",
+      "title": "Chuyen vien khach hang doanh nghiep sieu nho",
+      "position": "CV khach hang doanh nghiep sieu nho",
+      "department": "Bo Phan Khach Hang Doanh Nghiep Sieu Nho",
+      "division": "Khoi Khach Hang Ca Nhan"
+    },
+    "resolved_result": {
+      "firstname": "Tuan",
+      "lastname": "Tran Huu",
+      "sam_account_name": "TuanTH",
+      "display_name": "Tran Huu Tuan (K.KHCN-TAB)",
+      "title": "Chuyen vien khach hang doanh nghiep sieu nho",
+      "department": "Phong Khach Hang Ca Nhan",
+      "target_ou_dn": "OU=PVCB Tan Binh,OU=CN-Azure,OU=Chi nhanh,DC=automate,DC=com,DC=vn",
+      "groups": [
+        "tanbinh.khcn"
+      ]
+    }
+  },
+  {
+    "request_id": "REQ-D187424E",
+    "status": "PENDING",
+    "created_at": "2026-07-15T14:25:00.715428",
+    "hr_input": {
+      "employee_id": "00017000",
+      "full_name": "Tran Vo Hoang Chau",
+      "birth_date": "28/06/2000",
+      "title": "Chuyen vien Khach hang Ca nhan",
+      "position": "Chuyen vien Khach hang Ca nhan",
+      "department": "Bo Phan Khach Hang Ca Nhan",
+      "division": "Khoi Khach Hang Ca Nhan"
+    },
+    "resolved_result": {
+      "firstname": "Chau",
+      "lastname": "Tran Vo Hoang",
+      "sam_account_name": "ChauTVH",
+      "display_name": "Tran Vo Hoang Chau (K.KHCN-KHA)",
+      "title": "Chuyen vien Khach hang Ca nhan",
+      "department": "Phong Khach Hang Ca Nhan",
+      "target_ou_dn": "OU=PVCB Khanh Hoa,OU=CN-Azure,OU=Chi nhanh,DC=automate,DC=com,DC=vn",
+      "groups": [
+        "khanhhoa.khcn"
+      ]
+    }
+  },
+  {
+    "request_id": "REQ-EF8EEABC",
+    "status": "PENDING",
+    "created_at": "2026-07-15T14:35:14.299084",
+    "hr_input": {
+      "employee_id": "00017003",
+      "full_name": "Vu Kim Van Tuyen",
+      "birth_date": "23/09/2000",
+      "title": "Giao dich vien",
+      "position": "Giao dich vien",
+      "department": "Phong Dich Vu Khach Hang",
+      "division": "Khoi Khach Hang Ca Nhan"
+    },
+    "resolved_result": {
+      "firstname": "Tuyen",
+      "lastname": "Vu Kim Van",
+      "sam_account_name": "TuyenVKV",
+      "display_name": "Vu Kim Van Tuyen (K.KHCN-TDC)",
+      "title": "Giao dich vien",
+      "department": "Phong Dich Vu Khach Hang",
+      "target_ou_dn": "OU=PVCB Thu Duc,OU=CN-Azure,OU=Chi nhanh,DC=automate,DC=com,DC=vn",
+      "groups": [
+        "thuduc.dvkh"
+      ]
+    }
+  },
+  {
+    "request_id": "REQ-B9277BCB",
+    "status": "PENDING",
+    "created_at": "2026-07-15T15:19:26.517143",
+    "hr_input": {
+      "employee_id": "00017004",
+      "full_name": "Le Xuan Duong",
+      "birth_date": "24/05/2001",
+      "title": "Chuyen vien Khach hang Ca nhan",
+      "position": "Chuyen vien Khach hang Ca nhan",
+      "department": "PVcomBank Dong Tho - Phong Khach Hang Ca Nhan - Bo Phan Khach Hang Ca Nhan",
+      "division": "Khoi Khach Hang Ca Nhan"
+    },
+    "resolved_result": {
+      "firstname": "Duong",
+      "lastname": "Le Xuan",
+      "sam_account_name": "DuongLX",
+      "display_name": "Le Xuan Duong (K.KHCN)",
+      "title": "Chuyen vien Khach hang Ca nhan",
+      "department": "Phong Khach Hang Ca Nhan",
+      "target_ou_dn": "",
+      "groups": [
+        "dongtho.khcn"
+      ]
+    }
+  },
+  {
+    "request_id": "REQ-AA383B2B",
+    "status": "PENDING",
+    "created_at": "2026-07-15T15:21:07.430050",
+    "hr_input": {
+      "employee_id": "00017003",
+      "full_name": "Vu Kim Van Tuyen",
+      "birth_date": "23/09/2000",
+      "title": "Giao dich vien",
+      "position": "Giao dich vien",
+      "department": "PVcomBank Thu Duc - Phong Dich Vu Khach Hang",
+      "division": "Khoi Khach Hang Ca Nhan"
+    },
+    "resolved_result": {
+      "firstname": "Tuyen",
+      "lastname": "Vu Kim Van",
+      "sam_account_name": "TuyenVKV",
+      "display_name": "Vu Kim Van Tuyen (K.KHCN-TDC)",
+      "title": "Giao dich vien",
+      "department": "Phong Dich Vu Khach Hang",
+      "target_ou_dn": "OU=PVCB Thu Duc,OU=CN-Azure,OU=Chi nhanh,DC=automate,DC=com,DC=vn",
+      "groups": [
+        "thuduc.dvkh"
       ]
     }
   }

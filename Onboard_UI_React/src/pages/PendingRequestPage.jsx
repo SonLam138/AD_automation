@@ -166,7 +166,7 @@ const handleReject = async () => {
                     hr.title,
 
                 department:
-                    hr.department,
+                    resolver.department,
 
                 description:
                     `Onboard ${hr.employee_id}`,
