@@ -315,7 +315,6 @@ class LDAPAdapter:
             "DISPLAY_NAME:",
             request.display_name
         )
-
         # =====================================================
         # DRY RUN
         # =====================================================
@@ -384,7 +383,7 @@ class LDAPAdapter:
                 "session_summary":
                     summary
             }
-
+        
         attributes = {
 
             "cn":
@@ -423,10 +422,6 @@ class LDAPAdapter:
         # =====================================================
 
         step_started = datetime.utcnow()
-        print("USER_DN =", user_dn)
-
-        for k, v in attributes.items():
-            print(k, "=", v)
         result = self.connection.add(
             dn=user_dn,
             object_class=[
@@ -436,11 +431,6 @@ class LDAPAdapter:
                 "user"
             ],
             attributes=attributes
-        )
-
-        print(
-            "ADD USER:",
-            self.connection.result
         )
 
         step_completed = datetime.utcnow()
