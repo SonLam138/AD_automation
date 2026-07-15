@@ -1,0 +1,1555 @@
+{
+  "metadata": {
+    "version": "1.0.0",
+    "generated_at": "2026-07-07T23:58:05",
+    "source_file": "D:\\AD Automation\\app\\resolver\\knowledge\\source\\mapping.xlsx",
+    "builder_version": "1.0.0",
+    "description": "Knowledge catalog for AD Automation Resolver. Generated from Division/Branch, Department, Group, Branch code, and OU mapping file."
+  },
+  "organization": {
+    "divisions": [
+      {
+        "name": "Ban Marketing va truyen thong",
+        "branch_code": "HO",
+        "departments": [
+          {
+            "name": "Phong marketing"
+          },
+          {
+            "name": "Phong thuong hieu"
+          },
+          {
+            "name": "Phong truyen thong"
+          }
+        ]
+      },
+      {
+        "name": "Khoi Cong nghe thong tin",
+        "branch_code": "HO",
+        "departments": [
+          {
+            "name": "Phong quan tri kien truc cong nghe"
+          },
+          {
+            "name": "Phong quan ly danh muc va tai chinh cong nghe"
+          },
+          {
+            "name": "Phong phat trien tich hop so va he sinh thai so"
+          },
+          {
+            "name": "Phong so hoa hanh trinh khach hang"
+          },
+          {
+            "name": "Phong so hoa van hanh"
+          },
+          {
+            "name": "Phong phat trien he thong loi"
+          },
+          {
+            "name": "Phong phan tich nghiep vu va kiem thu"
+          },
+          {
+            "name": "Phong dich vu giam sat 247"
+          },
+          {
+            "name": "Phong van hanh ha tang va dien toan dam may"
+          },
+          {
+            "name": "Phong van hanh he thong loi va kenh ky thuat so"
+          },
+          {
+            "name": "Phong van hanh ung dung noi bo va tich hop"
+          },
+          {
+            "name": "Phong van hanh co so du lieu"
+          },
+          {
+            "name": "Phong dich vu cong nghe thong tin"
+          },
+          {
+            "name": "Phong phat trien giai phap du lieu va tri tue nhan tao"
+          },
+          {
+            "name": "Phong quan tri du lieu"
+          },
+          {
+            "name": "Phong tich hop du lieu"
+          },
+          {
+            "name": "Phong quan ly rui ro va kiem soat tuan thu"
+          },
+          {
+            "name": "Phong dam bao an toan thong tin"
+          },
+          {
+            "name": "Phong giam sat va ung pho su co an toan thong tin"
+          }
+        ]
+      },
+      {
+        "name": "Khoi Khach hang ca nhan",
+        "branch_code": "HO",
+        "departments": [
+          {
+            "name": "Phong canh bao va quan ly no"
+          },
+          {
+            "name": "Phong chinh sach va san pham cho vay the chap"
+          },
+          {
+            "name": "Phong chinh sach va san pham cho vay tin chap"
+          },
+          {
+            "name": "Phong khach hang ngan sach nha nuoc va dich vu tra luong"
+          },
+          {
+            "name": "Phong doi tac phi ngan hang"
+          },
+          {
+            "name": "Phong hop tac bao hiem"
+          },
+          {
+            "name": "Phong chinh sach va san pham cho vay ho kinh doanh - doanh nghiep sieu nho"
+          },
+          {
+            "name": "Phong ho tro kinh doanh va phat trien mang luoi"
+          },
+          {
+            "name": "Phong ke hoach va quan ly hieu qua kinh doanh"
+          },
+          {
+            "name": "Phong ngan hang uu tien"
+          },
+          {
+            "name": "Phong huy dong von va ngan hang dien tu"
+          },
+          {
+            "name": "Phong thuc day kinh doanh"
+          },
+          {
+            "name": "Phong phat trien nang luc dich vu va van hanh"
+          },
+          {
+            "name": "Phong ke toan phat hanh va thanh toan the"
+          },
+          {
+            "name": "Phong giam sat va xu ly rui ro the"
+          },
+          {
+            "name": "Phong phat hanh the va dich vu the"
+          },
+          {
+            "name": "Phong phat trien san pham va doi tac the"
+          }
+        ]
+      },
+      {
+        "name": "Khoi Khach hang doanh nghiep",
+        "branch_code": "HO",
+        "departments": [
+          {
+            "name": "Phong canh bao va quan ly no"
+          },
+          {
+            "name": "Phong nghien cuu va phat trien san pham tin dung"
+          },
+          {
+            "name": "Phong quan ly kinh doanh"
+          },
+          {
+            "name": "Phong ngan hang giao dich"
+          },
+          {
+            "name": "Phong doi tac"
+          },
+          {
+            "name": "Phong thuc day ban"
+          },
+          {
+            "name": "Trung tam phat trien khach hang doanh nghiep mien bac"
+          },
+          {
+            "name": "Trung tam phat trien khach hang doanh nghiep mien nam"
+          },
+          {
+            "name": "Phong giai phap tin dung"
+          },
+          {
+            "name": "Phong giai phap kinh doanh so"
+          },
+          {
+            "name": "Nhom phat trien khach hang chien luoc"
+          }
+        ]
+      },
+      {
+        "name": "Khoi Khach hang doanh nghiep lon",
+        "branch_code": "HO",
+        "departments": [
+          {
+            "name": "Phong ho tro va thuc day kinh doanh"
+          },
+          {
+            "name": "Phong thu xep von va tu van tai chinh"
+          },
+          {
+            "name": "Phong khach hang chien luoc"
+          },
+          {
+            "name": "Vung kinh doanh phia bac"
+          },
+          {
+            "name": "Vung kinh doanh phia nam"
+          }
+        ]
+      },
+      {
+        "name": "Khoi Nguon von va thi truong tai chinh",
+        "branch_code": "HO",
+        "departments": [
+          {
+            "name": "Phong dinh che tai chinh"
+          },
+          {
+            "name": "Phong giay to co gia"
+          },
+          {
+            "name": "Phong khach hang"
+          },
+          {
+            "name": "Phong kinh doanh ngoai hoi va san pham phai sinh"
+          },
+          {
+            "name": "Phong kinh doanh trai phieu chinh phu"
+          },
+          {
+            "name": "Phong kinh doanh von lien ngan hang"
+          }
+        ]
+      },
+      {
+        "name": "Khoi Phap che",
+        "branch_code": "HO",
+        "departments": [
+          {
+            "name": "Phong phap ly tin dung va dau tu"
+          },
+          {
+            "name": "Phong phap ly tin dung va phi tin dung"
+          },
+          {
+            "name": "Phong phong chong rua tien va gian lan"
+          }
+        ]
+      },
+      {
+        "name": "Khoi Tuan thu",
+        "branch_code": "HO",
+        "departments": [
+          {
+            "name": "Phong xu ly vi pham"
+          },
+          {
+            "name": "Phong kiem soat tuan thu hoi so"
+          },
+          {
+            "name": "Phong kiem soat tuan thu mien nam"
+          },
+          {
+            "name": "Phong giam sat giao dich bat thuong"
+          }
+        ]
+      },
+      {
+        "name": "Khoi Quan ly va tai cau truc tai san",
+        "branch_code": "HO",
+        "departments": [
+          {
+            "name": "Phong quan ly khach hang"
+          },
+          {
+            "name": "Phong tai cau truc khoan no"
+          },
+          {
+            "name": "Phong quan ly tai san"
+          },
+          {
+            "name": "Phong ke hoach va quan ly hieu suat"
+          },
+          {
+            "name": "Phong quan ly khach hang khong tai san bao dam"
+          },
+          {
+            "name": "Phong quan ly khach hang ca nhan mien bac"
+          },
+          {
+            "name": "Phong quan ly khach hang ca nhan dong nam bo"
+          },
+          {
+            "name": "Phong quan ly khach hang doanh nghiep mien bac"
+          },
+          {
+            "name": "Phong quan ly khach hang doanh nghiep mien dong nam bo"
+          },
+          {
+            "name": "Phong quan ly khach hang tay nam bo"
+          },
+          {
+            "name": "Phong quan ly khach hang mien trung"
+          }
+        ]
+      },
+      {
+        "name": "Khoi Quan tri nguon nhan luc",
+        "branch_code": "HO",
+        "departments": [
+          {
+            "name": "Phong chien luoc va chinh sach nhan su"
+          },
+          {
+            "name": "Phong dich vu nhan su"
+          },
+          {
+            "name": "Trung tam dao tao va phat trien nhan luc"
+          }
+        ]
+      },
+      {
+        "name": "Khoi Quan tri rui ro",
+        "branch_code": "HO",
+        "departments": [
+          {
+            "name": "Phong chinh sach rui ro tin dung"
+          },
+          {
+            "name": "Phong quan tri rui ro hoat dong"
+          },
+          {
+            "name": "Phong quan tri rui ro thi truong va thanh khoan"
+          },
+          {
+            "name": "Phong quan tri rui ro tin dung va quan ly danh muc"
+          }
+        ]
+      },
+      {
+        "name": "Khoi Tai chinh ke toan",
+        "branch_code": "HO",
+        "departments": [
+          {
+            "name": "Phong ke hoach va quan ly ket qua cong viec"
+          },
+          {
+            "name": "Phong ke toan noi bo"
+          },
+          {
+            "name": "Phong ke toan tong hop"
+          },
+          {
+            "name": "Phong quan ly tai san no co"
+          },
+          {
+            "name": "Phong quan ly xay dung co ban"
+          },
+          {
+            "name": "Phong quan tri du lieu va he thong tai chinh"
+          }
+        ]
+      },
+      {
+        "name": "Khoi Tai tham va phe duyet",
+        "branch_code": "HO",
+        "departments": [
+          {
+            "name": "Phong chinh sach va giam sat tai san bao dam"
+          },
+          {
+            "name": "Phong dinh gia hoi so"
+          },
+          {
+            "name": "Phong dinh gia dong nam bo"
+          },
+          {
+            "name": "Phong dinh gia tay nam bo"
+          },
+          {
+            "name": "Phong dinh gia mien trung"
+          },
+          {
+            "name": "Phong tham dinh tin dung khach hang ca nhan khong tai san dam bao"
+          },
+          {
+            "name": "Phong thuc dia"
+          },
+          {
+            "name": "Phong thu ky phe duyet"
+          },
+          {
+            "name": "Phong tai tham dinh khach hang doanh nghiep hoi so"
+          },
+          {
+            "name": "Phong tai tham dinh khach hang doanh nghiep mien nam"
+          },
+          {
+            "name": "Phong tai tham dinh khach hang doanh nghiep mien trung"
+          }
+        ]
+      },
+      {
+        "name": "Khoi Van hanh",
+        "branch_code": "HO",
+        "departments": [
+          {
+            "name": "Phong dich vu va cham soc khach hang 247"
+          },
+          {
+            "name": "Phong dich vu tai khoan"
+          },
+          {
+            "name": "Phong kho quy"
+          },
+          {
+            "name": "Phong quan ly chat luong dich vu"
+          },
+          {
+            "name": "Phong ho tro he thong"
+          },
+          {
+            "name": "Phong kiem soat tin dung khach hang ca nhan"
+          },
+          {
+            "name": "Phong kiem soat tin dung khach hang doanh nghiep"
+          },
+          {
+            "name": "Phong chuyen tien quoc te"
+          },
+          {
+            "name": "Phong dich vu tai tro thuong mai"
+          },
+          {
+            "name": "Phong thanh toan trong nuoc va tac nghiep nguon von"
+          },
+          {
+            "name": "Phong tong hop va van hanh ngan hang so"
+          }
+        ]
+      },
+      {
+        "name": "Kiem toan noi bo",
+        "branch_code": "HO",
+        "departments": [
+          {
+            "name": "Kiem toan noi bo"
+          }
+        ]
+      },
+      {
+        "name": "Khoi Van phong",
+        "branch_code": "HO",
+        "departments": [
+          {
+            "name": "Phong hanh chinh tong hop"
+          },
+          {
+            "name": "Phong mua sam va dau tu xay dung"
+          },
+          {
+            "name": "Phong van thu luu tru"
+          }
+        ]
+      },
+      {
+        "name": "Van phong dang uy va cac to chuc doan the",
+        "branch_code": "HO",
+        "departments": [
+          {
+            "name": "Van phong dang uy"
+          },
+          {
+            "name": "Van phong cong doan"
+          },
+          {
+            "name": "Van phong doan thanh nien"
+          },
+          {
+            "name": "Quy hoc bong thap sang niem tin"
+          }
+        ]
+      },
+      {
+        "name": "Van phong quan ly du an",
+        "branch_code": "HO",
+        "departments": [
+          {
+            "name": "Phong chien luoc kinh doanh va nghien cuu phat trien giai phap chuoi"
+          },
+          {
+            "name": "Phong quan ly chuyen doi"
+          }
+        ]
+      },
+      {
+        "name": "Ngan hang so",
+        "branch_code": "HO",
+        "departments": [
+          {
+            "name": "Phong phat trien san pham dich vu ngan hang so"
+          },
+          {
+            "name": "Phong phat trien kenh ngan hang so"
+          },
+          {
+            "name": "Phong quan ly trai nghiem khach hang ngan hang so"
+          },
+          {
+            "name": "Phong ky thuat ngan hang so"
+          },
+          {
+            "name": "Phong chien luoc va phan tich du lieu ngan hang so"
+          },
+          {
+            "name": "Phong ho tro kinh doanh va quan ly hieu suat ngan hang so"
+          }
+        ]
+      }
+    ],
+    "branches": [
+      {
+        "name": "PVcomBank An Giang",
+        "code": "AGG",
+        "departments": [
+          {
+            "name": "Phong dich vu khach hang"
+          },
+          {
+            "name": "Bo phan kho quy chi nhanh"
+          },
+          {
+            "name": "Phong khach hang ca nhan"
+          },
+          {
+            "name": "Bo phan khach hang uu tien"
+          },
+          {
+            "name": "Phong khach hang doanh nghiep"
+          },
+          {
+            "name": "Bo phan hành chinh tong hop"
+          },
+          {
+            "name": "Bo phan ke toan"
+          },
+          {
+            "name": "Bo phan kiem soat tin dung"
+          }
+        ]
+      },
+      {
+        "name": "PVcomBank An Phu",
+        "code": "APU",
+        "departments": [
+          {
+            "name": "Phong dich vu khach hang"
+          },
+          {
+            "name": "Phong khach hang ca nhan"
+          },
+          {
+            "name": "Bo phan khach hang uu tien"
+          }
+        ]
+      },
+      {
+        "name": "PVcomBank Ba Chieu",
+        "code": "BCU",
+        "departments": [
+          {
+            "name": "Phong dich vu khach hang"
+          },
+          {
+            "name": "Phong khach hang ca nhan"
+          }
+        ]
+      },
+      {
+        "name": "PVcomBank Ba Muoi Thang Tu",
+        "code": "BMTT",
+        "departments": [
+          {
+            "name": "Phong dich vu khach hang"
+          },
+          {
+            "name": "Phong khach hang ca nhan"
+          },
+          {
+            "name": "Bo phan khach hang uu tien"
+          }
+        ]
+      },
+      {
+        "name": "PVcomBank Bac Ninh",
+        "code": "BNH",
+        "departments": [
+          {
+            "name": "Phong dich vu khach hang"
+          },
+          {
+            "name": "Bo phan kho quy chi nhanh"
+          },
+          {
+            "name": "Phong khach hang ca nhan"
+          },
+          {
+            "name": "Bo phan khach hang uu tien"
+          },
+          {
+            "name": "Phong khach hang doanh nghiep"
+          },
+          {
+            "name": "Bo phan hành chinh tong hop"
+          },
+          {
+            "name": "Bo phan ke toan"
+          },
+          {
+            "name": "Bo phan kiem soat tin dung"
+          }
+        ]
+      },
+      {
+        "name": "PVcomBank Bien Hoa",
+        "code": "BHA",
+        "departments": [
+          {
+            "name": "Phong dich vu khach hang"
+          },
+          {
+            "name": "Phong khach hang ca nhan"
+          },
+          {
+            "name": "Bo phan khach hang uu tien"
+          }
+        ]
+      },
+      {
+        "name": "PVcomBank Binh Chanh",
+        "code": "BCH",
+        "departments": [
+          {
+            "name": "Phong dich vu khach hang"
+          },
+          {
+            "name": "Phong khach hang ca nhan"
+          }
+        ]
+      },
+      {
+        "name": "PVcomBank Binh Duong",
+        "code": "BDG",
+        "departments": [
+          {
+            "name": "Phong dich vu khach hang"
+          },
+          {
+            "name": "Bo phan kho quy chi nhanh"
+          },
+          {
+            "name": "Phong khach hang ca nhan"
+          },
+          {
+            "name": "Bo phan khach hang uu tien"
+          },
+          {
+            "name": "Phong khach hang doanh nghiep"
+          },
+          {
+            "name": "Bo phan hành chinh tong hop"
+          },
+          {
+            "name": "Bo phan ke toan"
+          },
+          {
+            "name": "Bo phan kiem soat tin dung"
+          }
+        ]
+      },
+      {
+        "name": "PVcomBank Binh Tay",
+        "code": "BTY",
+        "departments": [
+          {
+            "name": "Phong dich vu khach hang"
+          },
+          {
+            "name": "Phong khach hang ca nhan"
+          },
+          {
+            "name": "Bo phan khach hang uu tien"
+          }
+        ]
+      },
+      {
+        "name": "PVcomBank Binh Thanh",
+        "code": "BTH",
+        "departments": [
+          {
+            "name": "Phong dich vu khach hang"
+          },
+          {
+            "name": "Phong khach hang ca nhan"
+          },
+          {
+            "name": "Bo phan khach hang uu tien"
+          }
+        ]
+      },
+      {
+        "name": "PVcomBank Bui Thi Xuan",
+        "code": "BTX",
+        "departments": [
+          {
+            "name": "Phong dich vu khach hang"
+          },
+          {
+            "name": "Phong khach hang ca nhan"
+          },
+          {
+            "name": "Bo phan khach hang uu tien"
+          }
+        ]
+      },
+      {
+        "name": "PVcomBank Ca Mau",
+        "code": "CMU",
+        "departments": [
+          {
+            "name": "Phong dich vu khach hang"
+          },
+          {
+            "name": "Bo phan kho quy chi nhanh"
+          },
+          {
+            "name": "Phong khach hang ca nhan"
+          },
+          {
+            "name": "Bo phan khach hang uu tien"
+          },
+          {
+            "name": "Bo phan hành chinh tong hop"
+          },
+          {
+            "name": "Bo phan ke toan"
+          },
+          {
+            "name": "Bo phan kiem soat tin dung"
+          }
+        ]
+      },
+      {
+        "name": "PVcomBank Can Tho",
+        "code": "CTO",
+        "departments": [
+          {
+            "name": "Phong dich vu khach hang"
+          },
+          {
+            "name": "Bo phan kho quy chi nhanh"
+          },
+          {
+            "name": "Phong khach hang ca nhan"
+          },
+          {
+            "name": "Bo phan khach hang uu tien"
+          },
+          {
+            "name": "Phong khach hang doanh nghiep"
+          },
+          {
+            "name": "Bo phan hành chinh tong hop"
+          },
+          {
+            "name": "Bo phan ke toan"
+          },
+          {
+            "name": "Bo phan kiem soat tin dung"
+          }
+        ]
+      },
+      {
+        "name": "PVcomBank Chau Van Liem",
+        "code": "CVL",
+        "departments": [
+          {
+            "name": "Phong dich vu khach hang"
+          },
+          {
+            "name": "Phong khach hang ca nhan"
+          },
+          {
+            "name": "Bo phan khach hang uu tien"
+          }
+        ]
+      },
+      {
+        "name": "PVcomBank Co Do",
+        "code": "CDO",
+        "departments": [
+          {
+            "name": "Phong dich vu khach hang"
+          },
+          {
+            "name": "Phong khach hang ca nhan"
+          }
+        ]
+      },
+      {
+        "name": "PVcomBank Cong Hoa",
+        "code": "CHA",
+        "departments": [
+          {
+            "name": "Phong dich vu khach hang"
+          },
+          {
+            "name": "Phong khach hang ca nhan"
+          }
+        ]
+      },
+      {
+        "name": "PVcomBank Da Lat",
+        "code": "DLT",
+        "departments": [
+          {
+            "name": "Phong dich vu khach hang"
+          },
+          {
+            "name": "Bo phan kho quy chi nhanh"
+          }
+        ]
+      }
+    ]
+  },
+  "resource_catalog": {
+    "ou_catalog": [
+      {
+        "ou_dn": "OU=Ban Marcom,OU=HO-Azure,OU=Hoi so chinh,DC=pvcb,DC=vn",
+        "ou_label": "Ban Marcom"
+      },
+      {
+        "ou_dn": "OU=Khoi CNTT,OU=HO-Azure,OU=Hoi so chinh,DC=pvcb,DC=vn",
+        "ou_label": "Khoi CNTT"
+      },
+      {
+        "ou_dn": "OU=Khoi KH ca nhan,OU=HO-Azure,OU=Hoi so chinh,DC=pvcb,DC=vn",
+        "ou_label": "Khoi KH ca nhan"
+      },
+      {
+        "ou_dn": "OU=Khoi KH Doanh nghiep,OU=HO-Azure,OU=Hoi so chinh,DC=pvcb,DC=vn",
+        "ou_label": "Khoi KH Doanh nghiep"
+      },
+      {
+        "ou_dn": "OU=Khoi KH Doanh nghiep lon,OU=HO-Azure,OU=Hoi so chinh,DC=pvcb,DC=vn",
+        "ou_label": "Khoi KH Doanh nghiep lon"
+      },
+      {
+        "ou_dn": "OU=Khoi Nguon von va thi truong tai chinh,OU=HO-Azure,OU=Hoi so chinh,DC=pvcb,DC=vn",
+        "ou_label": "Khoi Nguon von va thi truong tai chinh"
+      },
+      {
+        "ou_dn": "OU=Khoi Phap che,OU=HO-Azure,OU=Hoi so chinh,DC=pvcb,DC=vn",
+        "ou_label": "Khoi Phap che"
+      },
+      {
+        "ou_dn": "OU=Khoi Tuan thu,OU=HO-Azure,OU=Hoi so chinh,DC=pvcb,DC=vn",
+        "ou_label": "Khoi Tuan thu"
+      },
+      {
+        "ou_dn": "OU=Khoi Quan ly va tai cau truc tai san,OU=HO-Azure,OU=Hoi so chinh,DC=pvcb,DC=vn",
+        "ou_label": "Khoi Quan ly va tai cau truc tai san"
+      },
+      {
+        "ou_dn": "OU=K.Van hanh,OU=HO-Azure,OU=Hoi so chinh,DC=pvcb,DC=vn",
+        "ou_label": "K.Van hanh"
+      },
+      {
+        "ou_dn": "OU=Khoi Quan tri rui ro,OU=HO-Azure,OU=Hoi so chinh,DC=pvcb,DC=vn",
+        "ou_label": "Khoi Quan tri rui ro"
+      },
+      {
+        "ou_dn": "OU=Khoi Tai chinh ke toan,OU=HO-Azure,OU=Hoi so chinh,DC=pvcb,DC=vn",
+        "ou_label": "Khoi Tai chinh ke toan"
+      },
+      {
+        "ou_dn": "OU=Khoi tai tham va phe duyet,OU=HO-Azure,OU=Hoi so chinh,DC=pvcb,DC=vn",
+        "ou_label": "Khoi tai tham va phe duyet"
+      },
+      {
+        "ou_dn": "OU=Khoi Van phong,OU=HO-Azure,OU=Hoi so chinh,DC=pvcb,DC=vn",
+        "ou_label": "Khoi Van phong"
+      },
+      {
+        "ou_dn": "OU=PVCB An Giang,OU=CN-Azure,OU=Chi nhanh,DC=pvcb,DC=vn",
+        "ou_label": "PVCB An Giang"
+      },
+      {
+        "ou_dn": "OU=PVCB An Phu,OU=CN-Azure,OU=Chi nhanh,DC=pvcb,DC=vn",
+        "ou_label": "PVCB An Phu"
+      },
+      {
+        "ou_dn": "OU=PVCB Ba Chieu,OU=CN-Azure,OU=Chi nhanh,DC=pvcb,DC=vn",
+        "ou_label": "PVCB Ba Chieu"
+      },
+      {
+        "ou_dn": "OU=PVCB Ba Muoi Thang Tu,OU=CN-Azure,OU=Chi nhanh,DC=pvcb,DC=vn",
+        "ou_label": "PVCB Ba Muoi Thang Tu"
+      },
+      {
+        "ou_dn": "OU=PVCB Bac Ninh,OU=CN-Azure,OU=Chi nhanh,DC=pvcb,DC=vn",
+        "ou_label": "PVCB Bac Ninh"
+      },
+      {
+        "ou_dn": "OU=PVCB Bien Hoa,OU=CN-Azure,OU=Chi nhanh,DC=pvcb,DC=vn",
+        "ou_label": "PVCB Bien Hoa"
+      },
+      {
+        "ou_dn": "OU=PVCB Binh Chanh,OU=CN-Azure,OU=Chi nhanh,DC=pvcb,DC=vn",
+        "ou_label": "PVCB Binh Chanh"
+      },
+      {
+        "ou_dn": "OU=PVCB Binh Duong,OU=CN-Azure,OU=Chi nhanh,DC=pvcb,DC=vn",
+        "ou_label": "PVCB Binh Duong"
+      },
+      {
+        "ou_dn": "OU=PVCB Binh Tay,OU=CN-Azure,OU=Chi nhanh,DC=pvcb,DC=vn",
+        "ou_label": "PVCB Binh Tay"
+      },
+      {
+        "ou_dn": "OU=PVCB Binh Thanh,OU=CN-Azure,OU=Chi nhanh,DC=pvcb,DC=vn",
+        "ou_label": "PVCB Binh Thanh"
+      },
+      {
+        "ou_dn": "OU=PVCB Bui Thi Xuan,OU=CN-Azure,OU=Chi nhanh,DC=pvcb,DC=vn",
+        "ou_label": "PVCB Bui Thi Xuan"
+      },
+      {
+        "ou_dn": "OU=PVCB Ca Mau,OU=CN-Azure,OU=Chi nhanh,DC=pvcb,DC=vn",
+        "ou_label": "PVCB Ca Mau"
+      },
+      {
+        "ou_dn": "OU=PVCB Can Tho,OU=CN-Azure,OU=Chi nhanh,DC=pvcb,DC=vn",
+        "ou_label": "PVCB Can Tho"
+      },
+      {
+        "ou_dn": "OU=PVCB Chau Van Liem,OU=CN-Azure,OU=Chi nhanh,DC=pvcb,DC=vn",
+        "ou_label": "PVCB Chau Van Liem"
+      },
+      {
+        "ou_dn": "OU=PVCB Co Do,OU=CN-Azure,OU=Chi nhanh,DC=pvcb,DC=vn",
+        "ou_label": "PVCB Co Do"
+      },
+      {
+        "ou_dn": "OU=PVCB Cong Hoa,OU=CN-Azure,OU=Chi nhanh,DC=pvcb,DC=vn",
+        "ou_label": "PVCB Cong Hoa"
+      },
+      {
+        "ou_dn": "OU=PVCB Da Lat,OU=CN-Azure,OU=Chi nhanh,DC=pvcb,DC=vn",
+        "ou_label": "PVCB Da Lat"
+      }
+    ],
+    "group_catalog": [
+      {
+        "group_name": "marcom.marketing"
+      },
+      {
+        "group_name": "marcom.th"
+      },
+      {
+        "group_name": "marcom.tt"
+      },
+      {
+        "group_name": "cntt.qtktcn"
+      },
+      {
+        "group_name": "cntt.qldmvtccn"
+      },
+      {
+        "group_name": "cntt.ptthvhsts"
+      },
+      {
+        "group_name": "cntt.shhtkh"
+      },
+      {
+        "group_name": "cntt.shvh"
+      },
+      {
+        "group_name": "cntt.pthtl"
+      },
+      {
+        "group_name": "cntt.ptnvvkt"
+      },
+      {
+        "group_name": "cntt.dvgs247"
+      },
+      {
+        "group_name": "cntt.vhhtvdtdm"
+      },
+      {
+        "group_name": "cntt.vhhtlvkkts"
+      },
+      {
+        "group_name": "cntt.vhudnbvth"
+      },
+      {
+        "group_name": "cntt.pthtttvnhm"
+      },
+      {
+        "group_name": "cntt.dvcntt"
+      },
+      {
+        "group_name": "cntt.ptgpvttnt"
+      },
+      {
+        "group_name": "cntt.qtdl"
+      },
+      {
+        "group_name": "cntt.thdl"
+      },
+      {
+        "group_name": "cntt.qlrrvkstt"
+      },
+      {
+        "group_name": "cntt.dbattt"
+      },
+      {
+        "group_name": "cntt.gsvupscattt"
+      },
+      {
+        "group_name": "khcn.cbn"
+      },
+      {
+        "group_name": "khcn.csspcvthechap"
+      },
+      {
+        "group_name": "khcn.csspcvtinchap"
+      },
+      {
+        "group_name": "khcn.khnsnn-dvtl"
+      },
+      {
+        "group_name": "khcn.dtpnh"
+      },
+      {
+        "group_name": "khcn.htbh"
+      },
+      {
+        "group_name": "khcn.msme"
+      },
+      {
+        "group_name": "khcn.htkdptml"
+      },
+      {
+        "group_name": "khcn.khkpis"
+      },
+      {
+        "group_name": "khcn.nhut"
+      },
+      {
+        "group_name": "khcn.hdvnhdt"
+      },
+      {
+        "group_name": "khcn.thucdaykinhdoanh"
+      },
+      {
+        "group_name": "khcn.ptnldvvh"
+      },
+      {
+        "group_name": "khcn.ttt.ktphttt"
+      },
+      {
+        "group_name": "khcn.ttt.gsxlrrt"
+      },
+      {
+        "group_name": "ttt.pht"
+      },
+      {
+        "group_name": "khcn.ttt.ptspdtt"
+      },
+      {
+        "group_name": "khdn.cbqln"
+      },
+      {
+        "group_name": "khdn.ncptsptd"
+      },
+      {
+        "group_name": "khdn.qlkd"
+      },
+      {
+        "group_name": "khdn.nhgd"
+      },
+      {
+        "group_name": "khdn.dt"
+      },
+      {
+        "group_name": "khdn.tdb"
+      },
+      {
+        "group_name": "khdn.ttptkhdnmb"
+      },
+      {
+        "group_name": "khdn.ttptkhdnmn"
+      },
+      {
+        "group_name": "khdnl.httdkd"
+      },
+      {
+        "group_name": "khdnl.txvvtvtc"
+      },
+      {
+        "group_name": "khdnl.pkhcl"
+      },
+      {
+        "group_name": "khdnl-kdpb"
+      },
+      {
+        "group_name": "khdnl-kdpn"
+      },
+      {
+        "group_name": "khdn.gptd"
+      },
+      {
+        "group_name": "khdn.gpkds"
+      },
+      {
+        "group_name": "khdn.ptkhcl"
+      },
+      {
+        "group_name": "nvvtttc.fi"
+      },
+      {
+        "group_name": "nvvtttc.gtcg"
+      },
+      {
+        "group_name": "nvvtttc.sale"
+      },
+      {
+        "group_name": "nvvtttc.kdnhspps"
+      },
+      {
+        "group_name": "nvvtttc.kdtpcp"
+      },
+      {
+        "group_name": "nvvtttc.kdvlnh"
+      },
+      {
+        "group_name": "pc.pltdvdt"
+      },
+      {
+        "group_name": "pc.pltdvptd"
+      },
+      {
+        "group_name": "pc.pcrtvgl"
+      },
+      {
+        "group_name": "tt.xlvp"
+      },
+      {
+        "group_name": "tt.ksttmn"
+      },
+      {
+        "group_name": "tt.ksttho"
+      },
+      {
+        "group_name": "tt.gsgdbt"
+      },
+      {
+        "group_name": "qltctts.qlkh"
+      },
+      {
+        "group_name": "qltctts.tctkn"
+      },
+      {
+        "group_name": "qltctts.qlts"
+      },
+      {
+        "group_name": "qltctts.qlhs"
+      },
+      {
+        "group_name": "qltctts.ktsdb"
+      },
+      {
+        "group_name": "qltctts.cnmb"
+      },
+      {
+        "group_name": "qltctts.cnmn"
+      },
+      {
+        "group_name": "qltctts.dnmb"
+      },
+      {
+        "group_name": "qltctts.dndnb"
+      },
+      {
+        "group_name": "qltctts.tnb"
+      },
+      {
+        "group_name": "qltctts.mtr"
+      },
+      {
+        "group_name": "qtnnl.clcsns"
+      },
+      {
+        "group_name": "ptnnl.pdvns"
+      },
+      {
+        "group_name": "qtnnl.ttdtptnl"
+      },
+      {
+        "group_name": "qtrr.csrr"
+      },
+      {
+        "group_name": "qtrr.qtrrhd"
+      },
+      {
+        "group_name": "qtrr.qtrrtttk"
+      },
+      {
+        "group_name": "qtrr.qtrrtdqldm"
+      },
+      {
+        "group_name": "tckt.khqlhqcv"
+      },
+      {
+        "group_name": "tckt.ktnb"
+      },
+      {
+        "group_name": "tckt.ktth"
+      },
+      {
+        "group_name": "tckt.qltsnc"
+      },
+      {
+        "group_name": "tckt.qlxdcb"
+      },
+      {
+        "group_name": "tckt.qtdl&httc"
+      },
+      {
+        "group_name": "ttdg.csgstsdb"
+      },
+      {
+        "group_name": "ttdg.dgho"
+      },
+      {
+        "group_name": "ttdg.dgdnb"
+      },
+      {
+        "group_name": "ttdg.dgtnb"
+      },
+      {
+        "group_name": "ttdg.dgmt"
+      },
+      {
+        "group_name": "ttpd.tdtdkhcnktsdb"
+      },
+      {
+        "group_name": "thucdia.pdtd"
+      },
+      {
+        "group_name": "ttpd.thukipheduyet"
+      },
+      {
+        "group_name": "ttttd.khdnho"
+      },
+      {
+        "group_name": "ttttd.khdnmn"
+      },
+      {
+        "group_name": "ttttd.khdnmt"
+      },
+      {
+        "group_name": "vh.dvtlkh"
+      },
+      {
+        "group_name": "vh.dvtk"
+      },
+      {
+        "group_name": "vh.khoquy"
+      },
+      {
+        "group_name": "vh.qlcldv"
+      },
+      {
+        "group_name": "vh.htht"
+      },
+      {
+        "group_name": "vh.kstdkhcn"
+      },
+      {
+        "group_name": "vh.kstdkhdn"
+      },
+      {
+        "group_name": "vh.ctqt"
+      },
+      {
+        "group_name": "vh.dvtttm"
+      },
+      {
+        "group_name": "vh.tnnvdt"
+      },
+      {
+        "group_name": "vh.thvvhnhs"
+      },
+      {
+        "group_name": "pvcb.ktnb"
+      },
+      {
+        "group_name": "vp.hcth.ho"
+      },
+      {
+        "group_name": "vp.ms&dtxd"
+      },
+      {
+        "group_name": "vp.vtlt"
+      },
+      {
+        "group_name": "vpdu.vpdu"
+      },
+      {
+        "group_name": "vpdu.vpcd"
+      },
+      {
+        "group_name": "vpdu.vpdtn"
+      },
+      {
+        "group_name": "vpdu.qhbtsnt"
+      },
+      {
+        "group_name": "clkd.vpqlda"
+      },
+      {
+        "group_name": "qlcd.vpqlda"
+      },
+      {
+        "group_name": "nhs.ptspdv"
+      },
+      {
+        "group_name": "nhs.ptk"
+      },
+      {
+        "group_name": "nhs.qltnkh"
+      },
+      {
+        "group_name": "kt.nhs"
+      },
+      {
+        "group_name": "nhs.ptdl"
+      },
+      {
+        "group_name": "nhs.htkdqlhs"
+      },
+      {
+        "group_name": "angiang.dvkh"
+      },
+      {
+        "group_name": "vh.qccn"
+      },
+      {
+        "group_name": "angiang.khcn"
+      },
+      {
+        "group_name": "angiang.khut"
+      },
+      {
+        "group_name": "angiang.khdn"
+      },
+      {
+        "group_name": "angiang.hcth"
+      },
+      {
+        "group_name": "angiang.kt"
+      },
+      {
+        "group_name": "angiang.kstd"
+      },
+      {
+        "group_name": "anphu.dvkh"
+      },
+      {
+        "group_name": "anphu.khcn"
+      },
+      {
+        "group_name": "anphu.khut"
+      },
+      {
+        "group_name": "bachieu.dvkh"
+      },
+      {
+        "group_name": "bachieu.khcn"
+      },
+      {
+        "group_name": "304.dvkh"
+      },
+      {
+        "group_name": "304.khcn"
+      },
+      {
+        "group_name": "304.khut"
+      },
+      {
+        "group_name": "bacninh.dvkh"
+      },
+      {
+        "group_name": "bacninh.khoquy"
+      },
+      {
+        "group_name": "bacninh.pkhcn"
+      },
+      {
+        "group_name": "bacninh.khut"
+      },
+      {
+        "group_name": "bacninh.khdn"
+      },
+      {
+        "group_name": "bacninh.hcth"
+      },
+      {
+        "group_name": "bacninh.kt"
+      },
+      {
+        "group_name": "bacninh.kstd"
+      },
+      {
+        "group_name": "bienhoa.dvkh"
+      },
+      {
+        "group_name": "bienhoa.khcn"
+      },
+      {
+        "group_name": "bienhoa.khut"
+      },
+      {
+        "group_name": "binhchanh.dvkh"
+      },
+      {
+        "group_name": "binhchanh.khcn"
+      },
+      {
+        "group_name": "binhduong.dvkh"
+      },
+      {
+        "group_name": "binhduong.khoquy"
+      },
+      {
+        "group_name": "binhduong.khcn"
+      },
+      {
+        "group_name": "binhduong.khut"
+      },
+      {
+        "group_name": "binhduong.khdn"
+      },
+      {
+        "group_name": "binhduong.hcth"
+      },
+      {
+        "group_name": "binhduong.kt"
+      },
+      {
+        "group_name": "binhduong.qltd"
+      },
+      {
+        "group_name": "binhtay.khcn"
+      },
+      {
+        "group_name": "binhtay.dvkh"
+      },
+      {
+        "group_name": "binhthanh.khut"
+      },
+      {
+        "group_name": "binhthanh.dvkh"
+      },
+      {
+        "group_name": "binhthanh.khcn"
+      },
+      {
+        "group_name": "buithixuan.dvkh"
+      },
+      {
+        "group_name": "buithixuan.khcn"
+      },
+      {
+        "group_name": "buithixuan.khut"
+      },
+      {
+        "group_name": "camau.dvkh"
+      },
+      {
+        "group_name": "camau.khcn"
+      },
+      {
+        "group_name": "camau.khut"
+      },
+      {
+        "group_name": "camau.hcth"
+      },
+      {
+        "group_name": "camau.kt"
+      },
+      {
+        "group_name": "camau.kstd"
+      },
+      {
+        "group_name": "cantho.dvkh"
+      },
+      {
+        "group_name": "camau.khoquy"
+      },
+      {
+        "group_name": "cantho.khcn"
+      },
+      {
+        "group_name": "cantho.khut"
+      },
+      {
+        "group_name": "cantho.khdn"
+      },
+      {
+        "group_name": "cantho.hcth"
+      },
+      {
+        "group_name": "cantho.kt"
+      },
+      {
+        "group_name": "cantho.kstd"
+      },
+      {
+        "group_name": "chauvanliem.dvkh"
+      },
+      {
+        "group_name": "chauvanliem.khcn"
+      },
+      {
+        "group_name": "chauvanliem.khut"
+      },
+      {
+        "group_name": "codo.dvkh"
+      },
+      {
+        "group_name": "codo.khcn"
+      },
+      {
+        "group_name": "conghoa.dvkh"
+      },
+      {
+        "group_name": "conghoa.khcn"
+      },
+      {
+        "group_name": "dalat.dvkh"
+      },
+      {
+        "group_name": "dalat.khoquy"
+      }
+    ]
+  }
+}

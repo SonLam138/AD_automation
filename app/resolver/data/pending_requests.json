@@ -1,0 +1,80 @@
+[
+  {
+    "request_id": "REQ-5F7A150A",
+    "status": "PENDING",
+    "created_at": "2026-07-15T14:10:15.761924",
+    "hr_input": {
+      "employee_id": "00017014",
+      "full_name": "Nguyen Thi Hong Van",
+      "birth_date": "30/05/1998",
+      "title": "Chuyen vien Khach hang Ca nhan",
+      "position": "Chuyen vien Khach hang Ca nhan",
+      "department": "PVcomBank Khanh Hoa - Phong Khach Hang Ca Nhan - Bo Phan Khach Hang Ca Nhan",
+      "division": "Khoi Khach Hang Ca Nhan"
+    },
+    "resolved_result": {
+      "firstname": "Van",
+      "lastname": "Nguyen Thi Hong",
+      "sam_account_name": "VanNTH",
+      "display_name": "Nguyen Thi Hong Van (K.KHCN-KHA)",
+      "title": "Chuyen vien Khach hang Ca nhan",
+      "department": "Phong Khach Hang Ca Nhan",
+      "target_ou_dn": "OU=PVCB Khanh Hoa,OU=CN-Azure,OU=Chi nhanh,DC=pvcb,DC=vn",
+      "groups": [
+        "khanhhoa.khcn"
+      ]
+    }
+  },
+  {
+    "request_id": "REQ-4DC370BA",
+    "status": "PENDING",
+    "created_at": "2026-07-15T14:21:44.495181",
+    "hr_input": {
+      "employee_id": "00017012",
+      "full_name": "Tran Thi Mai Thi",
+      "birth_date": "05/12/1997",
+      "title": "Kiem soat vien",
+      "position": "Kiem soat vien",
+      "department": "PVcomBank Khanh Hoi - Phong Dich Vu Khach Hang",
+      "division": "Khoi Khach Hang Ca Nhan"
+    },
+    "resolved_result": {
+      "firstname": "Thi",
+      "lastname": "Tran Thi Mai",
+      "sam_account_name": "ThiTTM",
+      "display_name": "Tran Thi Mai Thi (K.KHCN-KHI)",
+      "title": "Kiem soat vien",
+      "department": "Phong Dich Vu Khach Hang",
+      "target_ou_dn": "OU=PVCB Khanh Hoi,OU=CN-Azure,OU=Chi nhanh,DC=pvcb,DC=vn",
+      "groups": [
+        "khanhhoi.dvkh"
+      ]
+    }
+  },
+  {
+    "request_id": "REQ-1680245B",
+    "status": "PENDING",
+    "created_at": "2026-07-15T14:21:44.566944",
+    "hr_input": {
+      "employee_id": "00017013",
+      "full_name": "Tran Huu Tuan",
+      "birth_date": "17/02/1994",
+      "title": "Chuyen vien khach hang doanh nghiep sieu nho",
+      "position": "CV khach hang doanh nghiep sieu nho",
+      "department": "PVcomBank Tan Binh - Phong Khach Hang Ca Nhan - Bo Phan Khach Hang Doanh Nghiep Sieu Nho",
+      "division": "Khoi Khach Hang Ca Nhan"
+    },
+    "resolved_result": {
+      "firstname": "Tuan",
+      "lastname": "Tran Huu",
+      "sam_account_name": "TuanTH",
+      "display_name": "Tran Huu Tuan (K.KHCN-TAB)",
+      "title": "Chuyen vien khach hang doanh nghiep sieu nho",
+      "department": "Phong Khach Hang Ca Nhan",
+      "target_ou_dn": "OU=PVCB Tan Binh,OU=CN-Azure,OU=Chi nhanh,DC=pvcb,DC=vn",
+      "groups": [
+        "tanbinh.khcn"
+      ]
+    }
+  }
+]

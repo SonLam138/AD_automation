@@ -1,5 +1,4 @@
 
-# Test tạm thời
 
 LDAP_HOST = "DC-01.automate.com.vn"
 

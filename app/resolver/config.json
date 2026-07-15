@@ -1,0 +1,8 @@
+{
+  "prompt_extract_version": "v1",
+  "prompt_resolve_version": "v1",
+  "guide_version": "v2",
+ 
+  "provider": "ollama",
+  "model": "mistral:latest"
+}

@@ -59,7 +59,10 @@ def new_onboarding(
         )
     )
 ):
-    
+    print(
+    "LDAP CONNECTED =",
+    ldap.connection.bound
+)
     approved_by = (
             get_current_user_value(
                 current_user,
@@ -91,7 +94,10 @@ def new_onboarding(
         approved_by
     )
 
-    
+    print("=" * 80)
+    print("ONBOARDING REQUEST")
+    print(request)
+    print("=" * 80)
     result = ldap.create_user(
         request=request,
         approved_by=approved_by,

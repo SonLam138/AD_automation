@@ -1,0 +1,38 @@
+{
+  "schema_version": "1.0",
+  "session_id": "SES-DA8E800FD3F5",
+  "event_category": "IDENTITY",
+  "event_type": "NEW_ONBOARDING",
+  "source_type": "HR_EMAIL_SVD",
+  "source_id": null,
+  "capability": "new_onboarding",
+  "status": "RUNNING",
+  "started_at": "2026-07-15T09:23:11.605937",
+  "completed_at": null,
+  "duration_ms": null,
+  "requested": {
+    "employee_id": "00017003",
+    "first_name": "Vu Kim Van",
+    "last_name": "Tuyen",
+    "full_name": "Vu Kim Van Tuyen",
+    "department": "PVcomBank Thu Duc - Phong Dich Vu Khach Hang",
+    "title": "Giao dich vien",
+    "account": "TuyenVKV",
+    "display_name": "Vu Kim Van Tuyen",
+    "ou": "OU=PVCB Thu Duc,OU=CN-Azure,OU=Chi nhanh,DC=pvcb,DC=vn"
+  },
+  "actual": {
+    "account": null,
+    "display_name": null,
+    "user_dn": null,
+    "ou_dn": null
+  },
+  "failure_stage": null,
+  "failure_code": null,
+  "failure_reason": null,
+  "approved_by": "onboard.approve",
+  "approved_name": "onboard.approve",
+  "edited_by_approver": false,
+  "approval_type": "MANUAL",
+  "approval_time": "2026-07-15T09:23:11.605937"
+}

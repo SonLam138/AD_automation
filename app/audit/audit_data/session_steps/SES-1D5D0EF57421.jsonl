@@ -1,0 +1,1 @@
+{"session_id": "SES-1D5D0EF57421", "step_name": "add_user", "status": "FAILED", "started_at": "2026-07-15T09:59:15.229919", "completed_at": "2026-07-15T09:59:15.232932", "duration_ms": 3, "error_code": "19", "error_message": "constraintViolation", "details": null}

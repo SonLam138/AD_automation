@@ -13,10 +13,10 @@ from app.models.session_context import (
     SessionRequested,
     SessionActual
 )
-
+from ldap3.utils.conv import escape_filter_chars
 from app.core.session import generate_session_id
 
-from app.config import LDAP_BASE_DN
+from app.config import *
 from app.audit.audit_writer import save_context, save_step, save_summary
 
 class LDAPAdapter:
@@ -32,7 +32,12 @@ class LDAPAdapter:
         password,
         port=636
     ):
-
+        print("=" * 80)
+        print("LDAP CONNECT")
+        print("HOST     =", host)
+        print("USER     =", username)
+        print("PORT     =", port)
+        print("=" * 80)
         tls_config = Tls(
             validate=ssl.CERT_NONE
         )
@@ -276,7 +281,7 @@ class LDAPAdapter:
 
         actual_display_name = self.find_available_display_name(
             LDAP_BASE_DN,
-            request.full_name
+            request.display_name
         )
 
         request.sam_account_name = actual_account
@@ -418,7 +423,10 @@ class LDAPAdapter:
         # =====================================================
 
         step_started = datetime.utcnow()
+        print("USER_DN =", user_dn)
 
+        for k, v in attributes.items():
+            print(k, "=", v)
         result = self.connection.add(
             dn=user_dn,
             object_class=[
@@ -980,10 +988,23 @@ class LDAPAdapter:
         base_display_name: str
     ) -> str:
 
+        escaped_display_name = (
+            escape_filter_chars(
+                base_display_name
+            )
+        )
+
         self.connection.search(
             search_base=base_dn,
-            search_filter=f"(displayName={base_display_name}*)",
-            attributes=["displayName"]
+
+            search_filter=(
+                f"(displayName="
+                f"{escaped_display_name}*)"
+            ),
+
+            attributes=[
+                "displayName"
+            ]
         )
 
         display_names = []
@@ -991,13 +1012,16 @@ class LDAPAdapter:
         for entry in self.connection.entries:
 
             try:
+
                 display_names.append(
-                    str(entry["displayName"].value)
+                    str(
+                        entry["displayName"].value
+                    )
                 )
+
             except Exception:
                 pass
 
-        # Chưa tồn tại
         if base_display_name not in display_names:
             return base_display_name
 
@@ -1018,7 +1042,11 @@ class LDAPAdapter:
                     int(match.group(1))
                 )
 
-        return f"{base_display_name} {max_suffix + 1}"
+        return (
+            f"{base_display_name} "
+            f"{max_suffix + 1}"
+        )
+
 
 
     def set_password(
@@ -1090,6 +1118,75 @@ class LDAPAdapter:
 
         return result
     
+    def get_group_dn(
+        self,
+        group_name: str
+    ):
+        print("\n" + "=" * 80)
+        print("GET GROUP DN")
+        print("GROUP NAME =", repr(group_name))
+        print("LDAP_BASE_DN =", LDAP_BASE_DN)
+
+        search_filter = (
+            f"(cn={group_name})"
+        )
+
+        print("SEARCH FILTER =", repr(search_filter))
+        print("=" * 80)
+
+        try:
+
+            self.connection.search(
+                search_base=LDAP_BASE_DN,
+                search_filter=search_filter,
+                attributes=[
+                    "distinguishedName",
+                    "cn"
+                ]
+            )
+
+            print(
+                "SEARCH RESULT COUNT =",
+                len(self.connection.entries)
+            )
+
+            for entry in self.connection.entries:
+                print(
+                    "FOUND ENTRY =",
+                    entry.entry_dn
+                )
+
+            if not self.connection.entries:
+
+                print(
+                    "[GROUP NOT FOUND]"
+                )
+
+                return None
+
+            entry = self.connection.entries[0]
+
+            group_dn = str(
+                entry.entry_dn
+            )
+
+            print(
+                "GROUP DN =",
+                group_dn
+            )
+
+            return group_dn
+
+        except Exception as ex:
+
+            print(
+                "[GET GROUP DN ERROR]"
+            )
+
+            print(type(ex))
+            print(str(ex))
+
+            raise
 
     def add_user_to_groups(
         self,
@@ -1100,27 +1197,73 @@ class LDAPAdapter:
 
         failed_groups = []
 
-        for group_dn in groups:
+        print("\n" + "=" * 80)
+        print("ADD USER TO GROUPS")
+        print("USER DN =", user_dn)
+        print("GROUPS =", groups)
+        print("=" * 80)
 
-            result = self.connection.modify(
-                group_dn,
-                {
-                    "member": [
-                        (
-                            MODIFY_ADD,
-                            [user_dn]
-                        )
-                    ]
-                }
-            )
+        for group_name in groups:
 
-            if result:
-                added_groups.append(
-                    group_dn
+            try:
+
+                group_dn = self.get_group_dn(
+                    group_name
                 )
-            else:
+
+                if not group_dn:
+
+                    failed_groups.append(
+                        group_name
+                    )
+
+                    continue
+
+                print("\n" + "=" * 80)
+                print("ADDING MEMBER")
+                print("GROUP DN =", group_dn)
+                print("USER DN =", user_dn)
+                print("=" * 80)
+
+                result = self.connection.modify(
+                    group_dn,
+                    {
+                        "member": [
+                            (
+                                MODIFY_ADD,
+                                [user_dn]
+                            )
+                        ]
+                    }
+                )
+
+                print(
+                    "LDAP RESULT =",
+                    self.connection.result
+                )
+
+                if result:
+
+                    added_groups.append(
+                        group_name
+                    )
+
+                else:
+
+                    failed_groups.append(
+                        group_name
+                    )
+
+            except Exception as ex:
+
+                print(
+                    "[GROUP ERROR]"
+                )
+
+                print(ex)
+
                 failed_groups.append(
-                    group_dn
+                    group_name
                 )
 
         return {
