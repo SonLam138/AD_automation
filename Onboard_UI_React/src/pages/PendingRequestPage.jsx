@@ -260,356 +260,348 @@ const handleReject = async () => {
 
     }, [requestDetail]);
 
-
-    if (
-        selectedRequest &&
-        requestDetail
-    ) 
+//// Render ////
+    if (selectedRequest && requestDetail)
     {
+        const cardStyle = {
+            background: "#FFFDF7",
+            border: "1px solid #D4AF37",
+            borderRadius: "14px",
+            padding: "20px",
+            color: "#222",
+            textAlign: "left",
+            flex: 1,
+            boxShadow: "0 4px 12px rgba(0,0,0,0.08)"
+        };
+
+        const labelStyle = {
+            fontSize: "12px",
+            fontWeight: "700",
+            color: "#B8860B",
+            textTransform: "uppercase",
+            marginBottom: "4px"
+        };
+
+        const valueStyle = {
+            fontSize: "15px",
+            color: "#222",
+            marginBottom: "16px",
+            wordBreak: "break-word"
+        };
+
+        const nameParts =
+            requestDetail.hr_input?.full_name
+                ?.trim()
+                .split(" ") || [];
+
+        const lastName =
+            nameParts.length > 0
+                ? nameParts[nameParts.length - 1]
+                : "";
+
+        const firstName =
+            nameParts.length > 1
+                ? nameParts.slice(0, -1).join(" ")
+                : "";
+
         return (
+            <div
+                style={{
+                    maxWidth: "1400px",
+                    margin: "0 auto",
+                    padding: "20px",
+                    background: "#F8F6F0",
+                    minHeight: "100vh"
+                }}
+            >
+                {/* HEADER */}
 
-                <div>
-
-        <h2>Request Review</h2>
-
-        <p>
-            Request ID:
-            {requestDetail.request_id}
-        </p>
-
-        <p>
-            Status:
-            {requestDetail.status}
-        </p>
-
-        <hr/>
-
-        <h3>HR Information</h3>
-
-        <table border="1">
-
-            <tbody>
-
-                <tr>
-                    <td>Employee ID</td>
-                    <td>
-                        {requestDetail.hr_input?.employee_id}
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>Full Name</td>
-                    <td>
+                <div
+                    style={{
+                        background:
+                            "linear-gradient(135deg,#F4D06F,#D4AF37)",
+                        color: "#222",
+                        padding: "24px",
+                        borderRadius: "16px",
+                        marginBottom: "24px",
+                        boxShadow: "0 6px 16px rgba(0,0,0,0.15)"
+                    }}
+                >
+                    <h2
+                        style={{
+                            margin: 0,
+                            fontSize: "28px"
+                        }}
+                    >
                         {requestDetail.hr_input?.full_name}
-                    </td>
-                </tr>
+                    </h2>
 
-                <tr>
-                    <td>Position</td>
-                    <td>
-                        {requestDetail.hr_input?.title}
-                    </td>
-                </tr>
+                    <div
+                        style={{
+                            marginTop: "10px"
+                        }}
+                    >
+                        <strong>Employee ID:</strong>{" "}
+                        {requestDetail.hr_input?.employee_id}
+                    </div>
 
-                <tr>
-                    <td>Department</td>
-                    <td>
-                        {requestDetail.hr_input?.department}
-                    </td>
-                </tr>
+                    <div
+                        style={{
+                            marginTop: "4px"
+                        }}
+                    >
+                        <strong>Status:</strong>{" "}
+                        {requestDetail.status}
+                    </div>
+                </div>
 
-                <tr>
-                    <td>Division</td>
-                    <td>
-                        {requestDetail.hr_input?.division}
-                    </td>
-                </tr>
+                {/* 2 COLUMNS */}
 
-            </tbody>
+                <div
+                    style={{
+                        display: "flex",
+                        gap: "20px",
+                        alignItems: "flex-start"
+                    }}
+                >
+                    {/* HCM */}
 
-        </table>
+                    <div style={cardStyle}>
+                        <h3
+                            style={{
+                                color: "#B8860B",
+                                marginTop: 0,
+                                borderBottom:
+                                    "2px solid #D4AF37",
+                                paddingBottom: "10px"
+                            }}
+                        >
+                            Thông tin nhân sự từ HCM
+                        </h3>
 
-        <br />
+                        <div style={labelStyle}>
+                            Họ và tên
+                        </div>
+                        <div style={valueStyle}>
+                            {requestDetail.hr_input?.full_name}
+                        </div>
 
-        <h3>Resolver Result</h3>
+                        <div style={labelStyle}>
+                            Mã nhân viên
+                        </div>
+                        <div style={valueStyle}>
+                            {requestDetail.hr_input?.employee_id}
+                        </div>
 
-        <table border="1">
+                        <div style={labelStyle}>
+                            Chức danh
+                        </div>
+                        <div style={valueStyle}>
+                            {requestDetail.hr_input?.title}
+                        </div>
 
-            <tbody>
+                        <div style={labelStyle}>
+                            Phòng/Ban
+                        </div>
+                        <div style={valueStyle}>
+                            {requestDetail.hr_input?.department}
+                        </div>
 
-                                <tr>
-                    <td>
-                        DISPLAYNAME
-                    </td>
-                    <td>
-                        {
-                            editingField
-                            ===
-                            "display_name"
-                            ?
-                            <>
-                                <input
-                                    value={
-                                        editableData
-                                        ?.display_name || ""
-                                    }
-                                    style={{
-                                        width: "80%"
-                                    }}
-                                    onChange={(e) =>
+                        <div style={labelStyle}>
+                            Khối
+                        </div>
+                        <div style={valueStyle}>
+                            {requestDetail.hr_input?.division}
+                        </div>
+                    </div>
 
-                                        setEditableData({
+                    {/* AD */}
 
-                                            ...editableData,
+                    <div style={cardStyle}>
+                        <h3
+                            style={{
+                                color: "#B8860B",
+                                marginTop: 0,
+                                borderBottom:
+                                    "2px solid #D4AF37",
+                                paddingBottom: "10px"
+                            }}
+                        >
+                            Thông tin tạo tài khoản
+                        </h3>
 
-                                            display_name:
-                                                e.target.value
-                                        })
-                                    }
-                                />
-                                <button
-                                    onClick={() =>
+                        <div style={labelStyle}>
+                            firstName
+                        </div>
+                        <div style={valueStyle}>
+                            {firstName}
+                        </div>
 
-                                        setEditingField(null)
-                                    }
-                                >
-                                    Save
-                                </button>
-                            </>
-                            :
-                            <>
-                                {
-                                    editableData
-                                    ?.display_name
+                        <div style={labelStyle}>
+                            lastName
+                        </div>
+                        <div style={valueStyle}>
+                            {lastName}
+                        </div>
+
+                        {/* DISPLAY NAME */}
+
+                        <div style={labelStyle}>
+                            displayName
+                        </div>
+
+                        <div style={valueStyle}>
+                            {editableData?.display_name}
+                            {" "}
+                            <button
+                                onClick={() =>
+                                    setEditingField(
+                                        "display_name"
+                                    )
                                 }
-                                {" "}
-                                <button
-                                    onClick={() =>
+                            >
+                                Edit
+                            </button>
+                        </div>
 
-                                        setEditingField(
-                                            "display_name"
-                                        )
-                                    }
+                        {/* USERNAME */}
 
-                                >
-                                    Edit
-                                </button>
-                            </>
-                        }
-                    </td>
-                </tr>
+                        <div style={labelStyle}>
+                            Username
+                        </div>
 
-                <tr>
-                    <td>
-                        USERNAME
-                    </td>
-                    <td>
-                        {
-                            editingField
-                            ===
-                            "sam_account_name"
-                            ?
-                            <>
-                                <input
-                                    value={
-                                        editableData
-                                        ?.sam_account_name || ""
-                                    }
-                                    style={{
-                                        width: "80%"
-                                    }}
-                                    onChange={(e) =>
-
-                                        setEditableData({
-
-                                            ...editableData,
-
-                                            sam_account_name:
-                                                e.target.value
-                                        })
-                                    }
-                                />
-                                <button
-                                    onClick={() =>
-
-                                        setEditingField(null)
-                                    }
-                                >
-                                    Save
-                                </button>
-                            </>
-                            :
-                            <>
-                                {
-                                    editableData
-                                    ?.sam_account_name
+                        <div style={valueStyle}>
+                            {editableData?.sam_account_name}
+                            {" "}
+                            <button
+                                onClick={() =>
+                                    setEditingField(
+                                        "sam_account_name"
+                                    )
                                 }
-                                {" "}
-                                <button
-                                    onClick={() =>
+                            >
+                                Edit
+                            </button>
+                        </div>
 
-                                        setEditingField(
-                                            "sam_account_name"
-                                        )
-                                    }
+                        {/* TARGET OU */}
 
-                                >
-                                    Edit
-                                </button>
-                            </>
-                        }
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        TARGET OU
-                    </td>
-                    <td>
-                        {
-                            editingField
-                            ===
-                            "target_ou_dn"
-                            ?
-                            <>
-                                <input
-                                    value={
-                                        editableData
-                                        ?.target_ou_dn || ""
-                                    }
-                                    style={{
-                                        width: "80%"
-                                    }}
-                                    onChange={(e) =>
+                        <div style={labelStyle}>
+                            targetOU
+                        </div>
 
-                                        setEditableData({
-
-                                            ...editableData,
-
-                                            target_ou_dn:
-                                                e.target.value
-                                        })
-                                    }
-                                />
-                                <button
-                                    onClick={() =>
-
-                                        setEditingField(null)
-                                    }
-                                >
-                                    Save
-                                </button>
-                            </>
-                            :
-                            <>
-                                {
-                                    editableData
-                                    ?.target_ou_dn
+                        <div style={valueStyle}>
+                            {editableData?.target_ou_dn}
+                            {" "}
+                            <button
+                                onClick={() =>
+                                    setEditingField(
+                                        "target_ou_dn"
+                                    )
                                 }
-                                {" "}
-                                <button
-                                    onClick={() =>
+                            >
+                                Edit
+                            </button>
+                        </div>
 
-                                        setEditingField(
-                                            "target_ou_dn"
-                                        )
-                                    }
+                        {/* GROUPS */}
 
-                                >
-                                    Edit
-                                </button>
-                            </>
-                        }
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        MEMBER OF
-                    </td>
-                    <td>
-                        {
-                            editingField
-                            ===
-                            "groups"
-                            ?
-                            <>
-                                <input
-                                    value={
-                                        editableData
-                                        ?.groups || ""
-                                    }
-                                    style={{
-                                        width: "80%"
-                                    }}
-                                    onChange={(e) =>
+                        <div style={labelStyle}>
+                            memberOf
+                        </div>
 
-                                        setEditableData({
+                        <div style={valueStyle}>
+                            {Array.isArray(
+                                editableData?.groups
+                            )
+                                ? editableData.groups.map(
+                                    (group) => (
+                                        <span
+                                            key={group}
+                                            style={{
+                                                display:
+                                                    "inline-block",
+                                                background:
+                                                    "#D4AF37",
+                                                color:
+                                                    "#222",
+                                                borderRadius:
+                                                    "20px",
+                                                padding:
+                                                    "6px 12px",
+                                                margin:
+                                                    "4px",
+                                                fontSize:
+                                                    "12px",
+                                                fontWeight:
+                                                    "600"
+                                            }}
+                                        >
+                                            {group}
+                                        </span>
+                                    )
+                                )
+                                : editableData?.groups}
+                        </div>
+                    </div>
+                </div>
 
-                                            ...editableData,
+                {/* BUTTONS */}
 
-                                            groups:
-                                                e.target.value
-                                        })
-                                    }
-                                />
-                                <button
-                                    onClick={() =>
+                <div
+                    style={{
+                        marginTop: "24px",
+                        display: "flex",
+                        gap: "10px"
+                    }}
+                >
+                    <button
+                        onClick={handleApprove}
+                        style={{
+                            background: "#D4AF37",
+                            color: "#222",
+                            border: "none",
+                            padding: "12px 24px",
+                            borderRadius: "8px",
+                            cursor: "pointer",
+                            fontWeight: "700"
+                        }}
+                    >
+                        Approve
+                    </button>
 
-                                        setEditingField(null)
-                                    }
-                                >
-                                    Save
-                                </button>
-                            </>
-                            :
-                            <>
-                                {
-                                    editableData
-                                    ?.groups
-                                }
-                                {" "}
-                                <button
-                                    onClick={() =>
+                    <button
+                        onClick={handleReject}
+                        style={{
+                            background: "#B22222",
+                            color: "white",
+                            border: "none",
+                            padding: "12px 24px",
+                            borderRadius: "8px",
+                            cursor: "pointer"
+                        }}
+                    >
+                        Reject
+                    </button>
 
-                                        setEditingField(
-                                            "groups"
-                                        )
-                                    }
-
-                                >
-                                    Edit
-                                </button>
-                            </>
-                        }
-                    </td>
-                </tr>      
-            </tbody>
-
-        </table>
-
-        <br />
-
-        <button
-            onClick={handleApprove}
-        >
-            Approve
-        </button>
-
-        <button
-            onClick={handleReject}
-        >
-            Reject
-        </button>
-
-        <button
-            onClick={() => {
-                setSelectedRequest(null);
-                setRequestDetail(null);
-            }}
-        >
-            Back
-        </button>
-
-    </div>
+                    <button
+                        onClick={() => {
+                            setSelectedRequest(null);
+                            setRequestDetail(null);
+                        }}
+                        style={{
+                            background: "#666",
+                            color: "white",
+                            border: "none",
+                            padding: "12px 24px",
+                            borderRadius: "8px",
+                            cursor: "pointer"
+                        }}
+                    >
+                        Back
+                    </button>
+                </div>
+            </div>
         );
     }
 
@@ -634,13 +626,65 @@ const handleReject = async () => {
     }
 
     return (
-    <div>
+    <div
+        style={{
+            maxWidth:"1400px",
+            margin:"0 auto",
+            padding:"20px",
+            background:"#F8F6F0",
+            minHeight:"100vh"
+        }}
+    >
 
-        <h2>Pending Requests</h2>
+        <div
+            style={{
+                background:
+                    "linear-gradient(135deg,#F4D06F,#D4AF37)",
+                color:"#222",
+                padding:"20px",
+                borderRadius:"16px",
+                marginBottom:"20px",
+                boxShadow:
+                    "0 6px 16px rgba(0,0,0,0.15)"
+            }}
+        >
+            <h2
+                style={{
+                    margin:0
+                }}
+            >
+                📋 Pending Requests
+            </h2>
 
-        <table border="1">
+            <div
+                style={{
+                    marginTop:"6px"
+                }}
+            >
+                Total Requests :
+                {requests.length}
+            </div>
+        </div>
 
-        <thead>
+
+        <table
+        style={{
+            width:"100%",
+            borderCollapse:"collapse",
+            background:"#FFFDF7",
+            borderRadius:"12px",
+            overflow:"hidden",
+            boxShadow:
+                "0 4px 12px rgba(0,0,0,0.08)"
+        }}
+    >
+
+        <thead
+        style={{
+            background:"#D4AF37",
+            color:"#222"
+        }}
+    >
             <tr>
             <th>Request ID</th>
             <th>Họ tên</th>
@@ -656,21 +700,74 @@ const handleReject = async () => {
 
             {requests.map((request) => (
                 console.log(request),
-            <tr key={request.request_id}>
+            <tr
+                key={request.request_id}
+                style={{
+                    borderBottom:
+                        "1px solid #e5e5e5"
+                }}
+            >
 
-                <td>{request.request_id}</td>
-                <td>{request.hr_input?.full_name}</td>
-
-                <td>{request.hr_input?.title}</td>
-
-                <td>{request.hr_input?.department}</td>
-
-                <td>{request.hr_input?.division}</td>
-
-                <td>{request.status}</td>
-
+                <td
+                    style={{
+                        padding:"12px"
+                    }}
+                >
+                    {request.request_id}
+                </td>
+                <td
+                    style={{
+                        padding:"12px"
+                    }}
+                >
+                    {request.hr_input?.full_name}
+                </td>                
+                <td
+                    style={{
+                        padding:"12px"
+                    }}
+                >
+                    {request.hr_input?.title}
+                </td>      
+                <td
+                    style={{
+                        padding:"12px"
+                    }}
+                >
+                    {request.hr_input?.department}
+                </td>
+                <td
+                    style={{
+                        padding:"12px"
+                    }}
+                >
+                    {request.hr_input?.division}
+                </td>
+                    <td style={{padding:"12px"}}>
+                    <span
+                        style={{
+                            background:"#FFE6A7",
+                            color:"#8B6508",
+                            padding:"5px 10px",
+                            borderRadius:"999px",
+                            fontSize:"12px",
+                            fontWeight:"700"
+                        }}
+                    >
+                        {request.status}
+                    </span>
+                </td>
                 <td>
                 <button
+                    style={{
+                        background:"#D4AF37",
+                        color:"#222",
+                        border:"none",
+                        padding:"8px 16px",
+                        borderRadius:"8px",
+                        cursor:"pointer",
+                        fontWeight:"600"
+                    }}
                     onClick={() =>
                         handleReview(
                             request.request_id

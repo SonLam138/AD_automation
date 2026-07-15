@@ -1,0 +1,46 @@
+{
+  "session_id": "SES-3CE0747E054A",
+  "capability": "new_onboarding",
+  "result": "SUCCESS",
+  "summary_category": "SUCCESS",
+  "execution_time_ms": 33,
+  "generated_at": "2026-07-15T15:59:37.921554",
+  "business_summary": {
+    "case_type": "NEW_ONBOARDING",
+    "employee_id": "00017014",
+    "employee_name": "Nguyen Thi Hong Van",
+    "department": "Phong Khach Hang Ca Nhan",
+    "title": "Chuyen vien Khach hang Ca nhan",
+    "requested_account": "VanNTH",
+    "actual_account": "vannth2",
+    "requested_display_name": "Nguyen Thi Hong Van",
+    "actual_display_name": "Nguyen Thi Hong Van (K.KHCN-KHA) 1",
+    "requested_ou": "OU=PVCB Khanh Hoa,OU=CN-Azure,OU=Chi nhanh,DC=automate,DC=com,DC=vn",
+    "actual_ou": "OU=PVCB Khanh Hoa,OU=CN-Azure,OU=Chi nhanh,DC=automate,DC=com,DC=vn",
+    "result": "SUCCESS",
+    "added_groups": [
+      "khanhhoa.khcn"
+    ],
+    "failed_groups": []
+  },
+  "technical_summary": {
+    "total_steps": 5,
+    "success_steps": 5,
+    "failed_steps": 0,
+    "executed_steps": [
+      "add_user",
+      "set_password",
+      "enable_user",
+      "force_change_password",
+      "add_groups"
+    ],
+    "last_completed_step": "add_groups",
+    "failure_stage": null,
+    "execution_time_ms": 33
+  },
+  "error_summary": null,
+  "approved_by": "onboard.approve",
+  "approved_name": "onboard.approve",
+  "approval_type": "MANUAL",
+  "approval_time": "2026-07-15T15:59:37.887777"
+}
