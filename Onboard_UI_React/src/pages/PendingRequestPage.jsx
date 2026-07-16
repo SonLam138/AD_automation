@@ -746,8 +746,8 @@ const handleReject = async () => {
                     <td style={{padding:"12px"}}>
                     <span
                         style={{
-                            background:"#FFE6A7",
-                            color:"#8B6508",
+                            background:"#0e0b02",
+                            color:"#f8ca55",
                             padding:"5px 10px",
                             borderRadius:"999px",
                             fontSize:"12px",
