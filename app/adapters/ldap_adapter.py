@@ -1,7 +1,7 @@
 from ldap3 import Server, Tls
 from ldap3 import Connection
 from ldap3 import ALL
-from ldap3 import MODIFY_REPLACE, MODIFY_ADD
+from ldap3 import MODIFY_REPLACE, MODIFY_ADD, MODIFY_DELETE
 from ldap3.extend.microsoft.modifyPassword import ad_modify_password
 import re
 import ssl
@@ -1257,6 +1257,7 @@ class LDAPAdapter:
                 )
 
         return {
+
             "success":
                 len(failed_groups) == 0,
 
@@ -1265,4 +1266,267 @@ class LDAPAdapter:
 
             "failed_groups":
                 failed_groups
+        }
+    
+    #================================
+    # AD TOOL - SEARCH USER #
+    #================================
+    def disable_user(
+        self,
+        sam_account_name: str
+    ):
+
+        search_filter = (
+            f"(sAMAccountName={sam_account_name})"
+        )
+
+        self.connection.search(
+            search_base=LDAP_BASE_DN,
+            search_filter=search_filter,
+            attributes=[
+                "distinguishedName",
+                "userAccountControl"
+            ]
+        )
+
+        if not self.connection.entries:
+            raise Exception(
+                f"User not found: {sam_account_name}"
+            )
+
+        user = self.connection.entries[0]
+
+        user_dn = str(
+            user.distinguishedName.value
+        )
+
+        current_uac = int(
+            user.userAccountControl.value
+        )
+
+        ACCOUNTDISABLE = 2
+
+        new_uac = (
+            current_uac | ACCOUNTDISABLE
+        )
+
+        success = self.connection.modify(
+            user_dn,
+            {
+                "userAccountControl": [
+                    (
+                        MODIFY_REPLACE,
+                        [new_uac]
+                    )
+                ]
+            }
+        )
+
+        if not success:
+            raise Exception(
+                self.connection.result
+            )
+
+        return {
+            "success": True,
+            "action": "disable_user",
+            "sam_account_name": sam_account_name,
+            "user_dn": user_dn
+        }
+    #================================
+    # AD TOOL - ADD GROUP MEMBER #
+    #================================
+    def add_group_member(
+        self,
+        sam_account_name: str,
+        group_name: str
+    ):
+
+        # tìm user
+
+        self.connection.search(
+            search_base=LDAP_BASE_DN,
+            search_filter=(
+                f"(sAMAccountName={sam_account_name})"
+            ),
+            attributes=[
+                "distinguishedName"
+            ]
+        )
+
+        if not self.connection.entries:
+            raise Exception(
+                f"User not found: {sam_account_name}"
+            )
+
+        user_dn = str(
+            self.connection.entries[0]
+            .distinguishedName.value
+        )
+
+        # tìm group
+
+        self.connection.search(
+            search_base=LDAP_BASE_DN,
+            search_filter=(
+                f"(cn={group_name})"
+            ),
+            attributes=[
+                "distinguishedName"
+            ]
+        )
+
+        if not self.connection.entries:
+            raise Exception(
+                f"Group not found: {group_name}"
+            )
+
+        group_dn = str(
+            self.connection.entries[0]
+            .distinguishedName.value
+        )
+
+        success = self.connection.modify(
+            group_dn,
+            {
+                "member": [
+                    (
+                        MODIFY_ADD,
+                        [user_dn]
+                    )
+                ]
+            }
+        )
+
+        if not success:
+            raise Exception(
+                self.connection.result
+            )
+
+        return {
+            "success": True,
+            "action": "add_group_member",
+            "user": sam_account_name,
+            "group": group_name
+        }
+    #================================
+    # AD TOOL - REMOVE GROUP MEMBER #
+    #================================
+    def remove_group_member(
+        self,
+        sam_account_name: str,
+        group_name: str
+    ):
+
+        self.connection.search(
+            search_base=LDAP_BASE_DN,
+            search_filter=(
+                f"(sAMAccountName={sam_account_name})"
+            ),
+            attributes=[
+                "distinguishedName"
+            ]
+        )
+
+        if not self.connection.entries:
+            raise Exception(
+                f"User not found: {sam_account_name}"
+            )
+
+        user_dn = str(
+            self.connection.entries[0]
+            .distinguishedName.value
+        )
+
+        self.connection.search(
+            search_base=LDAP_BASE_DN,
+            search_filter=(
+                f"(cn={group_name})"
+            ),
+            attributes=[
+                "distinguishedName"
+            ]
+        )
+
+        if not self.connection.entries:
+            raise Exception(
+                f"Group not found: {group_name}"
+            )
+
+        group_dn = str(
+            self.connection.entries[0]
+            .distinguishedName.value
+        )
+
+        success = self.connection.modify(
+            group_dn,
+            {
+                "member": [
+                    (
+                        MODIFY_DELETE,
+                        [user_dn]
+                    )
+                ]
+            }
+        )
+
+        if not success:
+            raise Exception(
+                self.connection.result
+            )
+
+        return {
+            "success": True,
+            "action": "remove_group_member",
+            "user": sam_account_name,
+            "group": group_name
+        }
+
+    #================================
+    # AD TOOL - MOVE USER TO OU #
+    #================================
+    def move_user_to_ou(
+        self,
+        sam_account_name: str,
+        target_ou_dn: str
+    ):
+
+        self.connection.search(
+            search_base=LDAP_BASE_DN,
+            search_filter=(
+                f"(sAMAccountName={sam_account_name})"
+            ),
+            attributes=[
+                "distinguishedName"
+            ]
+        )
+
+        if not self.connection.entries:
+            raise Exception(
+                f"User not found: {sam_account_name}"
+            )
+
+        old_dn = str(
+            self.connection.entries[0]
+            .distinguishedName.value
+        )
+
+        rdn = old_dn.split(",")[0]
+
+        success = self.connection.modify_dn(
+            old_dn,
+            relative_dn=rdn,
+            new_superior=target_ou_dn
+        )
+
+        if not success:
+            raise Exception(
+                self.connection.result
+            )
+
+        return {
+            "success": True,
+            "action": "move_user_to_ou",
+            "user": sam_account_name,
+            "target_ou": target_ou_dn
         }

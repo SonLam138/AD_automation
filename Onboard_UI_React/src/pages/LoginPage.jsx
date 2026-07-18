@@ -30,10 +30,19 @@ function LoginPage() {
         
         const token = response.data.access_token;
 
+        const landingPage =
+            response.data.landing_page;
+
         localStorage.setItem(
             "access_token",
             token
         );
+
+        localStorage.setItem(
+            "landing_page",
+            landingPage
+        );
+
         setLoginSuccess(true);
 
         console.log("TOKEN SAVED");

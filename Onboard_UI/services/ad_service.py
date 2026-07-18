@@ -1,26 +1,22 @@
 from ldap3 import Server
 from ldap3 import Connection
 from ldap3 import ALL
-
-from app.LDAPConfig.ad_config import (
-    LDAP_SERVER,
-    BASE_DN,
-    SERVICE_ACCOUNT,
-    SERVICE_PASSWORD
-)
-
-
 from ldap3 import Server
 from ldap3 import Connection
 from ldap3 import ALL
 
-from app.LDAPConfig.ad_config import (
-    LDAP_SERVER,
-    BASE_DN,
-    SERVICE_ACCOUNT,
-    SERVICE_PASSWORD
+# from app.LDAPConfig.ad_config import (
+#     LDAP_SERVER,
+#     BASE_DN,
+#     SERVICE_ACCOUNT,
+#     SERVICE_PASSWORD
+# )
+from app.config import (
+    LDAP_HOST,
+    LDAP_BASE_DN,
+    LDAP_USER,
+    LDAP_PASSWORD
 )
-
 
 def authenticate_and_get_profile(
     username: str,
@@ -30,7 +26,7 @@ def authenticate_and_get_profile(
     try:
 
         server = Server(
-            LDAP_SERVER,
+            LDAP_HOST,
             get_info=ALL
         )
 
@@ -38,8 +34,8 @@ def authenticate_and_get_profile(
 
         svc_conn = Connection(
             server,
-            user=SERVICE_ACCOUNT,
-            password=SERVICE_PASSWORD,
+            user=LDAP_USER,
+            password=LDAP_PASSWORD,
             auto_bind=True
         )
 
@@ -48,7 +44,7 @@ def authenticate_and_get_profile(
         print(f"SEARCH USER = {username}")
 
         svc_conn.search(
-            search_base=BASE_DN,
+            search_base=LDAP_BASE_DN,
             search_filter=f"(sAMAccountName={username})",
             attributes=[
                 "displayName",
