@@ -9,7 +9,7 @@ from app.api.new_onboarding import (
 )
 from app.api.resolver_fake import router as resolver_fake_router
 from app.api.onboarding_request import router as onboarding_request_router
-
+from app.api.tool_ad import router as tool_ad_router
 from Onboard_UI.routers.auth_router import router as onboard_ui_router
 
 
@@ -71,4 +71,9 @@ app.include_router(
     onboard_ui_router,
     prefix="/onboard_auth",
     tags=["Onboard_Authentication"]
+)
+app.include_router(
+    tool_ad_router,
+    prefix="/api/ad",
+    tags=["AD Tools"]
 )
