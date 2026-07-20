@@ -4,43 +4,39 @@ Reset Password
 Unlock User
 Add Group
 
-Triết lý thiết kế :
-Deterministic First
-
-AD là nguồn sự thật.
-
-AI không quyết định hành động.
-
-AI chỉ hỗ trợ hiển thị, giải thích,
-tóm tắt hoặc xác nhận.
+1. Triết lý thiết kế :
+    Deterministic First 
+    AD là nguồn sự thật.
+    AI không quyết định hành động.
+    AI chỉ hỗ trợ hiển thị, giải thích,tóm tắt hoặc xác nhận.
 
 2. Kiến trúc tổng thể
-Layer 1 - UI
-    React
-    Chức năng : 
-        Login
-        Pending Requests (list row)
-        Review
-        Approve
+    Layer 1 - UI
+        React
+        Chức năng : 
+            Login
+            Pending Requests (list row)
+            Review
+            Approve
 
-Layer 2 - API
-    FastAPI
-        / onboard_auth/login
-        / onboarding/requests/pending
-        / onboarding/new
+    Layer 2 - API
+        FastAPI
+            / onboard_auth/login
+            / onboarding/requests/pending
+            / onboarding/new
 
-Layer 3 - Business Service
-    authenticate_user()
+    Layer 3 - Business Service
+        authenticate_user()
+    
+        create_user()
+    
+        add_group()
 
-    create_user()
-
-    add_group()
-
-Layer 4 - Active Directory
-    LDAP / LDAPS
-    Users
-    Groups
-    OU
+    Layer 4 - Active Directory
+        LDAP / LDAPS
+        Users
+        Groups
+        OU
 
 3. Nguyên tắc Authentication
     AD User
