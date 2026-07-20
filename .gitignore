@@ -4,3 +4,5 @@
 	venv/
 	sessions.json
 	data/
+	*config.py
+	app/config.py

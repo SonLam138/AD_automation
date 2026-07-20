@@ -4,13 +4,6 @@ from ldap3 import ALL
 from ldap3 import Server
 from ldap3 import Connection
 from ldap3 import ALL
-
-# from app.LDAPConfig.ad_config import (
-#     LDAP_SERVER,
-#     BASE_DN,
-#     SERVICE_ACCOUNT,
-#     SERVICE_PASSWORD
-# )
 from app.config import (
     LDAP_HOST,
     LDAP_BASE_DN,

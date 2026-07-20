@@ -32,3 +32,6 @@ Sửa DisplayName phần hiển thị, vd (K.CNTT-HO):
   Update file division_code_map.json
 
 
+
+Case Onboard : JWT lưu trên UI và UI gọi trực tiếp API, lấy JWT từ UI
+Case AD_Tools : JWT lưu tại peding_action và system call API
