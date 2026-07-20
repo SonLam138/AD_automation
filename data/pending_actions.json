@@ -1,0 +1,149 @@
+{
+  "62eaeebd-9ff9-41fb-a09f-9f36cb85f053": {
+    "status": "READY_TO_CONFIRM",
+    "next_step": "CONFIRM_ACTION",
+    "action": "disable_user",
+    "target_object_type": null,
+    "resolved_objects": {
+      "USER": {
+        "object_type": "USER",
+        "display_name": "Nguyen Minh Son",
+        "sam_account_name": "sonnm",
+        "mail": "sonnm@automate.com.vn",
+        "department": "",
+        "title": "",
+        "distinguished_name": "CN=Nguyen Minh Son,OU=HO,DC=automate,DC=com,DC=vn",
+        "user_account_control": "512",
+        "is_disabled": false
+      }
+    },
+    "candidate_objects": {},
+    "proposed_action_payload": {
+      "sam_account_name": "sonnm"
+    },
+    "approval_policy": "admin_secret",
+    "action_id": "62eaeebd-9ff9-41fb-a09f-9f36cb85f053"
+  },
+  "a4a4d0b4-997e-4b62-8698-49823649a58c": {
+    "status": "NEED_OBJECT_SELECTION",
+    "next_step": "ASK_OBJECT_SELECTION",
+    "action": "add_group_member",
+    "target_object_type": "GROUP",
+    "resolved_objects": {
+      "USER": {
+        "object_type": "USER",
+        "display_name": "Test User",
+        "sam_account_name": "AuThen",
+        "mail": "Authen@automate.com.vn",
+        "department": "",
+        "title": "",
+        "distinguished_name": "CN=AuThen,OU=HO,DC=automate,DC=com,DC=vn",
+        "user_account_control": "544",
+        "is_disabled": false
+      }
+    },
+    "candidate_objects": {
+      "GROUP": [
+        {
+          "object_type": "GROUP",
+          "name": "Administrators",
+          "cn": "Administrators",
+          "description": "Administrators have complete and unrestricted access to the computer/domain",
+          "mail": "",
+          "distinguished_name": "CN=Administrators,CN=Builtin,DC=automate,DC=com,DC=vn"
+        },
+        {
+          "object_type": "GROUP",
+          "name": "Hyper-V Administrators",
+          "cn": "Hyper-V Administrators",
+          "description": "Members of this group have complete and unrestricted access to all features of Hyper-V.",
+          "mail": "",
+          "distinguished_name": "CN=Hyper-V Administrators,CN=Builtin,DC=automate,DC=com,DC=vn"
+        },
+        {
+          "object_type": "GROUP",
+          "name": "Storage Replica Administrators",
+          "cn": "Storage Replica Administrators",
+          "description": "Members of this group have complete and unrestricted access to all features of Storage Replica.",
+          "mail": "",
+          "distinguished_name": "CN=Storage Replica Administrators,CN=Builtin,DC=automate,DC=com,DC=vn"
+        },
+        {
+          "object_type": "GROUP",
+          "name": "Schema Admins",
+          "cn": "Schema Admins",
+          "description": "Designated administrators of the schema",
+          "mail": "",
+          "distinguished_name": "CN=Schema Admins,CN=Users,DC=automate,DC=com,DC=vn"
+        },
+        {
+          "object_type": "GROUP",
+          "name": "Enterprise Admins",
+          "cn": "Enterprise Admins",
+          "description": "Designated administrators of the enterprise",
+          "mail": "",
+          "distinguished_name": "CN=Enterprise Admins,CN=Users,DC=automate,DC=com,DC=vn"
+        },
+        {
+          "object_type": "GROUP",
+          "name": "Domain Admins",
+          "cn": "Domain Admins",
+          "description": "Designated administrators of the domain",
+          "mail": "",
+          "distinguished_name": "CN=Domain Admins,CN=Users,DC=automate,DC=com,DC=vn"
+        },
+        {
+          "object_type": "GROUP",
+          "name": "DnsAdmins",
+          "cn": "DnsAdmins",
+          "description": "DNS Administrators Group",
+          "mail": "",
+          "distinguished_name": "CN=DnsAdmins,CN=Users,DC=automate,DC=com,DC=vn"
+        }
+      ]
+    },
+    "proposed_action_payload": {
+      "sam_account_name": "AuThen"
+    },
+    "approval_policy": null,
+    "action_id": "a4a4d0b4-997e-4b62-8698-49823649a58c"
+  },
+  "0e1f8d85-82e0-4a2e-94f2-8f9f33da97d0": {
+    "status": "NEED_OBJECT_SELECTION",
+    "next_step": "ASK_OBJECT_SELECTION",
+    "action": "move_user_to_ou",
+    "target_object_type": "OU",
+    "resolved_objects": {
+      "USER": {
+        "object_type": "USER",
+        "display_name": "Nguyen Minh Son",
+        "sam_account_name": "sonnm",
+        "mail": "sonnm@automate.com.vn",
+        "department": "",
+        "title": "",
+        "distinguished_name": "CN=Nguyen Minh Son,OU=HO,DC=automate,DC=com,DC=vn",
+        "user_account_control": "512",
+        "is_disabled": false
+      }
+    },
+    "candidate_objects": {
+      "OU": [
+        {
+          "object_type": "OU",
+          "ou": "HO",
+          "distinguished_name": "OU=HO,DC=automate,DC=com,DC=vn"
+        },
+        {
+          "object_type": "OU",
+          "ou": "PVCB Khanh Hoa",
+          "distinguished_name": "OU=PVCB Khanh Hoa,OU=CN-Azure,OU=Chi Nhanh,DC=automate,DC=com,DC=vn"
+        }
+      ]
+    },
+    "proposed_action_payload": {
+      "sam_account_name": "sonnm"
+    },
+    "approval_policy": null,
+    "action_id": "0e1f8d85-82e0-4a2e-94f2-8f9f33da97d0"
+  }
+}
