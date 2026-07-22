@@ -7,6 +7,9 @@ from app.agent.llm_client import (
 )
 
 
+import json
+
+
 def generate_user_response(
     resolver_result: dict
 ):
@@ -19,4 +22,15 @@ def generate_user_response(
         prompt
     )
 
-    return response.strip()
+    try:
+
+        data = json.loads(response)
+
+        return (
+            data.get("text")
+            or response
+        )
+
+    except Exception:
+
+        return response.strip()

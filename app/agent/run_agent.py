@@ -24,7 +24,9 @@ from app.agent.action_handle import (
     handle_confirm_action,
     handle_admin_secret
 )
-
+from app.agent.response_planner import (
+    generate_user_response
+)
 
 def _get_action_param_value(
     object_type: str,
@@ -453,6 +455,30 @@ def resolve_action(
 
         result["action_id"] = action_id
 
+
+    # ==========================================
+    # COPILOT RESPONSE
+    # ==========================================
+
+    try:
+
+        result["message"] = (
+            generate_user_response(
+                resolver_result=result
+            )
+        )
+
+    except Exception as ex:
+
+        print(
+            "GENERATE RESPONSE ERROR =",
+            ex
+        )
+
+        result["message"] = (
+            "Tôi đã xử lý yêu cầu nhưng chưa thể tạo phản hồi."
+        )
+
     return result
 
 #========================================================
@@ -464,13 +490,14 @@ def handle_user_input(
     user_text: str
 ):
     """
-    Entry point cho tất cả turn sau.
+    Entry point cho các turn tiếp theo.
+
+    Chỉ đọc state hiện tại
+    và route tới handler tương ứng.
 
     Không gọi LLM.
     Không detect lại action.
-
-    Chỉ đọc state hiện tại
-    và route đến handler tương ứng.
+    Không execute action.
     """
 
     pending_action = get_pending_action(
@@ -480,6 +507,7 @@ def handle_user_input(
     if not pending_action:
         return {
             "success": False,
+            "state": "FAILED",
             "error": "Pending action not found"
         }
 
@@ -488,15 +516,18 @@ def handle_user_input(
     )
 
     #
-    # Confirm
+    # User xác nhận
     #
-    if state == "CONFIRM_READY":
+    if state == (
+        "CONFIRM_READY"
+    ):
         return handle_confirm_action(
-            action_id
+            action_id,
+            user_text
         )
 
     #
-    # Waiting admin secret
+    # Chờ nhập admin secret
     #
     if state == (
         "WAITING_ADMIN_SECRET"
@@ -507,35 +538,50 @@ def handle_user_input(
         )
 
     #
-    # Waiting user select object
+    # Đã xác thực xong
     #
-    # if state == (
-    #     "WAITING_OBJECT_SELECTION"
-    # ):
-    #     return handle_object_selection(
-    #         action_id,
-    #         user_text
-    #     )
+    if state == (
+        "EXECUTION_READY"
+    ):
+        return {
+            "success": True,
+            "state": "EXECUTION_READY",
+            "message": (
+                "Yêu cầu đã sẵn sàng để thực thi."
+            ),
+            "pending_action": pending_action
+        }
 
-    # #
-    # # Waiting missing object
-    # #
-    # if state == (
-    #     "WAITING_REQUIRED_OBJECT"
-    # ):
-    #     return handle_required_object(
-    #         action_id,
-    #         user_text
-    #     )
+    #
+    # User nhập sai xác nhận quá số lần
+    #
+    if state == (
+        "CANCELLED"
+    ):
+        return {
+            "success": False,
+            "state": "CANCELLED",
+            "message": (
+                "Yêu cầu đã bị hủy."
+            )
+        }
+
+    #
+    # Future states
+    #
+    # WAITING_OBJECT_SELECTION
+    # WAITING_REQUIRED_OBJECT
+    # WAITING_APPROVER
+    #
 
     return {
         "success": False,
+        "state": state,
         "error": (
             f"Unsupported state: "
             f"{state}"
         )
     }
-
 
 
 

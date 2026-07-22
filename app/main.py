@@ -77,3 +77,11 @@ app.include_router(
     prefix="/api/ad",
     tags=["AD Tools"]
 )
+### Test
+from app.api import chat
+
+app.include_router(
+    chat.router,
+    prefix="/api/chat",
+    tags=["Chat"]
+)

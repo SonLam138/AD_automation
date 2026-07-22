@@ -10,7 +10,9 @@ from app.models.ad_tool import (
     RemoveGroupRequest,
     MoveUserRequest
 )
-
+from app.agent.execution_response import (
+    generate_execution_response
+)
 from app.adapters.ldap_adapter import (
     LDAPAdapter
 )
@@ -52,7 +54,27 @@ def disable_user(
             request.sam_account_name
         )
 
-        return result
+
+
+        execution_contract = {
+            "state": "ACTION_SUCCESS",
+            "action": "disable_user",
+            "proposed_action_payload": {
+                "sam_account_name":
+                    request.sam_account_name
+            },
+            "execution_result": result
+        }
+
+        message = generate_execution_response(
+            execution_contract
+        )
+
+        return {
+            "success": True,
+            "message": message,
+            "execution_result": result
+        }
 
     except Exception as ex:
 
@@ -114,3 +136,4 @@ def move_user(
         request.sam_account_name,
         request.target_ou_dn
     )
+

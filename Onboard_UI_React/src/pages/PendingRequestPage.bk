@@ -1039,3 +1039,42 @@ export default PendingRequestPage;
             </div>
         );
     }
+
+
+                if (result.state === "CONFIRM_READY") {
+
+                setMessages(prev => [
+                    ...prev,
+                    {
+                        sender: "assistant",
+                        type: "confirm_ready",
+                        data: result
+                    }
+                ]);
+
+            } else {
+
+                setMessages(prev => [
+                    ...prev,
+                    {
+                        sender: "assistant",
+                        text: result.message || "Đã xử lý."
+                    }
+                ]);
+
+            }
+
+            setMessages(prev => [
+            ...prev,
+
+            {
+                sender: "assistant",
+                text: result.message
+            },
+
+            {
+                sender: "assistant",
+                type: result.state,
+                data: result
+            }
+        ]);

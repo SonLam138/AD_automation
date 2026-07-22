@@ -174,5 +174,655 @@
     },
     "approval_policy": "admin_secret",
     "action_id": "7d1518d0-56c5-4048-b804-a84a61d3caa3"
+  },
+  "cac46df4-d194-465f-b8eb-c1f00973a64f": {
+    "status": "READY_TO_CONFIRM",
+    "state": "CONFIRM_READY",
+    "next_step": "CONFIRM_ACTION",
+    "action": "disable_user",
+    "target_object_type": null,
+    "resolved_objects": {
+      "USER": {
+        "object_type": "USER",
+        "display_name": "Nguyen Minh Son",
+        "sam_account_name": "sonnm",
+        "mail": "sonnm@automate.com.vn",
+        "department": "",
+        "title": "",
+        "distinguished_name": "CN=Nguyen Minh Son,OU=HO,DC=automate,DC=com,DC=vn",
+        "user_account_control": "512",
+        "is_disabled": false
+      }
+    },
+    "candidate_objects": {},
+    "proposed_action_payload": {
+      "sam_account_name": "sonnm"
+    },
+    "approval_policy": "admin_secret",
+    "action_id": "cac46df4-d194-465f-b8eb-c1f00973a64f"
+  },
+  "03801f35-61af-4547-8a52-3cd34b0b6db3": {
+    "status": "READY_TO_CONFIRM",
+    "state": "CONFIRM_READY",
+    "next_step": "CONFIRM_ACTION",
+    "action": "disable_user",
+    "target_object_type": null,
+    "resolved_objects": {
+      "USER": {
+        "object_type": "USER",
+        "display_name": "Nguyen Minh Son",
+        "sam_account_name": "sonnm",
+        "mail": "sonnm@automate.com.vn",
+        "department": "",
+        "title": "",
+        "distinguished_name": "CN=Nguyen Minh Son,OU=HO,DC=automate,DC=com,DC=vn",
+        "user_account_control": "512",
+        "is_disabled": false
+      }
+    },
+    "candidate_objects": {},
+    "proposed_action_payload": {
+      "sam_account_name": "sonnm"
+    },
+    "approval_policy": "admin_secret",
+    "action_id": "03801f35-61af-4547-8a52-3cd34b0b6db3"
+  },
+  "cbe4d0fc-ec93-412b-adef-77cd16f60870": {
+    "status": "READY_TO_CONFIRM",
+    "state": "CONFIRM_READY",
+    "next_step": "CONFIRM_ACTION",
+    "action": "disable_user",
+    "target_object_type": null,
+    "resolved_objects": {
+      "USER": {
+        "object_type": "USER",
+        "display_name": "Onboard Approver",
+        "sam_account_name": "Onboard.approve",
+        "mail": "",
+        "department": "",
+        "title": "",
+        "distinguished_name": "CN=Onboard Approver,OU=HO,DC=automate,DC=com,DC=vn",
+        "user_account_control": "66048",
+        "is_disabled": false
+      }
+    },
+    "candidate_objects": {},
+    "proposed_action_payload": {
+      "sam_account_name": "Onboard.approve"
+    },
+    "approval_policy": "normal",
+    "action_id": "cbe4d0fc-ec93-412b-adef-77cd16f60870"
+  },
+  "d8a098d8-ecad-4583-a725-b901c868ef81": {
+    "status": "READY_TO_CONFIRM",
+    "state": "CONFIRM_READY",
+    "next_step": "CONFIRM_ACTION",
+    "action": "disable_user",
+    "target_object_type": null,
+    "resolved_objects": {
+      "USER": {
+        "object_type": "USER",
+        "display_name": "Onboard Approver",
+        "sam_account_name": "Onboard.approve",
+        "mail": "",
+        "department": "",
+        "title": "",
+        "distinguished_name": "CN=Onboard Approver,OU=HO,DC=automate,DC=com,DC=vn",
+        "user_account_control": "66048",
+        "is_disabled": false
+      }
+    },
+    "candidate_objects": {},
+    "proposed_action_payload": {
+      "sam_account_name": "Onboard.approve"
+    },
+    "approval_policy": "normal",
+    "action_id": "d8a098d8-ecad-4583-a725-b901c868ef81"
+  },
+  "8fb76dfa-ac1e-4c7b-8fac-4080202a254f": {
+    "status": "READY_TO_CONFIRM",
+    "state": "CONFIRM_READY",
+    "next_step": "CONFIRM_ACTION",
+    "action": "disable_user",
+    "target_object_type": null,
+    "resolved_objects": {
+      "USER": {
+        "object_type": "USER",
+        "display_name": "Nguyen Minh Son",
+        "sam_account_name": "sonnm",
+        "mail": "sonnm@automate.com.vn",
+        "department": "",
+        "title": "",
+        "distinguished_name": "CN=Nguyen Minh Son,OU=HO,DC=automate,DC=com,DC=vn",
+        "user_account_control": "512",
+        "is_disabled": false
+      }
+    },
+    "candidate_objects": {},
+    "proposed_action_payload": {
+      "sam_account_name": "sonnm"
+    },
+    "approval_policy": "admin_secret",
+    "action_id": "8fb76dfa-ac1e-4c7b-8fac-4080202a254f"
+  },
+  "155b03a6-6f13-4d34-8db9-8472393462a8": {
+    "status": "READY_TO_CONFIRM",
+    "state": "CONFIRM_READY",
+    "next_step": "CONFIRM_ACTION",
+    "action": "disable_user",
+    "target_object_type": null,
+    "resolved_objects": {
+      "USER": {
+        "object_type": "USER",
+        "display_name": "Nguyen Minh Son",
+        "sam_account_name": "sonnm",
+        "mail": "sonnm@automate.com.vn",
+        "department": "",
+        "title": "",
+        "distinguished_name": "CN=Nguyen Minh Son,OU=HO,DC=automate,DC=com,DC=vn",
+        "user_account_control": "512",
+        "is_disabled": false
+      }
+    },
+    "candidate_objects": {},
+    "proposed_action_payload": {
+      "sam_account_name": "sonnm"
+    },
+    "approval_policy": "admin_secret",
+    "action_id": "155b03a6-6f13-4d34-8db9-8472393462a8"
+  },
+  "bb510df0-3f79-4e14-a7d7-6c8f12036d22": {
+    "status": "READY_TO_CONFIRM",
+    "state": "CONFIRM_READY",
+    "next_step": "CONFIRM_ACTION",
+    "action": "disable_user",
+    "target_object_type": null,
+    "resolved_objects": {
+      "USER": {
+        "object_type": "USER",
+        "display_name": "Nguyen Minh Son",
+        "sam_account_name": "sonnm",
+        "mail": "sonnm@automate.com.vn",
+        "department": "",
+        "title": "",
+        "distinguished_name": "CN=Nguyen Minh Son,OU=HO,DC=automate,DC=com,DC=vn",
+        "user_account_control": "512",
+        "is_disabled": false
+      }
+    },
+    "candidate_objects": {},
+    "proposed_action_payload": {
+      "sam_account_name": "sonnm"
+    },
+    "approval_policy": "admin_secret",
+    "action_id": "bb510df0-3f79-4e14-a7d7-6c8f12036d22"
+  },
+  "f9cb2166-afcf-480d-a02e-953b12f3d675": {
+    "status": "READY_TO_CONFIRM",
+    "state": "CONFIRM_READY",
+    "next_step": "CONFIRM_ACTION",
+    "action": "disable_user",
+    "target_object_type": null,
+    "resolved_objects": {
+      "USER": {
+        "object_type": "USER",
+        "display_name": "Nguyen Minh Son",
+        "sam_account_name": "sonnm",
+        "mail": "sonnm@automate.com.vn",
+        "department": "",
+        "title": "",
+        "distinguished_name": "CN=Nguyen Minh Son,OU=HO,DC=automate,DC=com,DC=vn",
+        "user_account_control": "512",
+        "is_disabled": false
+      }
+    },
+    "candidate_objects": {},
+    "proposed_action_payload": {
+      "sam_account_name": "sonnm"
+    },
+    "approval_policy": "admin_secret",
+    "action_id": "f9cb2166-afcf-480d-a02e-953b12f3d675"
+  },
+  "5ed80697-c744-429a-b4d9-8b4ba745a939": {
+    "status": "READY_TO_CONFIRM",
+    "state": "CONFIRM_READY",
+    "next_step": "CONFIRM_ACTION",
+    "action": "disable_user",
+    "target_object_type": null,
+    "resolved_objects": {
+      "USER": {
+        "object_type": "USER",
+        "display_name": "Nguyen Minh Son",
+        "sam_account_name": "sonnm",
+        "mail": "sonnm@automate.com.vn",
+        "department": "",
+        "title": "",
+        "distinguished_name": "CN=Nguyen Minh Son,OU=HO,DC=automate,DC=com,DC=vn",
+        "user_account_control": "512",
+        "is_disabled": false
+      }
+    },
+    "candidate_objects": {},
+    "proposed_action_payload": {
+      "sam_account_name": "sonnm"
+    },
+    "approval_policy": "admin_secret",
+    "action_id": "5ed80697-c744-429a-b4d9-8b4ba745a939"
+  },
+  "f4fac141-97dc-4fb9-b984-1b4cfdbf97bf": {
+    "status": "READY_TO_CONFIRM",
+    "state": "CONFIRM_READY",
+    "next_step": "CONFIRM_ACTION",
+    "action": "disable_user",
+    "target_object_type": null,
+    "resolved_objects": {
+      "USER": {
+        "object_type": "USER",
+        "display_name": "Nguyen Minh Son",
+        "sam_account_name": "sonnm",
+        "mail": "sonnm@automate.com.vn",
+        "department": "",
+        "title": "",
+        "distinguished_name": "CN=Nguyen Minh Son,OU=HO,DC=automate,DC=com,DC=vn",
+        "user_account_control": "512",
+        "is_disabled": false
+      }
+    },
+    "candidate_objects": {},
+    "proposed_action_payload": {
+      "sam_account_name": "sonnm"
+    },
+    "approval_policy": "admin_secret",
+    "action_id": "f4fac141-97dc-4fb9-b984-1b4cfdbf97bf"
+  },
+  "6a0587ad-6f48-4cc4-acd4-66d87042bf72": {
+    "status": "READY_TO_CONFIRM",
+    "state": "CONFIRM_READY",
+    "next_step": "CONFIRM_ACTION",
+    "action": "disable_user",
+    "target_object_type": null,
+    "resolved_objects": {
+      "USER": {
+        "object_type": "USER",
+        "display_name": "Nguyen Minh Son",
+        "sam_account_name": "sonnm",
+        "mail": "sonnm@automate.com.vn",
+        "department": "",
+        "title": "",
+        "distinguished_name": "CN=Nguyen Minh Son,OU=HO,DC=automate,DC=com,DC=vn",
+        "user_account_control": "512",
+        "is_disabled": false
+      }
+    },
+    "candidate_objects": {},
+    "proposed_action_payload": {
+      "sam_account_name": "sonnm"
+    },
+    "approval_policy": "admin_secret",
+    "action_id": "6a0587ad-6f48-4cc4-acd4-66d87042bf72"
+  },
+  "d5756a25-f3ba-4047-9735-ad93d696c5cf": {
+    "status": "READY_TO_CONFIRM",
+    "state": "CONFIRM_READY",
+    "next_step": "CONFIRM_ACTION",
+    "action": "disable_user",
+    "target_object_type": null,
+    "resolved_objects": {
+      "USER": {
+        "object_type": "USER",
+        "display_name": "Onboard Approver",
+        "sam_account_name": "Onboard.approve",
+        "mail": "",
+        "department": "",
+        "title": "",
+        "distinguished_name": "CN=Onboard Approver,OU=HO,DC=automate,DC=com,DC=vn",
+        "user_account_control": "66048",
+        "is_disabled": false
+      }
+    },
+    "candidate_objects": {},
+    "proposed_action_payload": {
+      "sam_account_name": "Onboard.approve"
+    },
+    "approval_policy": "normal",
+    "action_id": "d5756a25-f3ba-4047-9735-ad93d696c5cf"
+  },
+  "2353f4be-2467-4220-8fd8-cada70c7b103": {
+    "status": "READY_TO_CONFIRM",
+    "state": "CONFIRM_READY",
+    "next_step": "CONFIRM_ACTION",
+    "action": "disable_user",
+    "target_object_type": null,
+    "resolved_objects": {
+      "USER": {
+        "object_type": "USER",
+        "display_name": "Onboard Approver",
+        "sam_account_name": "Onboard.approve",
+        "mail": "",
+        "department": "",
+        "title": "",
+        "distinguished_name": "CN=Onboard Approver,OU=HO,DC=automate,DC=com,DC=vn",
+        "user_account_control": "66048",
+        "is_disabled": false
+      }
+    },
+    "candidate_objects": {},
+    "proposed_action_payload": {
+      "sam_account_name": "Onboard.approve"
+    },
+    "approval_policy": "normal",
+    "action_id": "2353f4be-2467-4220-8fd8-cada70c7b103"
+  },
+  "35613425-8f57-4bf7-b2ba-5827a7cb0558": {
+    "status": "READY_TO_CONFIRM",
+    "state": "CONFIRM_READY",
+    "next_step": "CONFIRM_ACTION",
+    "action": "disable_user",
+    "target_object_type": null,
+    "resolved_objects": {
+      "USER": {
+        "object_type": "USER",
+        "display_name": "Onboard Approver",
+        "sam_account_name": "Onboard.approve",
+        "mail": "",
+        "department": "",
+        "title": "",
+        "distinguished_name": "CN=Onboard Approver,OU=HO,DC=automate,DC=com,DC=vn",
+        "user_account_control": "66048",
+        "is_disabled": false
+      }
+    },
+    "candidate_objects": {},
+    "proposed_action_payload": {
+      "sam_account_name": "Onboard.approve"
+    },
+    "approval_policy": "normal",
+    "action_id": "35613425-8f57-4bf7-b2ba-5827a7cb0558"
+  },
+  "6462fb5c-3b98-4c23-9f30-3c86fee6b7c2": {
+    "status": "READY_TO_CONFIRM",
+    "state": "CONFIRM_READY",
+    "next_step": "CONFIRM_ACTION",
+    "action": "disable_user",
+    "target_object_type": null,
+    "resolved_objects": {
+      "USER": {
+        "object_type": "USER",
+        "display_name": "Onboard Approver",
+        "sam_account_name": "Onboard.approve",
+        "mail": "",
+        "department": "",
+        "title": "",
+        "distinguished_name": "CN=Onboard Approver,OU=HO,DC=automate,DC=com,DC=vn",
+        "user_account_control": "66048",
+        "is_disabled": false
+      }
+    },
+    "candidate_objects": {},
+    "proposed_action_payload": {
+      "sam_account_name": "Onboard.approve"
+    },
+    "approval_policy": "normal",
+    "action_id": "6462fb5c-3b98-4c23-9f30-3c86fee6b7c2"
+  },
+  "96ff1529-4c7e-4d6a-a66d-9e9b5c6d780d": {
+    "status": "READY_TO_CONFIRM",
+    "state": "CONFIRM_READY",
+    "next_step": "CONFIRM_ACTION",
+    "action": "disable_user",
+    "target_object_type": null,
+    "resolved_objects": {
+      "USER": {
+        "object_type": "USER",
+        "display_name": "Onboard Approver",
+        "sam_account_name": "Onboard.approve",
+        "mail": "",
+        "department": "",
+        "title": "",
+        "distinguished_name": "CN=Onboard Approver,OU=HO,DC=automate,DC=com,DC=vn",
+        "user_account_control": "66048",
+        "is_disabled": false
+      }
+    },
+    "candidate_objects": {},
+    "proposed_action_payload": {
+      "sam_account_name": "Onboard.approve"
+    },
+    "approval_policy": "normal",
+    "action_id": "96ff1529-4c7e-4d6a-a66d-9e9b5c6d780d"
+  },
+  "9335f0b0-a7c8-44c4-9410-f7ca712944ae": {
+    "status": "READY_TO_CONFIRM",
+    "state": "CONFIRM_READY",
+    "next_step": "CONFIRM_ACTION",
+    "action": "disable_user",
+    "target_object_type": null,
+    "resolved_objects": {
+      "USER": {
+        "object_type": "USER",
+        "display_name": "Onboard Approver",
+        "sam_account_name": "Onboard.approve",
+        "mail": "",
+        "department": "",
+        "title": "",
+        "distinguished_name": "CN=Onboard Approver,OU=HO,DC=automate,DC=com,DC=vn",
+        "user_account_control": "66048",
+        "is_disabled": false
+      }
+    },
+    "candidate_objects": {},
+    "proposed_action_payload": {
+      "sam_account_name": "Onboard.approve"
+    },
+    "approval_policy": "normal",
+    "action_id": "9335f0b0-a7c8-44c4-9410-f7ca712944ae"
+  },
+  "1335d0be-9b55-4e58-a2d4-eea0be83b4fd": {
+    "status": "READY_TO_CONFIRM",
+    "state": "CONFIRM_READY",
+    "next_step": "CONFIRM_ACTION",
+    "action": "disable_user",
+    "target_object_type": null,
+    "resolved_objects": {
+      "USER": {
+        "object_type": "USER",
+        "display_name": "Onboard Approver",
+        "sam_account_name": "Onboard.approve",
+        "mail": "",
+        "department": "",
+        "title": "",
+        "distinguished_name": "CN=Onboard Approver,OU=HO,DC=automate,DC=com,DC=vn",
+        "user_account_control": "66048",
+        "is_disabled": false
+      }
+    },
+    "candidate_objects": {},
+    "proposed_action_payload": {
+      "sam_account_name": "Onboard.approve"
+    },
+    "approval_policy": "normal",
+    "action_id": "1335d0be-9b55-4e58-a2d4-eea0be83b4fd"
+  },
+  "ce12fe92-bae6-45c0-a4c3-5c1bc4657da1": {
+    "status": "READY_TO_CONFIRM",
+    "state": "CONFIRM_READY",
+    "next_step": "CONFIRM_ACTION",
+    "action": "disable_user",
+    "target_object_type": null,
+    "resolved_objects": {
+      "USER": {
+        "object_type": "USER",
+        "display_name": "AD Automation 4",
+        "sam_account_name": "ad.auto4",
+        "mail": "",
+        "department": "K.CNTT-HO",
+        "title": "Chuyen vien",
+        "distinguished_name": "CN=AD Automation 4,OU=HO,DC=automate,DC=com,DC=vn",
+        "user_account_control": "512",
+        "is_disabled": false
+      }
+    },
+    "candidate_objects": {},
+    "proposed_action_payload": {
+      "sam_account_name": "ad.auto4"
+    },
+    "approval_policy": "normal",
+    "action_id": "ce12fe92-bae6-45c0-a4c3-5c1bc4657da1"
+  },
+  "bc6c09b4-5bea-4e7d-8a52-665f66f4dc1b": {
+    "status": "READY_TO_CONFIRM",
+    "state": "CONFIRM_READY",
+    "next_step": "CONFIRM_ACTION",
+    "action": "disable_user",
+    "target_object_type": null,
+    "resolved_objects": {
+      "USER": {
+        "object_type": "USER",
+        "display_name": "AD Automation 2",
+        "sam_account_name": "ad.auto2",
+        "mail": "",
+        "department": "K.CNTT-HO",
+        "title": "Chuyen vien",
+        "distinguished_name": "CN=AD Automation 2,OU=HO,DC=automate,DC=com,DC=vn",
+        "user_account_control": "546",
+        "is_disabled": true
+      }
+    },
+    "candidate_objects": {},
+    "proposed_action_payload": {
+      "sam_account_name": "ad.auto2"
+    },
+    "approval_policy": "normal",
+    "action_id": "bc6c09b4-5bea-4e7d-8a52-665f66f4dc1b"
+  },
+  "da76ebcb-e98b-4098-8bcd-1d0d7479a9e3": {
+    "status": "READY_TO_CONFIRM",
+    "state": "CONFIRM_READY",
+    "next_step": "CONFIRM_ACTION",
+    "action": "disable_user",
+    "target_object_type": null,
+    "resolved_objects": {
+      "USER": {
+        "object_type": "USER",
+        "display_name": "AD Automation 2",
+        "sam_account_name": "ad.auto2",
+        "mail": "",
+        "department": "K.CNTT-HO",
+        "title": "Chuyen vien",
+        "distinguished_name": "CN=AD Automation 2,OU=HO,DC=automate,DC=com,DC=vn",
+        "user_account_control": "546",
+        "is_disabled": true
+      }
+    },
+    "candidate_objects": {},
+    "proposed_action_payload": {
+      "sam_account_name": "ad.auto2"
+    },
+    "approval_policy": "normal",
+    "action_id": "da76ebcb-e98b-4098-8bcd-1d0d7479a9e3"
+  },
+  "ddc8623d-3a9d-4438-bfbe-f661c9c64af3": {
+    "status": "READY_TO_CONFIRM",
+    "state": "CONFIRM_READY",
+    "next_step": "CONFIRM_ACTION",
+    "action": "disable_user",
+    "target_object_type": null,
+    "resolved_objects": {
+      "USER": {
+        "object_type": "USER",
+        "display_name": "AD Automation 2",
+        "sam_account_name": "ad.auto2",
+        "mail": "",
+        "department": "K.CNTT-HO",
+        "title": "Chuyen vien",
+        "distinguished_name": "CN=AD Automation 2,OU=HO,DC=automate,DC=com,DC=vn",
+        "user_account_control": "546",
+        "is_disabled": true
+      }
+    },
+    "candidate_objects": {},
+    "proposed_action_payload": {
+      "sam_account_name": "ad.auto2"
+    },
+    "approval_policy": "normal",
+    "action_id": "ddc8623d-3a9d-4438-bfbe-f661c9c64af3"
+  },
+  "4c454ada-5e36-48ac-843c-13f837e38d20": {
+    "status": "READY_TO_CONFIRM",
+    "state": "CONFIRM_READY",
+    "next_step": "CONFIRM_ACTION",
+    "action": "disable_user",
+    "target_object_type": null,
+    "resolved_objects": {
+      "USER": {
+        "object_type": "USER",
+        "display_name": "AD Automation 2",
+        "sam_account_name": "ad.auto2",
+        "mail": "",
+        "department": "K.CNTT-HO",
+        "title": "Chuyen vien",
+        "distinguished_name": "CN=AD Automation 2,OU=HO,DC=automate,DC=com,DC=vn",
+        "user_account_control": "546",
+        "is_disabled": true
+      }
+    },
+    "candidate_objects": {},
+    "proposed_action_payload": {
+      "sam_account_name": "ad.auto2"
+    },
+    "approval_policy": "normal",
+    "action_id": "4c454ada-5e36-48ac-843c-13f837e38d20"
+  },
+  "b7d9002c-0e3c-43d8-a209-1d265cac05c2": {
+    "status": "READY_TO_CONFIRM",
+    "state": "CONFIRM_READY",
+    "next_step": "CONFIRM_ACTION",
+    "action": "disable_user",
+    "target_object_type": null,
+    "resolved_objects": {
+      "USER": {
+        "object_type": "USER",
+        "display_name": "AD Automation 2",
+        "sam_account_name": "ad.auto2",
+        "mail": "",
+        "department": "K.CNTT-HO",
+        "title": "Chuyen vien",
+        "distinguished_name": "CN=AD Automation 2,OU=HO,DC=automate,DC=com,DC=vn",
+        "user_account_control": "546",
+        "is_disabled": true
+      }
+    },
+    "candidate_objects": {},
+    "proposed_action_payload": {
+      "sam_account_name": "ad.auto2"
+    },
+    "approval_policy": "normal",
+    "action_id": "b7d9002c-0e3c-43d8-a209-1d265cac05c2"
+  },
+  "049998a8-d2da-47dd-9ab8-856ba929d2ea": {
+    "status": "READY_TO_CONFIRM",
+    "state": "CONFIRM_READY",
+    "next_step": "CONFIRM_ACTION",
+    "action": "disable_user",
+    "target_object_type": null,
+    "resolved_objects": {
+      "USER": {
+        "object_type": "USER",
+        "display_name": "AD Automation 6",
+        "sam_account_name": "ad.auto6",
+        "mail": "",
+        "department": "K.CNTT-HO",
+        "title": "Chuyen vien",
+        "distinguished_name": "CN=AD Automation 6,OU=HO,DC=automate,DC=com,DC=vn",
+        "user_account_control": "512",
+        "is_disabled": false
+      }
+    },
+    "candidate_objects": {},
+    "proposed_action_payload": {
+      "sam_account_name": "ad.auto6"
+    },
+    "approval_policy": "normal",
+    "action_id": "049998a8-d2da-47dd-9ab8-856ba929d2ea"
   }
 }

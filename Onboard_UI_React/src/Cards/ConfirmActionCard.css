@@ -1,0 +1,323 @@
+.confirm-card {
+    width: fit-content;
+    max-width: 560px;
+
+    margin: 6px 0 10px 0;
+    padding: 20px 22px;
+
+    border-radius: 22px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #111111 0%,
+            #1b1b1b 55%,
+            #241c08 100%
+        );
+
+    border: 1px solid rgba(212, 175, 55, 0.72);
+
+    color: #f7df8a;
+
+    box-shadow:
+        0 12px 28px rgba(0, 0, 0, 0.22),
+        0 0 18px rgba(212, 175, 55, 0.18);
+
+    position: relative;
+    /*overflow: hidden;*/
+}
+
+/* Lớp ánh vàng rất nhẹ phía trên card 
+.confirm-card::before {
+    content: "";
+
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+
+    height: 3px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            #ffd700,
+            transparent
+        );
+
+    opacity: 0.85;
+}
+*/
+/* =========================
+   HEADER
+========================= */
+
+.confirm-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+
+    border-bottom: 1px solid rgba(212, 175, 55, 0.25);
+}
+
+.confirm-card-title {
+    color: #ffd700;
+
+    font-size: 17px;
+    font-weight: 800;
+
+    letter-spacing: 0.3px;
+}
+
+.confirm-card-subtitle {
+    margin-top: 5px;
+
+    color: #d7c27a;
+
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+/* =========================
+   BODY
+========================= */
+
+.confirm-card-body {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    margin-top: 4px;
+}
+
+.confirm-row {
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+
+    font-size: 14px;
+}
+
+.confirm-label {
+    width: 72px;
+    flex-shrink: 0;
+
+    color: #bca55c;
+
+    font-weight: 700;
+}
+
+.confirm-value {
+    color: #fff3b0;
+
+    font-weight: 700;
+
+    word-break: break-word;
+}
+
+/* =========================
+   POLICY BADGE
+========================= */
+
+.policy-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 5px 12px;
+
+    border-radius: 999px;
+
+    font-size: 12px;
+    font-weight: 800;
+
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+}
+
+.policy-badge.normal {
+    background: rgba(107, 255, 188, 0.12);
+
+    color: #82ffc9;
+
+    border: 1px solid rgba(130, 255, 201, 0.38);
+}
+
+.policy-badge.admin_secret {
+    background: rgba(255, 215, 0, 0.13);
+
+    color: #ffd700;
+
+    border: 1px solid rgba(255, 215, 0, 0.45);
+
+    box-shadow:
+        0 0 12px rgba(255, 215, 0, 0.12);
+}
+
+/* =========================
+   SECRET BOX
+========================= */
+
+.secret-box {
+    margin-top: 16px;
+    padding: 14px;
+
+    border-radius: 16px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(0, 0, 0, 0.42),
+            rgba(40, 31, 8, 0.55)
+        );
+
+    border: 1px solid rgba(212, 175, 55, 0.36);
+}
+
+.secret-label {
+    display: block;
+
+    margin-bottom: 8px;
+
+    color: #ffd700;
+
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.secret-input {
+    width: 100%;
+    box-sizing: border-box;
+
+    padding: 12px 14px;
+
+    border-radius: 12px;
+
+    background: #080808;
+
+    border: 1px solid rgba(212, 175, 55, 0.65);
+
+    color: #ffd700;
+
+    font-size: 14px;
+}
+
+.secret-input::placeholder {
+    color: #8f7a35;
+}
+
+.secret-input:focus {
+    outline: none;
+
+    border-color: #ffd700;
+
+    box-shadow:
+        0 0 0 3px rgba(255, 215, 0, 0.16);
+}
+
+/* =========================
+   COMPLETED STATE
+========================= */
+
+.action-completed {
+    margin-top: 16px;
+    padding: 12px 14px;
+
+    border-radius: 14px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(40, 146, 87, 0.18),
+            rgba(25, 100, 65, 0.24)
+        );
+
+    border: 1px solid rgba(94, 224, 170, 0.45);
+
+    color: #7fffc5;
+
+    font-weight: 800;
+
+    box-shadow:
+        0 0 14px rgba(94, 224, 170, 0.12);
+}
+
+/* =========================
+   ACTIONS
+========================= */
+
+.confirm-card-actions {
+    display: flex;
+    gap: 10px;
+
+    margin-top: 18px;
+}
+
+.confirm-btn {
+    padding: 10px 18px;
+
+    border: none;
+    border-radius: 14px;
+
+    cursor: pointer;
+
+    background:
+        linear-gradient(
+            135deg,
+            #ffd700,
+            #f4c542
+        );
+
+    color: #111111;
+
+    font-size: 14px;
+    font-weight: 900;
+
+    transition: all 0.22s ease;
+}
+
+.confirm-btn:hover:not(:disabled) {
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 8px 18px rgba(255, 215, 0, 0.30);
+}
+
+.confirm-btn:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+.cancel-btn {
+    padding: 10px 16px;
+
+    border-radius: 14px;
+
+    cursor: pointer;
+
+    background: transparent;
+
+    color: #e8d891;
+
+    border: 1px solid rgba(232, 216, 145, 0.38);
+
+    font-weight: 700;
+
+    transition: all 0.22s ease;
+}
+
+.cancel-btn:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.06);
+
+    border-color: rgba(255, 215, 0, 0.65);
+}
+
+.cancel-btn:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}

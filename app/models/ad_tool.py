@@ -16,3 +16,15 @@ class RemoveGroupRequest(BaseModel):
 class MoveUserRequest(BaseModel):
     sam_account_name: str
     target_ou_dn: str
+
+
+from pydantic import BaseModel
+
+class AssistantMessageRequest(
+    BaseModel
+):
+    message: str
+
+
+class VerifySecretRequest(BaseModel):
+    secret: str

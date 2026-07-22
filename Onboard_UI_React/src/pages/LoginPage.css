@@ -1,0 +1,166 @@
+.login-page {
+    min-height: 100vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background:
+        linear-gradient(
+            135deg,
+            #a87400 0%,
+            #c89b3c 35%,
+            #d4af37 65%,
+            #f0d878 100%
+        );
+
+    font-family:
+        "Segoe UI",
+        sans-serif;
+}
+
+.login-card {
+
+    width: 520px;
+
+    padding: 40px;
+
+    border-radius: 24px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #d7b150,
+            #c89b3c
+        );
+
+    border: 2px solid #8b6508;
+
+    box-shadow:
+        0 20px 50px rgba(0,0,0,0.35),
+        0 0 35px rgba(212,175,55,0.45);
+
+    backdrop-filter: blur(10px);
+}
+
+.login-header {
+
+    text-align: center;
+
+    margin-bottom: 32px;
+}
+
+.login-header h1 {
+
+    margin: 0;
+
+    font-size: 32px;
+
+    font-weight: 800;
+
+    color: #111111;
+
+    letter-spacing: 1px;
+}
+
+.login-header p {
+
+    margin-top: 10px;
+
+    color: #2c2200;
+
+    font-weight: 500;
+
+    opacity: 0.85;
+}
+
+.login-form {
+
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.login-form label {
+
+    color: #111111;
+
+    font-size: 14px;
+
+    font-weight: 700;
+}
+
+.login-form input {
+
+    background: #111111;
+
+    color: #d4af37;
+
+    border: 2px solid #2b2b2b;
+
+    border-radius: 12px;
+
+    padding: 14px 16px;
+
+    font-size: 15px;
+
+    transition: all 0.2s ease;
+}
+
+.login-form input::placeholder {
+
+    color: #887341;
+}
+
+.login-form input:focus {
+
+    outline: none;
+
+    border-color: #d4af37;
+
+    box-shadow:
+        0 0 0 3px rgba(212,175,55,0.25);
+}
+
+.login-form button {
+
+    margin-top: 10px;
+
+    padding: 14px;
+
+    border: none;
+
+    border-radius: 12px;
+
+    cursor: pointer;
+
+    font-size: 15px;
+
+    font-weight: 800;
+
+    background: #111111;
+
+    color: #d4af37;
+
+    transition: all 0.25s ease;
+}
+
+.login-form button:hover {
+
+    background: #000000;
+
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 6px 20px rgba(0,0,0,0.3);
+}
+
+.login-form button:active {
+
+    transform: translateY(1px);
+}
+
+.login-error {
+
+    padding: 10px 14px;
+}

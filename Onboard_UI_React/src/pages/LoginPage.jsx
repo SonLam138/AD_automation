@@ -1,21 +1,15 @@
 import { useState } from "react";
 import axiosClient from "../api/axiosClient";
-import DashboardPage from "./PendingRequestPage";
-
+import { useNavigate } from "react-router-dom";
+import "./LoginPage.css";
 function LoginPage() {
-
+    const navigate = useNavigate();
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    const [loginSuccess, setLoginSuccess]
-    = useState(false);
+    // const [loginSuccess, setLoginSuccess]
+    // = useState(false);
     const [loginFailed, setLoginFailed]
     = useState(false);
-    if (loginSuccess) {
-
-    return (
-        <DashboardPage />
-        );
-    }
     const handleLogin = async () => {
 
     try {
@@ -29,84 +23,94 @@ function LoginPage() {
             );
         
         const token = response.data.access_token;
-
-        const landingPage =
-            response.data.landing_page;
-
         localStorage.setItem(
             "access_token",
             token
         );
 
-        localStorage.setItem(
-            "landing_page",
-            landingPage
+        navigate(
+            "/portal/automation-tools"
         );
-
-        setLoginSuccess(true);
-
-        console.log("TOKEN SAVED");
-
-        alert("LOGIN SUCCESS");
 
     } catch (error) {
         setLoginFailed(true);
         console.log("ERROR");
         console.log(error);
 
-        alert("LOGIN FAILED");
     }
 };
 
     return (
-        <div style={{ padding: "20px" }}>
-            <h2>Onboarding Approval Login</h2>
 
-            <div>
-                <label>Username</label>
-                <br />
+    <div className="login-page">
+
+        <div className="login-card">
+
+            <div className="login-header">
+
+                <h1>
+                    AD Automation Platform
+                </h1>
+
+                <p>
+                    Active Directory Automation Assistant
+                </p>
+
+            </div>
+
+            <div className="login-form">
+
+                <label>
+                    Username
+                </label>
+
                 <input
                     type="text"
                     value={username}
                     onChange={(e) =>
-                        setUsername(e.target.value)
+                        setUsername(
+                            e.target.value
+                        )
                     }
                 />
-            </div>
 
-            <br />
+                <label>
+                    Password
+                </label>
 
-            <div>
-                <label>Password</label>
-                <br />
                 <input
                     type="password"
                     value={password}
                     onChange={(e) =>
-                        setPassword(e.target.value)
+                        setPassword(
+                            e.target.value
+                        )
                     }
                 />
+
+                {loginFailed && (
+
+                    <div className="login-error">
+                        Đăng nhập thất bại
+                    </div>
+
+                )}
+
+                <button
+                    onClick={handleLogin}
+                >
+                    Sign In
+                </button>
+
             </div>
-
-            <br />
-
-            <button onClick={handleLogin}>
-                Login
-                {
-                    loginFailed &&
-                    (
-                        <p
-                            style={{
-                                color: "red"
-                            }}
-                        >
-                            Login Failed
-                        </p>
-                    )
-                }
-            </button>
+            <div className="login-footer">
+                Enterprise Team Pharaoh Edition • Internal Use Only
+            </div>
         </div>
-    );
+
+    </div>
+
+);
 }
 
 export default LoginPage;

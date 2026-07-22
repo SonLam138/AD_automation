@@ -35,3 +35,8 @@ Sửa DisplayName phần hiển thị, vd (K.CNTT-HO):
 
 Case Onboard : JWT lưu trên UI và UI gọi trực tiếp API, lấy JWT từ UI
 Case AD_Tools : JWT lưu tại peding_action và system call API
+
+
+REACT UI : Portal layout , dùng react-router-dom
+
+npm install react-router-dom
