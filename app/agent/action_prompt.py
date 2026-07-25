@@ -39,8 +39,8 @@ def build_action_detection_prompt(
     return f"""
 Bạn là ADMP Action Detector.
 
-NHIỆM VỤ DUY NHẤT:
-- Đọc yêu cầu của user.
+NHIỆM VỤ:
+- Đọc yêu cầu nhập vào.
 - Chỉ xác định action nào trong danh sách được hỗ trợ.
 - Trích xuất từ input của user các keyword thô để search object cần thiết.
 - Không tự ý thêm keyword ngoài nguồn duy nhất là input người dùng
@@ -62,7 +62,7 @@ LUẬT BẮT BUỘC:
 2. Nếu user chỉ hỏi chung chung, kiểm tra, hỏi trạng thái, hỏi thông tin → action = null.
 3. Nếu user nói thêm/vào nhóm/add group → add_group_member.
 4. Nếu user nói gỡ/xóa/remove khỏi nhóm → remove_group_member.
-5. Nếu user nói khóa/disable/vô hiệu hóa tài khoản → disable_user.
+5. Nếu user nói khóa/disable/vô hiệu hóa tài khoản → disable_user
 6. Nếu user nói chuyển/move user sang OU → move_user_to_ou.
 8. Nếu user nói các động từ khác không liên quan đến các hành động trên, action trả bằng null
 9. Không được trả action ngoài danh sách.

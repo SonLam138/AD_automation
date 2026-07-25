@@ -7,7 +7,8 @@ from "../services/actionExecutor";
 
 function ConfirmActionCard({ 
                 data, 
-                onFinished 
+                onFinished ,
+                onCancel
             }){
     const [showSecretInput, setShowSecretInput] = useState(false);
     const [secret, setSecret] = useState("");
@@ -104,7 +105,11 @@ function ConfirmActionCard({
     };
 
     const handleCancel = () => {
-        console.log("CANCEL ACTION:", data);
+
+        if (onCancel) {
+            onCancel();
+        }
+
     };
 
     return (
@@ -117,7 +122,7 @@ function ConfirmActionCard({
                     </div>
 
                     <div className="confirm-card-subtitle">
-                        Ngáo em đã phân tích xong và cần xác nhận trước khi thực hiện.
+                        Ngáo em đã phân tích xong và cần anh/chị xác nhận trước khi thực hiện.
                     </div>
                 </div>
             </div>

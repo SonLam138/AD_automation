@@ -338,25 +338,19 @@ def resolve_action(
             keyword,
             limit=100
         )
+        candidate_objects = filter_candidates_by_action(
+            action,
+            search_result
+        )
+        count = search_result.get(
+            "count",
+            0
+        )
+
         results = search_result.get(
             "results",
             []
         )
-        print("RESULTS TYPE =", type(results))
-        if results:
-            print(
-            "FIRST ITEM TYPE =",
-            type(results[0])
-            )
-            print(
-            "FIRST ITEM =",
-            results[0]
-            )
-        results = filter_candidates_by_action(
-            action,
-            results
-        )
-        count = len(results)
 
         #
         # NOT FOUND
@@ -507,24 +501,24 @@ def resolve_action(
     # COPILOT RESPONSE
     # ==========================================
 
-    try:
+    # try:
 
-        result["message"] = (
-            generate_user_response(
-                resolver_result=result
-            )
-        )
+    #     result["message"] = (
+    #         generate_user_response(
+    #             resolver_result=result
+    #         )
+    #     )
 
-    except Exception as ex:
+    # except Exception as ex:
 
-        print(
-            "GENERATE RESPONSE ERROR =",
-            ex
-        )
+    #     print(
+    #         "GENERATE RESPONSE ERROR =",
+    #         ex
+    #     )
 
-        result["message"] = (
-            "Tôi đã xử lý yêu cầu nhưng chưa thể tạo phản hồi."
-        )
+    #     result["message"] = (
+    #         "Tôi đã xử lý yêu cầu nhưng chưa thể tạo phản hồi."
+    #     )
 
     return result
 

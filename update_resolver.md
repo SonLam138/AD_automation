@@ -40,3 +40,65 @@ Case AD_Tools : JWT lưu tại peding_action và system call API
 REACT UI : Portal layout , dùng react-router-dom
 
 npm install react-router-dom
+
+=============================================
+CONTRACT TỪ RESOLVER
+============================================
+{
+  "status": "...",
+  "state": "...",
+  "next_step": "...",
+
+  "action": "...",
+
+  "target_object_type": "...",
+
+  "resolved_objects": {},
+
+  "candidate_objects": {},
+
+  "proposed_action_payload": {},
+
+  "approval_policy": "..."
+}
+
+
+===============================================
+ObjectSelector
+===============================================
+Render condition :
+msg.type === "WAITING_OBJECT_SELECTION"
+INPUT:
+<Data>
+candidate_objects.USER[]
+action_id
+=========================================
+CONFIRM CARD
+==========================================
+Render condition:
+msg.type === "CONFIRM_READY"
+
+ConfirmCard consume: (input)
+{
+  "action": "...",
+  "approval_policy": "...",
+  "proposed_action_payload": {
+      ...
+  }
+}
+
+ConfirmCard execute:
+executeAction(
+    action,
+    proposed_action_payload
+)
+=> payload = data.proposed_action_payload
+
+==========================================
+CHAT LOCK
+==========================================
+Khóa chat :
+WAITING_OBJECT_SELECTION
+CONFIRM_READY
+
+

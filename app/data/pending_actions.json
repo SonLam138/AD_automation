@@ -824,5 +824,1735 @@
     },
     "approval_policy": "normal",
     "action_id": "049998a8-d2da-47dd-9ab8-856ba929d2ea"
+  },
+  "e47eacd8-e447-4a1b-879a-c1afb8040f8c": {
+    "status": "NEED_OBJECT_SELECTION",
+    "state": "WAITING_OBJECT_SELECTION",
+    "next_step": "ASK_OBJECT_SELECTION",
+    "action": "disable_user",
+    "target_object_type": "USER",
+    "resolved_objects": {},
+    "candidate_objects": {
+      "USER": [
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen",
+          "sam_account_name": "nguyentn",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "Chuyen vien khach hang uu tien",
+          "distinguished_name": "CN=Truong Thao Nguyen,OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false
+        },
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen 1",
+          "sam_account_name": "nguyentn1",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "Chuyen vien khach hang uu tien",
+          "distinguished_name": "CN=Truong Thao Nguyen 1,OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false
+        }
+      ]
+    },
+    "proposed_action_payload": {},
+    "approval_policy": null,
+    "action_id": "e47eacd8-e447-4a1b-879a-c1afb8040f8c"
+  },
+  "fe4636c1-b87d-49a7-b3bf-66a29fc405ca": {
+    "status": "NEED_OBJECT_SELECTION",
+    "state": "WAITING_OBJECT_SELECTION",
+    "next_step": "ASK_OBJECT_SELECTION",
+    "action": "disable_user",
+    "target_object_type": "USER",
+    "resolved_objects": {},
+    "candidate_objects": {
+      "USER": [
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen",
+          "sam_account_name": "nguyentn",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "Chuyen vien khach hang uu tien",
+          "distinguished_name": "CN=Truong Thao Nguyen,OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false
+        },
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen 1",
+          "sam_account_name": "nguyentn1",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "Chuyen vien khach hang uu tien",
+          "distinguished_name": "CN=Truong Thao Nguyen 1,OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false
+        }
+      ]
+    },
+    "proposed_action_payload": {},
+    "approval_policy": null,
+    "action_id": "fe4636c1-b87d-49a7-b3bf-66a29fc405ca"
+  },
+  "a3c10941-2adb-4d85-a3bb-6f321fabd40d": {
+    "status": "NEED_OBJECT_SELECTION",
+    "state": "WAITING_OBJECT_SELECTION",
+    "next_step": "ASK_OBJECT_SELECTION",
+    "action": "disable_user",
+    "target_object_type": "USER",
+    "resolved_objects": {},
+    "candidate_objects": {
+      "USER": [
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen",
+          "sam_account_name": "nguyentn",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "Chuyen vien khach hang uu tien",
+          "distinguished_name": "CN=Truong Thao Nguyen,OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false
+        },
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen 1",
+          "sam_account_name": "nguyentn1",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "Chuyen vien khach hang uu tien",
+          "distinguished_name": "CN=Truong Thao Nguyen 1,OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false
+        }
+      ]
+    },
+    "proposed_action_payload": {},
+    "approval_policy": null,
+    "action_id": "a3c10941-2adb-4d85-a3bb-6f321fabd40d"
+  },
+  "1b507f66-ef39-4a34-ba11-3ee0b9814865": {
+    "status": "NEED_OBJECT_SELECTION",
+    "state": "WAITING_OBJECT_SELECTION",
+    "next_step": "ASK_OBJECT_SELECTION",
+    "action": "disable_user",
+    "target_object_type": "USER",
+    "resolved_objects": {},
+    "candidate_objects": {
+      "USER": [
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen",
+          "sam_account_name": "nguyentn",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "Chuyen vien khach hang uu tien",
+          "distinguished_name": "CN=Truong Thao Nguyen,OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false
+        },
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen 1",
+          "sam_account_name": "nguyentn1",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "Chuyen vien khach hang uu tien",
+          "distinguished_name": "CN=Truong Thao Nguyen 1,OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false
+        }
+      ]
+    },
+    "proposed_action_payload": {},
+    "approval_policy": null,
+    "action_id": "1b507f66-ef39-4a34-ba11-3ee0b9814865"
+  },
+  "2a27430f-68b6-4e89-bae1-6084b56b327b": {
+    "status": "NEED_OBJECT_SELECTION",
+    "state": "WAITING_OBJECT_SELECTION",
+    "next_step": "ASK_OBJECT_SELECTION",
+    "action": "disable_user",
+    "target_object_type": "USER",
+    "resolved_objects": {},
+    "candidate_objects": {
+      "USER": [
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen",
+          "sam_account_name": "nguyentn",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "Chuyen vien khach hang uu tien",
+          "distinguished_name": "CN=Truong Thao Nguyen,OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false
+        },
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen 1",
+          "sam_account_name": "nguyentn1",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "Chuyen vien khach hang uu tien",
+          "distinguished_name": "CN=Truong Thao Nguyen 1,OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false
+        }
+      ]
+    },
+    "proposed_action_payload": {},
+    "approval_policy": null,
+    "action_id": "2a27430f-68b6-4e89-bae1-6084b56b327b"
+  },
+  "2c71bce9-8cc1-4f4a-8fdb-1d9d65a353d8": {
+    "status": "NEED_OBJECT_SELECTION",
+    "state": "WAITING_OBJECT_SELECTION",
+    "next_step": "ASK_OBJECT_SELECTION",
+    "action": "disable_user",
+    "target_object_type": "USER",
+    "resolved_objects": {},
+    "candidate_objects": {
+      "USER": [
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen",
+          "sam_account_name": "nguyentn",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "Chuyen vien khach hang uu tien",
+          "distinguished_name": "CN=Truong Thao Nguyen,OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false
+        },
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen 1",
+          "sam_account_name": "nguyentn1",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "Chuyen vien khach hang uu tien",
+          "distinguished_name": "CN=Truong Thao Nguyen 1,OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false
+        }
+      ]
+    },
+    "proposed_action_payload": {},
+    "approval_policy": null,
+    "action_id": "2c71bce9-8cc1-4f4a-8fdb-1d9d65a353d8"
+  },
+  "3ba807fc-3f76-4c3b-a71d-b6573fd9d631": {
+    "status": "NEED_OBJECT_SELECTION",
+    "state": "WAITING_OBJECT_SELECTION",
+    "next_step": "ASK_OBJECT_SELECTION",
+    "action": "disable_user",
+    "target_object_type": "USER",
+    "resolved_objects": {},
+    "candidate_objects": {
+      "USER": [
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen",
+          "sam_account_name": "nguyentn",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "Chuyen vien khach hang uu tien",
+          "distinguished_name": "CN=Truong Thao Nguyen,OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false
+        },
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen 1",
+          "sam_account_name": "nguyentn1",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "Chuyen vien khach hang uu tien",
+          "distinguished_name": "CN=Truong Thao Nguyen 1,OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false
+        }
+      ]
+    },
+    "proposed_action_payload": {},
+    "approval_policy": null,
+    "action_id": "3ba807fc-3f76-4c3b-a71d-b6573fd9d631"
+  },
+  "28ad4c69-62be-458d-8ce5-588329ab9e6d": {
+    "status": "NEED_OBJECT_SELECTION",
+    "state": "WAITING_OBJECT_SELECTION",
+    "next_step": "ASK_OBJECT_SELECTION",
+    "action": "disable_user",
+    "target_object_type": "USER",
+    "resolved_objects": {},
+    "candidate_objects": {
+      "USER": [
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen",
+          "sam_account_name": "nguyentn",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "Chuyen vien khach hang uu tien",
+          "distinguished_name": "CN=Truong Thao Nguyen,OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false
+        },
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen 1",
+          "sam_account_name": "nguyentn1",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "Chuyen vien khach hang uu tien",
+          "distinguished_name": "CN=Truong Thao Nguyen 1,OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false
+        }
+      ]
+    },
+    "proposed_action_payload": {},
+    "approval_policy": null,
+    "action_id": "28ad4c69-62be-458d-8ce5-588329ab9e6d"
+  },
+  "7c25300c-aa13-4fd9-af66-604c24ba352f": {
+    "status": "NEED_OBJECT_SELECTION",
+    "state": "WAITING_OBJECT_SELECTION",
+    "next_step": "ASK_OBJECT_SELECTION",
+    "action": "disable_user",
+    "target_object_type": "USER",
+    "resolved_objects": {},
+    "candidate_objects": {
+      "USER": [
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen",
+          "sam_account_name": "nguyentn",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "Chuyen vien khach hang uu tien",
+          "distinguished_name": "CN=Truong Thao Nguyen,OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false
+        },
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen 1",
+          "sam_account_name": "nguyentn1",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "Chuyen vien khach hang uu tien",
+          "distinguished_name": "CN=Truong Thao Nguyen 1,OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false
+        }
+      ]
+    },
+    "proposed_action_payload": {},
+    "approval_policy": null,
+    "action_id": "7c25300c-aa13-4fd9-af66-604c24ba352f"
+  },
+  "ed2aed19-6376-4c74-a3e8-9f3850e0c62a": {
+    "status": "NEED_OBJECT_SELECTION",
+    "state": "WAITING_OBJECT_SELECTION",
+    "next_step": "ASK_OBJECT_SELECTION",
+    "action": "disable_user",
+    "target_object_type": "USER",
+    "resolved_objects": {},
+    "candidate_objects": {
+      "USER": [
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen",
+          "sam_account_name": "nguyentn",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "Chuyen vien khach hang uu tien",
+          "distinguished_name": "CN=Truong Thao Nguyen,OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false
+        },
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen 1",
+          "sam_account_name": "nguyentn1",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "Chuyen vien khach hang uu tien",
+          "distinguished_name": "CN=Truong Thao Nguyen 1,OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false
+        }
+      ]
+    },
+    "proposed_action_payload": {},
+    "approval_policy": "normal",
+    "action_id": "ed2aed19-6376-4c74-a3e8-9f3850e0c62a"
+  },
+  "fc1e4f21-097b-4cf0-bcff-969bf56c8e52": {
+    "status": "NEED_OBJECT_SELECTION",
+    "state": "WAITING_OBJECT_SELECTION",
+    "next_step": "ASK_OBJECT_SELECTION",
+    "action": "disable_user",
+    "target_object_type": "USER",
+    "resolved_objects": {},
+    "candidate_objects": {
+      "USER": [
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen",
+          "sam_account_name": "nguyentn",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "Chuyen vien khach hang uu tien",
+          "distinguished_name": "CN=Truong Thao Nguyen,OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false
+        },
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen 1",
+          "sam_account_name": "nguyentn1",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "Chuyen vien khach hang uu tien",
+          "distinguished_name": "CN=Truong Thao Nguyen 1,OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false
+        }
+      ]
+    },
+    "proposed_action_payload": {},
+    "approval_policy": "normal",
+    "action_id": "fc1e4f21-097b-4cf0-bcff-969bf56c8e52"
+  },
+  "3c6f87c2-eef6-43ca-9e23-a997eb0fc71d": {
+    "status": "NEED_OBJECT_SELECTION",
+    "state": "WAITING_OBJECT_SELECTION",
+    "next_step": "ASK_OBJECT_SELECTION",
+    "action": "disable_user",
+    "target_object_type": "USER",
+    "resolved_objects": {},
+    "candidate_objects": {
+      "USER": [
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen",
+          "sam_account_name": "nguyentn",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "Chuyen vien khach hang uu tien",
+          "distinguished_name": "CN=Truong Thao Nguyen,OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false
+        },
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen 1",
+          "sam_account_name": "nguyentn1",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "Chuyen vien khach hang uu tien",
+          "distinguished_name": "CN=Truong Thao Nguyen 1,OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false
+        }
+      ]
+    },
+    "proposed_action_payload": {},
+    "approval_policy": "normal",
+    "action_id": "3c6f87c2-eef6-43ca-9e23-a997eb0fc71d"
+  },
+  "627da636-d95c-4b5f-ae44-926d11d77af6": {
+    "status": "NEED_OBJECT_SELECTION",
+    "state": "WAITING_OBJECT_SELECTION",
+    "next_step": "ASK_OBJECT_SELECTION",
+    "action": "disable_user",
+    "target_object_type": "USER",
+    "resolved_objects": {},
+    "candidate_objects": {
+      "USER": [
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen",
+          "sam_account_name": "nguyentn",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "Chuyen vien khach hang uu tien",
+          "distinguished_name": "CN=Truong Thao Nguyen,OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false
+        },
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen 1",
+          "sam_account_name": "nguyentn1",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "Chuyen vien khach hang uu tien",
+          "distinguished_name": "CN=Truong Thao Nguyen 1,OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false
+        }
+      ]
+    },
+    "proposed_action_payload": {},
+    "approval_policy": "normal",
+    "action_id": "627da636-d95c-4b5f-ae44-926d11d77af6"
+  },
+  "aca8e08f-ad08-4054-b0fc-eb4a40336bbf": {
+    "status": "NEED_OBJECT_SELECTION",
+    "state": "WAITING_OBJECT_SELECTION",
+    "next_step": "ASK_OBJECT_SELECTION",
+    "action": "disable_user",
+    "target_object_type": "USER",
+    "resolved_objects": {},
+    "candidate_objects": {
+      "USER": [
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen",
+          "sam_account_name": "nguyentn",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "Chuyen vien khach hang uu tien",
+          "distinguished_name": "CN=Truong Thao Nguyen,OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false
+        },
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen 1",
+          "sam_account_name": "nguyentn1",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "Chuyen vien khach hang uu tien",
+          "distinguished_name": "CN=Truong Thao Nguyen 1,OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false
+        }
+      ]
+    },
+    "proposed_action_payload": {},
+    "approval_policy": "normal",
+    "action_id": "aca8e08f-ad08-4054-b0fc-eb4a40336bbf"
+  },
+  "53cebf4b-bd71-4d55-8e52-4cc4725dacfe": {
+    "status": "NEED_OBJECT_SELECTION",
+    "state": "WAITING_OBJECT_SELECTION",
+    "next_step": "ASK_OBJECT_SELECTION",
+    "action": "disable_user",
+    "target_object_type": "USER",
+    "resolved_objects": {},
+    "candidate_objects": {
+      "USER": [
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen",
+          "sam_account_name": "nguyentn",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "Chuyen vien khach hang uu tien",
+          "distinguished_name": "CN=Truong Thao Nguyen,OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false
+        },
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen 1",
+          "sam_account_name": "nguyentn1",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "Chuyen vien khach hang uu tien",
+          "distinguished_name": "CN=Truong Thao Nguyen 1,OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false
+        }
+      ]
+    },
+    "proposed_action_payload": {},
+    "approval_policy": "normal",
+    "action_id": "53cebf4b-bd71-4d55-8e52-4cc4725dacfe"
+  },
+  "5ffab13f-ded6-422c-8be2-b8ddf71d6ba6": {
+    "status": "NEED_OBJECT_SELECTION",
+    "state": "WAITING_OBJECT_SELECTION",
+    "next_step": "ASK_OBJECT_SELECTION",
+    "action": "disable_user",
+    "target_object_type": "USER",
+    "resolved_objects": {},
+    "candidate_objects": {
+      "USER": [
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen",
+          "sam_account_name": "nguyentn",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "Chuyen vien khach hang uu tien",
+          "distinguished_name": "CN=Truong Thao Nguyen,OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false
+        },
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen 1",
+          "sam_account_name": "nguyentn1",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "Chuyen vien khach hang uu tien",
+          "distinguished_name": "CN=Truong Thao Nguyen 1,OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false
+        }
+      ]
+    },
+    "proposed_action_payload": {},
+    "approval_policy": "normal",
+    "action_id": "5ffab13f-ded6-422c-8be2-b8ddf71d6ba6"
+  },
+  "1e0db44a-56d9-4b87-92d3-a3ab95dcf0cb": {
+    "status": "NEED_OBJECT_SELECTION",
+    "state": "WAITING_OBJECT_SELECTION",
+    "next_step": "ASK_OBJECT_SELECTION",
+    "action": "disable_user",
+    "target_object_type": "USER",
+    "resolved_objects": {},
+    "candidate_objects": {
+      "USER": [
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen",
+          "sam_account_name": "nguyentn",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "Chuyen vien khach hang uu tien",
+          "distinguished_name": "CN=Truong Thao Nguyen,OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false
+        },
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen 1",
+          "sam_account_name": "nguyentn1",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "Chuyen vien khach hang uu tien",
+          "distinguished_name": "CN=Truong Thao Nguyen 1,OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false
+        },
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen (KHCN-HO)",
+          "sam_account_name": "nguyentn3",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "",
+          "distinguished_name": "CN=Truong Thao Nguyen (KHCN-HO),OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false
+        }
+      ]
+    },
+    "proposed_action_payload": {},
+    "approval_policy": "normal",
+    "action_id": "1e0db44a-56d9-4b87-92d3-a3ab95dcf0cb"
+  },
+  "bc92ced3-2907-4ed4-bd13-530375868d13": {
+    "status": "NEED_OBJECT_SELECTION",
+    "state": "WAITING_OBJECT_SELECTION",
+    "next_step": "ASK_OBJECT_SELECTION",
+    "action": "disable_user",
+    "target_object_type": "USER",
+    "resolved_objects": {},
+    "candidate_objects": {
+      "USER": [
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen",
+          "sam_account_name": "nguyentn",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "Chuyen vien khach hang uu tien",
+          "distinguished_name": "CN=Truong Thao Nguyen,OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false
+        },
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen 1",
+          "sam_account_name": "nguyentn1",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "Chuyen vien khach hang uu tien",
+          "distinguished_name": "CN=Truong Thao Nguyen 1,OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false
+        },
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen (KHCN-HO)",
+          "sam_account_name": "nguyentn3",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "",
+          "distinguished_name": "CN=Truong Thao Nguyen (KHCN-HO),OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false
+        }
+      ]
+    },
+    "proposed_action_payload": {},
+    "approval_policy": "normal",
+    "action_id": "bc92ced3-2907-4ed4-bd13-530375868d13"
+  },
+  "4083dcb9-0ff5-4cd2-b759-cd2e9d496831": {
+    "status": "NEED_OBJECT_SELECTION",
+    "state": "WAITING_OBJECT_SELECTION",
+    "next_step": "ASK_OBJECT_SELECTION",
+    "action": "disable_user",
+    "target_object_type": "USER",
+    "resolved_objects": {},
+    "candidate_objects": {
+      "USER": [
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen",
+          "sam_account_name": "nguyentn",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "Chuyen vien khach hang uu tien",
+          "distinguished_name": "CN=Truong Thao Nguyen,OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false
+        },
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen 1",
+          "sam_account_name": "nguyentn1",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "Chuyen vien khach hang uu tien",
+          "distinguished_name": "CN=Truong Thao Nguyen 1,OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false
+        },
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen (KHCN-HO)",
+          "sam_account_name": "nguyentn3",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "",
+          "distinguished_name": "CN=Truong Thao Nguyen (KHCN-HO),OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "514",
+          "is_disabled": true
+        }
+      ]
+    },
+    "proposed_action_payload": {},
+    "approval_policy": "normal",
+    "action_id": "4083dcb9-0ff5-4cd2-b759-cd2e9d496831"
+  },
+  "3d4dc79d-4500-4344-96a3-d7ad2094b95f": {
+    "status": "NEED_OBJECT_SELECTION",
+    "state": "WAITING_OBJECT_SELECTION",
+    "next_step": "ASK_OBJECT_SELECTION",
+    "action": "disable_user",
+    "target_object_type": "USER",
+    "resolved_objects": {},
+    "candidate_objects": {
+      "USER": [
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen",
+          "sam_account_name": "nguyentn",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "Chuyen vien khach hang uu tien",
+          "distinguished_name": "CN=Truong Thao Nguyen,OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false
+        },
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen 1",
+          "sam_account_name": "nguyentn1",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "Chuyen vien khach hang uu tien",
+          "distinguished_name": "CN=Truong Thao Nguyen 1,OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false
+        },
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen (KHCN-HO)",
+          "sam_account_name": "nguyentn3",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "",
+          "distinguished_name": "CN=Truong Thao Nguyen (KHCN-HO),OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "514",
+          "is_disabled": true
+        }
+      ]
+    },
+    "proposed_action_payload": {},
+    "approval_policy": "normal",
+    "action_id": "3d4dc79d-4500-4344-96a3-d7ad2094b95f"
+  },
+  "69986f1b-ebba-4a43-ac46-a2f45766af2e": {
+    "status": "NEED_OBJECT_SELECTION",
+    "state": "WAITING_OBJECT_SELECTION",
+    "next_step": "ASK_OBJECT_SELECTION",
+    "action": "disable_user",
+    "target_object_type": "USER",
+    "resolved_objects": {},
+    "candidate_objects": {
+      "USER": [
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen",
+          "sam_account_name": "nguyentn",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "Chuyen vien khach hang uu tien",
+          "distinguished_name": "CN=Truong Thao Nguyen,OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false
+        },
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen 1",
+          "sam_account_name": "nguyentn1",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "Chuyen vien khach hang uu tien",
+          "distinguished_name": "CN=Truong Thao Nguyen 1,OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false
+        },
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen (KHCN-HO)",
+          "sam_account_name": "nguyentn3",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "",
+          "distinguished_name": "CN=Truong Thao Nguyen (KHCN-HO),OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "514",
+          "is_disabled": true
+        }
+      ]
+    },
+    "proposed_action_payload": {},
+    "approval_policy": "normal",
+    "action_id": "69986f1b-ebba-4a43-ac46-a2f45766af2e"
+  },
+  "a51d75b3-46b0-4796-837b-545fd9353f7d": {
+    "status": "NEED_OBJECT_SELECTION",
+    "state": "WAITING_OBJECT_SELECTION",
+    "next_step": "ASK_OBJECT_SELECTION",
+    "action": "disable_user",
+    "target_object_type": "USER",
+    "resolved_objects": {},
+    "candidate_objects": {
+      "USER": [
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen",
+          "sam_account_name": "nguyentn",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "Chuyen vien khach hang uu tien",
+          "distinguished_name": "CN=Truong Thao Nguyen,OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false
+        },
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen 1",
+          "sam_account_name": "nguyentn1",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "Chuyen vien khach hang uu tien",
+          "distinguished_name": "CN=Truong Thao Nguyen 1,OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false
+        },
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen (KHCN-HO)",
+          "sam_account_name": "nguyentn3",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "",
+          "distinguished_name": "CN=Truong Thao Nguyen (KHCN-HO),OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "514",
+          "is_disabled": true
+        }
+      ]
+    },
+    "proposed_action_payload": {},
+    "approval_policy": "normal",
+    "action_id": "a51d75b3-46b0-4796-837b-545fd9353f7d"
+  },
+  "7405b543-233e-40dd-babb-1ba8b4156d99": {
+    "status": "NEED_OBJECT_SELECTION",
+    "state": "WAITING_OBJECT_SELECTION",
+    "next_step": "ASK_OBJECT_SELECTION",
+    "action": "disable_user",
+    "target_object_type": "USER",
+    "resolved_objects": {},
+    "candidate_objects": {
+      "USER": [
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen",
+          "sam_account_name": "nguyentn",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "Chuyen vien khach hang uu tien",
+          "distinguished_name": "CN=Truong Thao Nguyen,OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false
+        },
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen 1",
+          "sam_account_name": "nguyentn1",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "Chuyen vien khach hang uu tien",
+          "distinguished_name": "CN=Truong Thao Nguyen 1,OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false
+        },
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen (KHCN-HO)",
+          "sam_account_name": "nguyentn3",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "",
+          "distinguished_name": "CN=Truong Thao Nguyen (KHCN-HO),OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "514",
+          "is_disabled": true
+        }
+      ]
+    },
+    "proposed_action_payload": {},
+    "approval_policy": "normal",
+    "action_id": "7405b543-233e-40dd-babb-1ba8b4156d99"
+  },
+  "946692ed-2ad6-41a5-b596-b1b4986746b1": {
+    "status": "NEED_OBJECT_SELECTION",
+    "state": "WAITING_OBJECT_SELECTION",
+    "next_step": "ASK_OBJECT_SELECTION",
+    "action": "disable_user",
+    "target_object_type": "USER",
+    "resolved_objects": {},
+    "candidate_objects": {
+      "USER": [
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen",
+          "sam_account_name": "nguyentn",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "Chuyen vien khach hang uu tien",
+          "distinguished_name": "CN=Truong Thao Nguyen,OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false
+        },
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen 1",
+          "sam_account_name": "nguyentn1",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "Chuyen vien khach hang uu tien",
+          "distinguished_name": "CN=Truong Thao Nguyen 1,OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false
+        },
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen (KHCN-HO)",
+          "sam_account_name": "nguyentn3",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "",
+          "distinguished_name": "CN=Truong Thao Nguyen (KHCN-HO),OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "514",
+          "is_disabled": true
+        }
+      ]
+    },
+    "proposed_action_payload": {},
+    "approval_policy": "normal",
+    "action_id": "946692ed-2ad6-41a5-b596-b1b4986746b1"
+  },
+  "2c4f575b-4d80-43b0-89d4-2e5660c49178": {
+    "status": "NEED_OBJECT_SELECTION",
+    "state": "WAITING_OBJECT_SELECTION",
+    "next_step": "ASK_OBJECT_SELECTION",
+    "action": "disable_user",
+    "target_object_type": "USER",
+    "resolved_objects": {},
+    "candidate_objects": {
+      "USER": [
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen",
+          "sam_account_name": "nguyentn",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "Chuyen vien khach hang uu tien",
+          "distinguished_name": "CN=Truong Thao Nguyen,OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false
+        },
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen 1",
+          "sam_account_name": "nguyentn1",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "Chuyen vien khach hang uu tien",
+          "distinguished_name": "CN=Truong Thao Nguyen 1,OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false
+        },
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen (KHCN-HO)",
+          "sam_account_name": "nguyentn3",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "",
+          "distinguished_name": "CN=Truong Thao Nguyen (KHCN-HO),OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "514",
+          "is_disabled": true
+        }
+      ]
+    },
+    "proposed_action_payload": {},
+    "approval_policy": "normal",
+    "action_id": "2c4f575b-4d80-43b0-89d4-2e5660c49178"
+  },
+  "c16c3b6e-dc51-4a3e-81b9-f4e86e156fc2": {
+    "status": "NEED_OBJECT_SELECTION",
+    "state": "WAITING_OBJECT_SELECTION",
+    "next_step": "ASK_OBJECT_SELECTION",
+    "action": "disable_user",
+    "target_object_type": "USER",
+    "resolved_objects": {},
+    "candidate_objects": {
+      "USER": [
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen",
+          "sam_account_name": "nguyentn",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "Chuyen vien khach hang uu tien",
+          "distinguished_name": "CN=Truong Thao Nguyen,OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false
+        },
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen 1",
+          "sam_account_name": "nguyentn1",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "Chuyen vien khach hang uu tien",
+          "distinguished_name": "CN=Truong Thao Nguyen 1,OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false
+        },
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen (KHCN-HO)",
+          "sam_account_name": "nguyentn3",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "",
+          "distinguished_name": "CN=Truong Thao Nguyen (KHCN-HO),OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "514",
+          "is_disabled": true
+        }
+      ]
+    },
+    "proposed_action_payload": {},
+    "approval_policy": "normal",
+    "action_id": "c16c3b6e-dc51-4a3e-81b9-f4e86e156fc2"
+  },
+  "3a4d627e-ca68-4552-a9b4-adcad1f75dd3": {
+    "status": "NEED_OBJECT_SELECTION",
+    "state": "WAITING_OBJECT_SELECTION",
+    "next_step": "ASK_OBJECT_SELECTION",
+    "action": "disable_user",
+    "target_object_type": "USER",
+    "resolved_objects": {},
+    "candidate_objects": {
+      "USER": [
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen",
+          "sam_account_name": "nguyentn",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "Chuyen vien khach hang uu tien",
+          "distinguished_name": "CN=Truong Thao Nguyen,OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false
+        },
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen 1",
+          "sam_account_name": "nguyentn1",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "Chuyen vien khach hang uu tien",
+          "distinguished_name": "CN=Truong Thao Nguyen 1,OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false
+        },
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen (KHCN-HO)",
+          "sam_account_name": "nguyentn3",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "",
+          "distinguished_name": "CN=Truong Thao Nguyen (KHCN-HO),OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "514",
+          "is_disabled": true
+        }
+      ]
+    },
+    "proposed_action_payload": {},
+    "approval_policy": "normal",
+    "action_id": "3a4d627e-ca68-4552-a9b4-adcad1f75dd3"
+  },
+  "28e02391-8ca9-482c-a519-d35e4931fac4": {
+    "status": "NEED_OBJECT_SELECTION",
+    "state": "WAITING_OBJECT_SELECTION",
+    "next_step": "ASK_OBJECT_SELECTION",
+    "action": "disable_user",
+    "target_object_type": "USER",
+    "resolved_objects": {},
+    "candidate_objects": {
+      "USER": [
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen",
+          "sam_account_name": "nguyentn",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "Chuyen vien khach hang uu tien",
+          "distinguished_name": "CN=Truong Thao Nguyen,OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false
+        },
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen 1",
+          "sam_account_name": "nguyentn1",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "Chuyen vien khach hang uu tien",
+          "distinguished_name": "CN=Truong Thao Nguyen 1,OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false
+        }
+      ]
+    },
+    "proposed_action_payload": {},
+    "approval_policy": "normal",
+    "action_id": "28e02391-8ca9-482c-a519-d35e4931fac4"
+  },
+  "5f7f8989-ad87-4e8e-b818-6ea100393aeb": {
+    "status": "NEED_OBJECT_SELECTION",
+    "state": "WAITING_OBJECT_SELECTION",
+    "next_step": "ASK_OBJECT_SELECTION",
+    "action": "disable_user",
+    "target_object_type": "USER",
+    "resolved_objects": {},
+    "candidate_objects": {
+      "USER": [
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen",
+          "sam_account_name": "nguyentn",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "Chuyen vien khach hang uu tien",
+          "distinguished_name": "CN=Truong Thao Nguyen,OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false
+        },
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen 1",
+          "sam_account_name": "nguyentn1",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "Chuyen vien khach hang uu tien",
+          "distinguished_name": "CN=Truong Thao Nguyen 1,OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false
+        }
+      ]
+    },
+    "proposed_action_payload": {},
+    "approval_policy": "normal",
+    "action_id": "5f7f8989-ad87-4e8e-b818-6ea100393aeb"
+  },
+  "4abddbd6-06f5-4f9c-b26f-7ceeff5b1739": {
+    "status": "NEED_OBJECT_SELECTION",
+    "state": "WAITING_OBJECT_SELECTION",
+    "next_step": "ASK_OBJECT_SELECTION",
+    "action": "disable_user",
+    "target_object_type": "USER",
+    "resolved_objects": {},
+    "candidate_objects": {
+      "USER": [
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen",
+          "sam_account_name": "nguyentn",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "Chuyen vien khach hang uu tien",
+          "distinguished_name": "CN=Truong Thao Nguyen,OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false
+        },
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen (KHCN-HO)",
+          "sam_account_name": "nguyentn3",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "",
+          "distinguished_name": "CN=Truong Thao Nguyen (KHCN-HO),OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false
+        }
+      ]
+    },
+    "proposed_action_payload": {},
+    "approval_policy": "normal",
+    "action_id": "4abddbd6-06f5-4f9c-b26f-7ceeff5b1739"
+  },
+  "d23ed690-d8c2-4521-a4d7-67b9ad9171c1": {
+    "status": "NEED_OBJECT_SELECTION",
+    "state": "WAITING_OBJECT_SELECTION",
+    "next_step": "ASK_OBJECT_SELECTION",
+    "action": "disable_user",
+    "target_object_type": "USER",
+    "resolved_objects": {},
+    "candidate_objects": {
+      "USER": [
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen",
+          "sam_account_name": "nguyentn",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "Chuyen vien khach hang uu tien",
+          "distinguished_name": "CN=Truong Thao Nguyen,OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false
+        },
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen (KHCN-HO)",
+          "sam_account_name": "nguyentn3",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "",
+          "distinguished_name": "CN=Truong Thao Nguyen (KHCN-HO),OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false
+        }
+      ]
+    },
+    "proposed_action_payload": {},
+    "approval_policy": "normal",
+    "action_id": "d23ed690-d8c2-4521-a4d7-67b9ad9171c1"
+  },
+  "356b30af-5eae-4ef3-aae6-d39ee7b43fe8": {
+    "status": "NEED_OBJECT_SELECTION",
+    "state": "WAITING_OBJECT_SELECTION",
+    "next_step": "ASK_OBJECT_SELECTION",
+    "action": "disable_user",
+    "target_object_type": "USER",
+    "resolved_objects": {},
+    "candidate_objects": {
+      "USER": [
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen",
+          "sam_account_name": "nguyentn",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "Chuyen vien khach hang uu tien",
+          "distinguished_name": "CN=Truong Thao Nguyen,OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false
+        },
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen 1",
+          "sam_account_name": "nguyentn1",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "Chuyen vien khach hang uu tien",
+          "distinguished_name": "CN=Truong Thao Nguyen 1,OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false
+        },
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen (KHCN-HO)",
+          "sam_account_name": "nguyentn3",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "",
+          "distinguished_name": "CN=Truong Thao Nguyen (KHCN-HO),OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false
+        }
+      ]
+    },
+    "proposed_action_payload": {},
+    "approval_policy": "normal",
+    "action_id": "356b30af-5eae-4ef3-aae6-d39ee7b43fe8"
+  },
+  "c62836a8-7918-47ed-809f-02ed29390d50": {
+    "status": "NEED_OBJECT_SELECTION",
+    "state": "WAITING_OBJECT_SELECTION",
+    "next_step": "ASK_OBJECT_SELECTION",
+    "action": "disable_user",
+    "target_object_type": "USER",
+    "resolved_objects": {},
+    "candidate_objects": {
+      "USER": [
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen",
+          "sam_account_name": "nguyentn",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "Chuyen vien khach hang uu tien",
+          "distinguished_name": "CN=Truong Thao Nguyen,OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false
+        },
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen 1",
+          "sam_account_name": "nguyentn1",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "Chuyen vien khach hang uu tien",
+          "distinguished_name": "CN=Truong Thao Nguyen 1,OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false
+        },
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen (KHCN-HO)",
+          "sam_account_name": "nguyentn3",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "",
+          "distinguished_name": "CN=Truong Thao Nguyen (KHCN-HO),OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false
+        }
+      ]
+    },
+    "proposed_action_payload": {},
+    "approval_policy": "normal",
+    "action_id": "c62836a8-7918-47ed-809f-02ed29390d50"
+  },
+  "17d114b5-e62b-48be-a465-18015d3f8baa": {
+    "status": "NEED_OBJECT_SELECTION",
+    "state": "WAITING_OBJECT_SELECTION",
+    "next_step": "ASK_OBJECT_SELECTION",
+    "action": "disable_user",
+    "target_object_type": "USER",
+    "resolved_objects": {},
+    "candidate_objects": {
+      "USER": [
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen",
+          "sam_account_name": "nguyentn",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "Chuyen vien khach hang uu tien",
+          "distinguished_name": "CN=Truong Thao Nguyen,OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false
+        },
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen 1",
+          "sam_account_name": "nguyentn1",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "Chuyen vien khach hang uu tien",
+          "distinguished_name": "CN=Truong Thao Nguyen 1,OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false
+        },
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen (KHCN-HO)",
+          "sam_account_name": "nguyentn3",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "",
+          "distinguished_name": "CN=Truong Thao Nguyen (KHCN-HO),OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false
+        }
+      ]
+    },
+    "proposed_action_payload": {},
+    "approval_policy": "normal",
+    "action_id": "17d114b5-e62b-48be-a465-18015d3f8baa"
+  },
+  "06e6e130-5760-4381-bdb3-ffeab8410e55": {
+    "status": "NEED_OBJECT_SELECTION",
+    "state": "WAITING_OBJECT_SELECTION",
+    "next_step": "ASK_OBJECT_SELECTION",
+    "action": "disable_user",
+    "target_object_type": "USER",
+    "resolved_objects": {},
+    "candidate_objects": {
+      "USER": [
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen",
+          "sam_account_name": "nguyentn",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "Chuyen vien khach hang uu tien",
+          "distinguished_name": "CN=Truong Thao Nguyen,OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false
+        },
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen 1",
+          "sam_account_name": "nguyentn1",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "Chuyen vien khach hang uu tien",
+          "distinguished_name": "CN=Truong Thao Nguyen 1,OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false
+        },
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen (KHCN-HO)",
+          "sam_account_name": "nguyentn3",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "",
+          "distinguished_name": "CN=Truong Thao Nguyen (KHCN-HO),OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false
+        }
+      ]
+    },
+    "proposed_action_payload": {},
+    "approval_policy": "normal",
+    "action_id": "06e6e130-5760-4381-bdb3-ffeab8410e55"
+  },
+  "23f7fe5d-7434-4c24-b4e5-0ed5f2874d4f": {
+    "status": "NEED_OBJECT_SELECTION",
+    "state": "WAITING_OBJECT_SELECTION",
+    "next_step": "ASK_OBJECT_SELECTION",
+    "action": "disable_user",
+    "target_object_type": "USER",
+    "resolved_objects": {},
+    "candidate_objects": {
+      "USER": [
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen",
+          "sam_account_name": "nguyentn",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "Chuyen vien khach hang uu tien",
+          "distinguished_name": "CN=Truong Thao Nguyen,OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false
+        },
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen 1",
+          "sam_account_name": "nguyentn1",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "Chuyen vien khach hang uu tien",
+          "distinguished_name": "CN=Truong Thao Nguyen 1,OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false
+        },
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen (KHCN-HO)",
+          "sam_account_name": "nguyentn3",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "",
+          "distinguished_name": "CN=Truong Thao Nguyen (KHCN-HO),OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false
+        }
+      ]
+    },
+    "proposed_action_payload": {},
+    "approval_policy": "normal",
+    "action_id": "23f7fe5d-7434-4c24-b4e5-0ed5f2874d4f"
+  },
+  "fe9f611b-bef1-4b3c-a042-0ab20d38be52": {
+    "status": "NEED_OBJECT_SELECTION",
+    "state": "WAITING_OBJECT_SELECTION",
+    "next_step": "ASK_OBJECT_SELECTION",
+    "action": "disable_user",
+    "target_object_type": "USER",
+    "resolved_objects": {},
+    "candidate_objects": {
+      "USER": [
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen",
+          "sam_account_name": "nguyentn",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "Chuyen vien khach hang uu tien",
+          "distinguished_name": "CN=Truong Thao Nguyen,OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false
+        },
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen (KHCN-HO)",
+          "sam_account_name": "nguyentn3",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "",
+          "distinguished_name": "CN=Truong Thao Nguyen (KHCN-HO),OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false
+        }
+      ]
+    },
+    "proposed_action_payload": {},
+    "approval_policy": "normal",
+    "action_id": "fe9f611b-bef1-4b3c-a042-0ab20d38be52"
+  },
+  "db657baf-10b4-4c40-83c4-3c4f3434ec6b": {
+    "status": "NEED_OBJECT_SELECTION",
+    "state": "WAITING_OBJECT_SELECTION",
+    "next_step": "ASK_OBJECT_SELECTION",
+    "action": "disable_user",
+    "target_object_type": "USER",
+    "resolved_objects": {},
+    "candidate_objects": {
+      "USER": [
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen",
+          "sam_account_name": "nguyentn",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "Chuyen vien khach hang uu tien",
+          "distinguished_name": "CN=Truong Thao Nguyen,OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false
+        },
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen (KHCN-HO)",
+          "sam_account_name": "nguyentn3",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "",
+          "distinguished_name": "CN=Truong Thao Nguyen (KHCN-HO),OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false
+        }
+      ]
+    },
+    "proposed_action_payload": {},
+    "approval_policy": "normal",
+    "action_id": "db657baf-10b4-4c40-83c4-3c4f3434ec6b"
+  },
+  "8c130ee2-57d4-49f6-8d2a-f610b128d3f5": {
+    "status": "NEED_OBJECT_SELECTION",
+    "state": "WAITING_OBJECT_SELECTION",
+    "next_step": "ASK_OBJECT_SELECTION",
+    "action": "disable_user",
+    "target_object_type": "USER",
+    "resolved_objects": {},
+    "candidate_objects": {
+      "USER": [
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen",
+          "sam_account_name": "nguyentn",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "Chuyen vien khach hang uu tien",
+          "distinguished_name": "CN=Truong Thao Nguyen,OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false
+        },
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen (KHCN-HO)",
+          "sam_account_name": "nguyentn3",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "",
+          "distinguished_name": "CN=Truong Thao Nguyen (KHCN-HO),OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false
+        }
+      ]
+    },
+    "proposed_action_payload": {},
+    "approval_policy": "normal",
+    "action_id": "8c130ee2-57d4-49f6-8d2a-f610b128d3f5"
+  },
+  "83779db7-6009-4b4b-aaa8-027d51e262d6": {
+    "status": "NEED_OBJECT_SELECTION",
+    "state": "WAITING_OBJECT_SELECTION",
+    "next_step": "ASK_OBJECT_SELECTION",
+    "action": "disable_user",
+    "target_object_type": "USER",
+    "resolved_objects": {},
+    "candidate_objects": {
+      "USER": [
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen",
+          "sam_account_name": "nguyentn",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "Chuyen vien khach hang uu tien",
+          "distinguished_name": "CN=Truong Thao Nguyen,OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false
+        },
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen (KHCN-HO)",
+          "sam_account_name": "nguyentn3",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "",
+          "distinguished_name": "CN=Truong Thao Nguyen (KHCN-HO),OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false
+        }
+      ]
+    },
+    "proposed_action_payload": {},
+    "approval_policy": "normal",
+    "action_id": "83779db7-6009-4b4b-aaa8-027d51e262d6"
+  },
+  "75dac18a-7ca9-4341-b6d0-76d6f211ca73": {
+    "status": "NEED_OBJECT_SELECTION",
+    "state": "WAITING_OBJECT_SELECTION",
+    "next_step": "ASK_OBJECT_SELECTION",
+    "action": "disable_user",
+    "target_object_type": "USER",
+    "resolved_objects": {},
+    "candidate_objects": {
+      "USER": [
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen",
+          "sam_account_name": "nguyentn",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "Chuyen vien khach hang uu tien",
+          "distinguished_name": "CN=Truong Thao Nguyen,OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false
+        },
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen (KHCN-HO)",
+          "sam_account_name": "nguyentn3",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "",
+          "distinguished_name": "CN=Truong Thao Nguyen (KHCN-HO),OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false
+        }
+      ]
+    },
+    "proposed_action_payload": {},
+    "approval_policy": "normal",
+    "action_id": "75dac18a-7ca9-4341-b6d0-76d6f211ca73"
+  },
+  "1f1cf23e-30f4-4d0e-8775-832007ee429c": {
+    "status": "NEED_OBJECT_SELECTION",
+    "state": "WAITING_OBJECT_SELECTION",
+    "next_step": "ASK_OBJECT_SELECTION",
+    "action": "disable_user",
+    "target_object_type": "USER",
+    "resolved_objects": {},
+    "candidate_objects": {
+      "USER": [
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen",
+          "sam_account_name": "nguyentn",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "Chuyen vien khach hang uu tien",
+          "distinguished_name": "CN=Truong Thao Nguyen,OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false
+        },
+        {
+          "object_type": "USER",
+          "display_name": "Truong Thao Nguyen (KHCN-HO)",
+          "sam_account_name": "nguyentn3",
+          "mail": "",
+          "department": "PVcomBank Sai Gon - Bo Phan Khach Hang Uu Tien",
+          "title": "",
+          "distinguished_name": "CN=Truong Thao Nguyen (KHCN-HO),OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false
+        }
+      ]
+    },
+    "proposed_action_payload": {},
+    "approval_policy": "normal",
+    "action_id": "1f1cf23e-30f4-4d0e-8775-832007ee429c"
   }
 }

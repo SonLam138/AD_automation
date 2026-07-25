@@ -15,7 +15,7 @@ from app.config import (
 from app.agent import (
     resolve_action
 )
-
+from app.agent.action_prompt import build_action_detection_prompt
 
 ldap = LDAPAdapter()
 
@@ -27,10 +27,7 @@ ldap.connect(
 
 
 test_inputs = [
-    "Disable tài khoản Minh Son",
-    "Thêm tài khoản Test vào group Administrators",
-    "chuyển Sonnm sang OU HO",
-    "kiểm tra giúp tôi anh Sơn"
+    "Disable user nguyentn"
 ]
 
 
@@ -44,18 +41,19 @@ for text in test_inputs:
         text,
         ldap.connection
     )
-
+    ngao = build_action_detection_prompt(text)
     print("RESOLVER")
     print(resolver_result)
-
+    print("NGAO")
+    print(ngao)
     print()
 
-    print("COPILOT RESPONSE")
+    # print("COPILOT RESPONSE")
 
-    response = generate_user_response(
-        resolver_result
-    )
+    # response = generate_user_response(
+    #     resolver_result
+    # )
 
-    print(response)
+    # print(response)
 
-    print()
+    # print()

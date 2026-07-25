@@ -13,5 +13,10 @@ export async function sendMessage(
             }
         );
 
+    console.log(
+    "API RESPONSE =",
+    response.data
+    );
+
     return response.data;
 }

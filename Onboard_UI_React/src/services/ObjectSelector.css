@@ -1,0 +1,67 @@
+.object-selector {
+    margin-top: 8px;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 8px;
+}
+.object-option {
+
+    width: 35%;
+
+    text-align: left;
+
+    padding: 10px 14px;
+
+    background: #363634;
+
+    border: 1px solid #454545;
+
+    border-radius: 10px;
+
+    cursor: pointer;
+
+    transition: all 0.15s ease;
+}
+.object-option:hover {
+
+    border-color: #caa64d;
+
+    background: #434332;
+}
+.object-option-title {
+
+    color: rgb(244, 244, 4);
+
+    font-weight: 600;
+
+    font-size: 13px;
+}
+.object-option-subtitle {
+
+    margin-top: 5px;
+    margin-left: 13px;
+    color: #f4d794;
+
+    font-size: 12px;
+}
+.object-selector-label {
+
+    font-size: 18px;
+
+    color: #999;
+
+    margin-bottom: 6px;
+}
+.object-option.selected {
+    border: 2px solid #22c55e;
+    background: #f0fdf4;
+}
+
+.object-status {
+    margin-top: 4px;
+    font-size: 12px;
+    color: #16a34a;
+    font-weight: 600;
+}
