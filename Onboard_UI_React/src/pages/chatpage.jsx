@@ -285,13 +285,6 @@ function ChatPage() {
                                 }}
                                 onCancel={() => {
                                 setActiveAction(null);
-                                setMessages(prev => [
-                                ...prev,
-                                {
-                                sender: "assistant",
-                                text: "Yêu cầu đã được hủy."
-                                }
-                                ]);
                                 }}
                             />
                         );

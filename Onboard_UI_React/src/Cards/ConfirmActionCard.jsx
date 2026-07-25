@@ -14,6 +14,7 @@ function ConfirmActionCard({
     const [secret, setSecret] = useState("");
     const [executing, setExecuting] = useState(false);
     const [completed, setCompleted] = useState(false);
+    const [cancelled, setCancelled] = useState(false);
     const action = data?.action;
     const approvalPolicy = data?.approval_policy;
     const payload = data?.proposed_action_payload || {};
@@ -106,6 +107,8 @@ function ConfirmActionCard({
 
     const handleCancel = () => {
 
+        setCancelled(true);
+
         if (onCancel) {
             onCancel();
         }
@@ -171,8 +174,14 @@ function ConfirmActionCard({
                 </div>
 
             )}
-            
-            {!completed && (
+            {cancelled && (
+
+                <div className="action-cancelled">
+                    🚫 Yêu cầu đã bị hủy
+                </div>
+
+            )}
+            {!completed && !cancelled && (
             <div className="confirm-card-actions">
 
                 {!showSecretInput && (
