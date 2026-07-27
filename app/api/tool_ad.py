@@ -8,7 +8,8 @@ from app.models.ad_tool import (
     DisableUserRequest,
     AddGroupRequest,
     RemoveGroupRequest,
-    MoveUserRequest
+    MoveUserRequest,
+    VerifySecretRequest
 )
 from app.agent.execution_response import (
     generate_execution_response
@@ -44,11 +45,6 @@ def disable_user(
 ):
 
     try:
-
-        print(
-            "LDAP CONNECTED =",
-            ldap.connection.bound
-        )
 
         result = ldap.disable_user(
             request.sam_account_name
@@ -95,11 +91,39 @@ def add_group(
         )
     )
 ):
+    try:
 
-    return ldap.add_group_member(
-        request.sam_account_name,
-        request.group_name
-    )
+        result = ldap.add_group_member(
+            request.sam_account_name,
+	    request.group_name
+        )
+
+        execution_contract = {
+            "state": "ACTION_SUCCESS",
+            "action": "add_group_member",
+            "proposed_action_payload": {
+            "sam_account_name": request.sam_account_name,
+		    "group_name": request.group_name
+            },
+            "execution_result": result
+        }
+
+        message = generate_execution_response(
+            execution_contract
+        )
+
+        return {
+            "success": True,
+            "message": message,
+            "execution_result": result
+        }
+
+    except Exception as ex:
+
+        raise HTTPException(
+            status_code=500,
+            detail=str(ex)
+        )
 
 @router.post("/remove-group")
 def remove_group(
@@ -114,10 +138,39 @@ def remove_group(
     )
 ):
 
-    return ldap.remove_group_member(
-        request.sam_account_name,
-        request.group_name
-    )
+    try:
+
+        result = ldap.remove_group_member(
+            request.sam_account_name,
+	        request.group_name
+        )
+
+        execution_contract = {
+            "state": "ACTION_SUCCESS",
+            "action": "remove_group_member",
+            "proposed_action_payload": {
+            "sam_account_name": request.sam_account_name,
+		    "group_name": request.group_name
+            },
+            "execution_result": result
+        }
+
+        message = generate_execution_response(
+            execution_contract
+        )
+
+        return {
+            "success": True,
+            "message": message,
+            "execution_result": result
+        }
+    except Exception as ex:
+
+        raise HTTPException(
+            status_code=500,
+            detail=str(ex)
+        )
+
 
 @router.post("/move-user")
 def move_user(
@@ -131,9 +184,53 @@ def move_user(
         )
     )
 ):
+    try:
 
-    return ldap.move_user_to_ou(
-        request.sam_account_name,
-        request.target_ou_dn
-    )
+        result = ldap.move_user_to_ou(
+            request.sam_account_name,
+            request.target_ou_dn
+            )
 
+        execution_contract = {
+            "state": "ACTION_SUCCESS",
+            "action": "move_user_to_ou",
+            "proposed_action_payload": {
+            "sam_account_name": request.sam_account_name,
+		    "target_ou_dn": request.target_ou_dn
+            },
+            "execution_result": result
+        }
+
+        message = generate_execution_response(
+            execution_contract
+        )
+
+        return {
+            "success": True,
+            "message": message,
+            "execution_result": result
+        }
+
+    except Exception as ex:
+    
+            raise HTTPException(
+                status_code=500,
+                detail=str(ex)
+            )
+
+
+    # return ldap.move_user_to_ou(
+    #     request.sam_account_name,
+    #     request.target_ou_dn
+    # )
+
+@router.post("/verify-admin-secret")
+def verify_admin_secret(
+    request: VerifySecretRequest
+):
+
+    return {
+        "success":
+            request.secret ==
+            ADMIN_APPROVAL_SECRET
+    }

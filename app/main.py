@@ -11,7 +11,7 @@ from app.api.resolver_fake import router as resolver_fake_router
 from app.api.onboarding_request import router as onboarding_request_router
 from app.api.tool_ad import router as tool_ad_router
 from Onboard_UI.routers.auth_router import router as onboard_ui_router
-
+from app.api import chat
 
 app = FastAPI(
     title="AD Capability Service"
@@ -77,11 +77,10 @@ app.include_router(
     prefix="/api/ad",
     tags=["AD Tools"]
 )
-### Test
-from app.api import chat
 
 app.include_router(
     chat.router,
     prefix="/api/chat",
     tags=["Chat"]
 )
+

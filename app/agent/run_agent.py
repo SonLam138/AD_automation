@@ -261,6 +261,7 @@ def resolve_action(
     next_step = "CONFIRM_ACTION"
 
     approval_policy = None
+    approval_policies = []
 
     target_object_type = None
     state = None
@@ -342,16 +343,16 @@ def resolve_action(
             "results",
             []
         )
-        print("RESULTS TYPE =", type(results))
-        if results:
-            print(
-            "FIRST ITEM TYPE =",
-            type(results[0])
-            )
-            print(
-            "FIRST ITEM =",
-            results[0]
-            )
+        # print("RESULTS TYPE =", type(results))
+        # if results:
+        #     print(
+        #     "FIRST ITEM TYPE =",
+        #     type(results[0])
+        #     )
+        #     print(
+        #     "FIRST ITEM =",
+        #     results[0]
+        #     )
         results = filter_candidates_by_action(
             action,
             results
@@ -400,9 +401,27 @@ def resolve_action(
             )
             state = "WAITING_OBJECT_SELECTION"
 
+            enriched_results = []
+
+            for item in results:
+
+                item_copy = dict(item)
+
+                item_copy["approval_policy"] = (
+                    get_candidate_approval_policy(
+                        action=action,
+                        object_type=object_type,
+                        candidates=[item]
+                    )
+                )
+
+                enriched_results.append(
+                    item_copy
+                )
+
             candidate_objects[
                 object_type
-            ] = results
+            ] = enriched_results
 
             approval_policy = (
             get_candidate_approval_policy(
@@ -525,110 +544,7 @@ def resolve_action(
         result["message"] = (
             "Tôi đã xử lý yêu cầu nhưng chưa thể tạo phản hồi."
         )
-
+    print(result)
     return result
-
-#========================================================
-# TURN 2 : CHUYỂN TỚI CÁC HÀM HANDLE ĐÚNG VỚI STATE 
-#=======================================================
-
-def handle_user_input(
-    action_id: str,
-    user_text: str
-):
-    """
-    Entry point cho các turn tiếp theo.
-
-    Chỉ đọc state hiện tại
-    và route tới handler tương ứng.
-
-    Không gọi LLM.
-    Không detect lại action.
-    Không execute action.
-    """
-
-    pending_action = get_pending_action(
-        action_id
-    )
-
-    if not pending_action:
-        return {
-            "success": False,
-            "state": "FAILED",
-            "error": "Pending action not found"
-        }
-
-    state = pending_action.get(
-        "state"
-    )
-
-    #
-    # User xác nhận
-    #
-    if state == (
-        "CONFIRM_READY"
-    ):
-        return handle_confirm_action(
-            action_id,
-            user_text
-        )
-
-    #
-    # Chờ nhập admin secret
-    #
-    if state == (
-        "WAITING_ADMIN_SECRET"
-    ):
-        return handle_admin_secret(
-            action_id,
-            user_text
-        )
-
-    #
-    # Đã xác thực xong
-    #
-    if state == (
-        "EXECUTION_READY"
-    ):
-        return {
-            "success": True,
-            "state": "EXECUTION_READY",
-            "message": (
-                "Yêu cầu đã sẵn sàng để thực thi."
-            ),
-            "pending_action": pending_action
-        }
-
-    #
-    # User nhập sai xác nhận quá số lần
-    #
-    if state == (
-        "CANCELLED"
-    ):
-        return {
-            "success": False,
-            "state": "CANCELLED",
-            "message": (
-                "Yêu cầu đã bị hủy."
-            )
-        }
-
-    #
-    # Future states
-    #
-    # WAITING_OBJECT_SELECTION
-    # WAITING_REQUIRED_OBJECT
-    # WAITING_APPROVER
-    #
-
-    return {
-        "success": False,
-        "state": state,
-        "error": (
-            f"Unsupported state: "
-            f"{state}"
-        )
-    }
-
 
 

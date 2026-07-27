@@ -11,10 +11,13 @@ const ACTION_MAP = {
     disable_user: disableUser,
 
     add_group: addGroup,
+    add_group_member: addGroup,
 
     remove_group: removeGroup,
+    remove_group_member: removeGroup,
 
-    move_user: moveUser
+    move_user: moveUser,
+    move_user_to_ou: moveUser
 };
 
 export async function executeAction(

@@ -101,4 +101,198 @@ Khóa chat :
 WAITING_OBJECT_SELECTION
 CONFIRM_READY
 
+==========================================
+MULTI FRAMEWORK - CASE N-N
+==========================================
+Luồng hoàn chỉnh :
+      User
+      ↓
+      resolve_action()
+      ↓
+      candidate_objects
+      ↓
+      isMultiFlow
+      ↓
+      MultiSelector
+      ↓
+      selected_objects
+      ↓
+      resolved_objects
+      ↓
+      getMultiApprovalPolicy()
+      ↓
+      buildActionPayload()
+      ↓
+      confirmData
+      ↓
+      MultiConfirmCard
+      ↓
+      verifySecret()
+      ↓
+      executeAction()
 
+
+
+Multi Flow xuất hiện khi :
+    resolved_objects = {}
+và  candidate_objects có nhiều hơn 1 giá trị object_type (>=2)
+
+Candidate Object Schema :
+  bổ sung "approval_policy" 
+
+MultiSelector :
+ Data nhận : msg.data.candidate_objects
+      {
+    USER: [...],
+    GROUP: [...]
+      }
+
+ Render theo : 
+    Object.entries(
+      candidate_objects
+    )
+Selected Objects :
+  schema
+    selected_objects: currentSelectedObjects,
+    const currentSelectedObjects = {
+            ...(resolverData.selected_objects || {}),
+            [objectType]: selectedObject
+
+Điều kiện đủ object :
+    Object.keys(
+        selected_objects
+    ).length
+
+    ===
+
+    Object.keys(
+        candidate_objects
+    ).length
+==> selected_object = số lượng object_type trong candidates
+
+Resolved Objects : khi đủ selected_object
+      resolvedObjects = {
+        ...selectedObjects
+    };
+  schema : 
+        {
+          USER: {...},
+          GROUP: {...}
+      }
+
+Payload : sau khi đủ object từ hàm handleMultiSelect() gọi :
+        buildActionPayload(
+          action,
+          resolvedObjects
+      )
+  để build payload chuẩn cho từng case : vd User-Group hoặc User-OU
+
+ConfirmData : object trung gian quan trọng nhất. Build trong handleMultiSelect()
+  schema : 
+      const confirmData = {
+
+      ...resolverData,
+
+      completed: true,
+
+      resolved_objects:
+          resolvedObjects,
+
+      selected_objects:
+          selectedObjects,
+
+      proposed_action_payload:
+          proposedActionPayload,
+
+      approval_policy:
+          approvalPolicy
+  };
+
+MultiConfirmCard :
+ chỉ đọc : resolved_objects, approval_policy, proposed_action_payload
+
+Verify Secret : tách riêng biệt cho single và multi
+  Trong multi gắn secret cho từng đối tượng, không lấy approval_policy theo request như single
+
+==========================================
+ADD NEW TOOL OBJECT ( base on case add-group)
+==========================================
+Layer 1 - Tool Search :
+ LLM detect :
+        {
+    "action": "add_group",
+    "entities": {
+        "users": ["sonnm"],
+        "groups": ["VPN Users"]
+        }
+    }
+
+Layer 2 - Resolver:
+  Resolver biết: 
+        Action = add_group
+
+        Required Objects:
+        - USER
+        - GROUP
+  Resolver gọi: search_tool
+
+  TH đầy đủ : resolve được ngay các requeriment_object (1-1)
+    {
+    "resolved_objects": {
+        "USER": {...},
+        "GROUP": {...}
+        }
+    }
+  --> sinh luôn payload và đi tới confirm
+      {
+      "group_name": "VPN Users"
+      }
+
+  Trường hợp nhiều candidate : 
+      {
+        "candidate_objects": {
+            "USER": [...],
+            "GROUP": [...]
+        },
+
+        "target_object_type": "USER",
+
+        "status": "NEED_OBJECT_SELECTION"
+      }
+  --> hiển thị ObjectSelector hoặc MultiSelector
+
+Layer 3 - Schema chuẩn của Object :
+
+  USER :
+      {
+        "object_type": "USER",
+
+        "display_name": "...",
+
+        "sam_account_name": "...",
+
+        "distinguished_name": "...",
+
+        "approval_policy": "normal"
+      }
+  GROUP :
+      {
+          "object_type": "GROUP",
+
+          "group_name": "...",
+
+          "distinguished_name": "...",
+
+          "approval_policy": "admin_secret"
+      }
+
+  OU :
+      {
+        "object_type": "OU",
+
+        "ou": "...",
+
+        "distinguished_name": "...",
+
+        "approval_policy": "normal"
+      }

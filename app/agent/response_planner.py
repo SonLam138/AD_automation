@@ -21,16 +21,31 @@ def generate_user_response(
     response = ask_llm(
         prompt
     )
-
     try:
-
         data = json.loads(response)
-
+        return data["message"]
+    except Exception:
+        print(
+        "INVALID LLM RESPONSE:",
+        response
+        )
         return (
-            data.get("text")
-            or response
+        "Ngáo trả lời sai định dạng."
         )
 
-    except Exception:
 
-        return response.strip()
+
+    # return response.strip()
+
+    # try:
+
+    #     data = json.loads(response)
+
+    #     return (
+    #         data.get("text")
+    #         or response
+    #     )
+
+    # except Exception:
+
+    #     return response.strip()

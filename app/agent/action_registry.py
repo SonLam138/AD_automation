@@ -46,7 +46,7 @@ ACTION_REGISTRY = {
         ),
 
         "intent_hints": [
-            "add group",
+            "add ... group",
             "add to group",
             "add user to group",
             "add member",
@@ -92,12 +92,12 @@ ACTION_REGISTRY = {
         ),
 
         "intent_hints": [
-            "remove group",
+            "remove... group",
             "remove from group",
             "remove user from group",
             "remove member",
-            "gỡ group",
-            "go group",
+            "gỡ user... group",
+            "gỡ tài khoản... group",
             "gỡ khỏi nhóm",
             "go khoi nhom",
             "xoá khỏi nhóm",

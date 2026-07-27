@@ -1,0 +1,225 @@
+.multi-confirm-card {
+    width: 100%;
+    max-width: 420px;
+    margin: 12px 0;
+    padding: 10px;
+    border-radius: 18px;
+    background: linear-gradient(
+        135deg,
+        #1d1608,
+        #2b210d
+    );
+    border: 1px solid rgba(212, 175, 55, 0.45);
+    box-shadow: 0 14px 36px rgba(0, 0, 0, 0.28);
+    color: #f8efd2;
+}
+
+.multi-confirm-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 16px;
+}
+
+.multi-confirm-title {
+    color: #D4AF37;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.multi-confirm-subtitle {
+    margin-top: 6px;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #dacda8;
+}
+
+.multi-confirm-body {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.multi-confirm-section {
+    padding: 8px;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.045);
+    border: 1px solid rgba(212, 175, 55, 0.18);
+}
+
+.multi-section-title {
+    margin-bottom: 10px;
+    font-size: 14px;
+    font-weight: 700;
+    color: #d4af37;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.multi-confirm-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 2px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.multi-confirm-row:last-child {
+    border-bottom: none;
+}
+
+.multi-confirm-label {
+    color: #D4AF37;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.multi-confirm-value {
+    flex: 1;
+    text-align: right;
+    color: #fff6dc;
+    font-size: 14px;
+    word-break: break-word;
+}
+
+.multi-policy-badge {
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.multi-policy-badge.normal {
+    background: rgba(76, 175, 80, 0.18);
+    color: #9beaa1;
+    border: 1px solid rgba(76, 175, 80, 0.35);
+}
+
+.multi-policy-badge.admin_secret {
+    background: rgba(255, 193, 7, 0.18);
+    color: #ffd45d;
+    border: 1px solid rgba(255, 193, 7, 0.42);
+}
+
+.multi-object-card {
+    border-left: 3px solid #D4AF37;
+    padding-left: 10px;
+    margin-bottom: 8px;
+}
+
+.multi-object-card:last-child {
+    margin-bottom: 0;
+}
+
+.multi-object-type {
+    margin-bottom: 6px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #f3c969;
+    letter-spacing: 0.04em;
+}
+
+.multi-object-value {
+    font-size: 15px;
+    color: #fff7df;
+    word-break: break-word;
+}
+
+.multi-secret-box {
+    margin-top: 16px;
+    padding: 14px;
+    border-radius: 14px;
+    background: rgba(255, 193, 7, 0.08);
+    border: 1px solid rgba(255, 193, 7, 0.28);
+}
+
+.multi-secret-label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: #ffd45d;
+}
+
+.multi-secret-input {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid rgba(212, 175, 55, 0.35);
+    background: rgba(0, 0, 0, 0.35);
+    color: #fff7df;
+    outline: none;
+}
+
+.multi-secret-input:focus {
+    border-color: #f3c969;
+    box-shadow: 0 0 0 2px rgba(243, 201, 105, 0.16);
+}
+
+.multi-confirm-secret-warning {
+    margin-top: 6px;
+    color: #f3c969;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.multi-confirm-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 18px;
+}
+
+.multi-confirm-btn {
+    padding: 10px 18px;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(
+        135deg,
+        #d4af37,
+        #f3c969
+    );
+    color: #1b1305;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.multi-confirm-btn:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+.multi-cancel-btn {
+    padding: 10px 18px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    background: rgba(255, 255, 255, 0.06);
+    color: #f8efd2;
+    cursor: pointer;
+}
+
+.multi-cancel-btn:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+.multi-action-completed {
+    margin-top: 16px;
+    padding: 12px;
+    border-radius: 12px;
+    background: rgba(76, 175, 80, 0.12);
+    border: 1px solid rgba(76, 175, 80, 0.3);
+    color: #9beaa1;
+    font-weight: 600;
+}
+
+.multi-action-cancelled {
+    margin-top: 16px;
+    padding: 12px;
+    border-radius: 12px;
+    background: rgba(244, 67, 54, 0.12);
+    border: 1px solid rgba(244, 67, 54, 0.3);
+    color: #ff9f96;
+    font-weight: 600;
+}

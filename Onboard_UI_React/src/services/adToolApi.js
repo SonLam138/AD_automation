@@ -33,9 +33,22 @@ export async function removeGroup(payload) {
 export async function moveUser(payload) {
 
     const response = await axiosClient.post(
-        "/api/move-user",
+        "/api/ad/move-user",
         payload
     );
+
+    return response.data;
+}
+
+export async function verifySecret(secret) {
+
+    const response =
+        await axiosClient.post(
+            "/api/ad/verify-admin-secret",
+            {
+                secret
+            }
+        );
 
     return response.data;
 }

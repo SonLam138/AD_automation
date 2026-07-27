@@ -42,75 +42,81 @@ function LoginPage() {
 
     return (
 
-    <div className="login-page">
+        <div className="login-page">
 
-        <div className="login-card">
+            <div className="login-card">
 
-            <div className="login-header">
+                <div className="login-header">
 
-                <h1>
-                    AD Automation Platform
-                </h1>
+                    <h1>
+                        AD Automation Platform
+                    </h1>
 
-                <p>
-                    Active Directory Automation Assistant
-                </p>
+                    <p>
+                        Active Directory Automation Assistant
+                    </p>
 
-            </div>
+                </div>
 
-            <div className="login-form">
-
-                <label>
-                    Username
-                </label>
-
-                <input
-                    type="text"
-                    value={username}
-                    onChange={(e) =>
-                        setUsername(
-                            e.target.value
-                        )
-                    }
-                />
-
-                <label>
-                    Password
-                </label>
-
-                <input
-                    type="password"
-                    value={password}
-                    onChange={(e) =>
-                        setPassword(
-                            e.target.value
-                        )
-                    }
-                />
-
-                {loginFailed && (
-
-                    <div className="login-error">
-                        Đăng nhập thất bại
-                    </div>
-
-                )}
-
-                <button
-                    onClick={handleLogin}
+                <form
+                    className="login-form"
+                    onSubmit={(e) => {
+                        e.preventDefault();
+                        handleLogin();
+                    }}
                 >
-                    Sign In
-                </button>
+
+                    <label>
+                        Username
+                    </label>
+
+                    <input
+                        type="text"
+                        value={username}
+                        onChange={(e) =>
+                            setUsername(
+                                e.target.value
+                            )
+                        }
+                    />
+
+                    <label>
+                        Password
+                    </label>
+
+                    <input
+                        type="password"
+                        value={password}
+                        onChange={(e) =>
+                            setPassword(
+                                e.target.value
+                            )
+                        }
+                    />
+
+                    {loginFailed && (
+
+                        <div className="login-error">
+                            Đăng nhập thất bại
+                        </div>
+
+                    )}
+
+                    <button type="submit">
+                        Sign In
+                    </button>
+
+                </form>
+
+                <div className="login-footer">
+                    Enterprise Team Pharaoh Edition • Internal Use Only
+                </div>
 
             </div>
-            <div className="login-footer">
-                Enterprise Team Pharaoh Edition • Internal Use Only
-            </div>
+
         </div>
 
-    </div>
-
-);
+    );
 }
 
 export default LoginPage;

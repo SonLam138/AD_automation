@@ -51,11 +51,11 @@ export default function AutomationToolsPage() {
                     </div>
 
                     <div className="feature-box">
-                        ✅ Enable User
+                        ↔️ Add/Remove Group Members
                     </div>
 
                     <div className="feature-box">
-                        🔑 Reset Password
+                        📁 Move User to OU
                     </div>
 
                     <div className="feature-box">

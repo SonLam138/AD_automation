@@ -4,11 +4,14 @@ import {
     executeAction
 }
 from "../services/actionExecutor";
+import { verifySecret } from "../services/adToolApi";
+import { getRandomVerifySecretMessage } from "../components/verifySecretMsg";
 
 function ConfirmActionCard({ 
                 data, 
                 onFinished ,
-                onCancel
+                onCancel,
+                onVerifyMessage
             }){
     const [showSecretInput, setShowSecretInput] = useState(false);
     const [secret, setSecret] = useState("");
@@ -19,6 +22,7 @@ function ConfirmActionCard({
     const approvalPolicy = data?.approval_policy;
     const payload = data?.proposed_action_payload || {};
     const samAccountName = payload?.sam_account_name;
+    const groupName = payload?.group_name;
 
     const handleConfirm = () => {
         if (approvalPolicy === "admin_secret") {
@@ -47,6 +51,12 @@ function ConfirmActionCard({
             if (
                 approvalPolicy === "admin_secret"
             ) {
+
+                if (onVerifyMessage) {
+                    onVerifyMessage(
+                    getRandomVerifySecretMessage()
+                    );
+                }
 
                 const verifyResult =
                     await verifySecret(
@@ -141,7 +151,17 @@ function ConfirmActionCard({
                     <span className="confirm-label">User</span>
                     <span className="confirm-value">{samAccountName}</span>
                 </div>
+                {groupName && (
+                <div className="confirm-row">
+                    <span className="confirm-label">
+                        Group
+                    </span>
 
+                    <span className="confirm-value">
+                        {groupName}
+                    </span>
+                </div>
+                )}
                 <div className="confirm-row">
                     <span className="confirm-label">Policy</span>
                     <span className={`policy-badge ${approvalPolicy}`}>
@@ -220,70 +240,3 @@ function ConfirmActionCard({
 }
 
 export default ConfirmActionCard;
-
-// const executeAction = async () => {
-
-//     setExecuting(true);
-
-//     try {
-
-//         let result = null;
-
-//         switch (action) {
-
-//             case "disable_user":
-
-//                 result = await disableUser({
-//                     sam_account_name:
-//                         payload.sam_account_name
-//                 });
-
-//                 break;
-
-//             case "add_group":
-
-//                 result = await addGroup({
-//                     sam_account_name:
-//                         payload.sam_account_name,
-//                     group_name:
-//                         payload.group_name
-//                 });
-
-//                 break;
-
-//             case "remove_group":
-
-//                 result = await removeGroup({
-//                     sam_account_name:
-//                         payload.sam_account_name,
-//                     group_name:
-//                         payload.group_name
-//                 });
-
-//                 break;
-
-//             case "move_user":
-
-//                 result = await moveUser({
-//                     sam_account_name:
-//                         payload.sam_account_name,
-//                     target_ou_dn:
-//                         payload.target_ou_dn
-//                 });
-
-//                 break;
-
-//             default:
-//                 throw new Error(
-//                     `Unsupported action: ${action}`
-//                 );
-//         }
-
-//         console.log(result);
-
-//     } finally {
-
-//         setExecuting(false);
-
-//     }
-// };

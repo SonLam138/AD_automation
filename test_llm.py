@@ -27,7 +27,7 @@ ldap.connect(
 
 
 test_inputs = [
-    "Disable user nguyentn"
+    "chuyển user sonnm sang OU HO"
 ]
 
 
@@ -41,11 +41,8 @@ for text in test_inputs:
         text,
         ldap.connection
     )
-    ngao = build_action_detection_prompt(text)
     print("RESOLVER")
     print(resolver_result)
-    print("NGAO")
-    print(ngao)
     print()
 
     # print("COPILOT RESPONSE")
