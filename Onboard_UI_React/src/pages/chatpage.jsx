@@ -134,12 +134,25 @@ function ChatPage() {
 
     const handleObjectSelect = (
         resolverData,
-        selectedUser
+        selectedObject
     ) => {
-        console.log(
-        "HANDLE OBJECT SELECT FIRED",
-        selectedUser
-        );
+        const payload = 
+            buildSinglePayload(
+            resolverData.target_object_type,
+            selectedObject,
+            resolverData.proposed_action_payload
+            );
+            console.log(
+            "CONFIRM PAYLOAD",
+            payload
+            );
+
+        const approvalPolicy =
+            getMultiApprovalPolicy(
+                resolvedObjects
+            );
+            
+
         const confirmData = {
         ...resolverData,
             
@@ -151,16 +164,14 @@ function ChatPage() {
 
         resolved_objects: {
             ...resolverData.resolved_objects,
-            USER: selectedUser
+            [resolverData.target_object_type]: selectedObject
         },
 
         candidate_objects: {},
 
-        proposed_action_payload: {
-            ...resolverData.proposed_action_payload,
-            sam_account_name:
-                selectedUser.sam_account_name
-        }
+        proposed_action_payload: payload,
+
+        approval_policy: approvalPolicy
 
     };
 
@@ -182,7 +193,7 @@ function ChatPage() {
                     data: {
                     ...msg.data,
                     completed: true,
-                    selectedUser
+                    selectedObject
                     }
                     };
                     return updatedMsg;
@@ -231,10 +242,12 @@ function ChatPage() {
 
     candidate_objects: {},
 
-    proposed_action_payload: {
-        ...resolverData.proposed_action_payload,
-        group_name: selectedGroup.name
-            }
+    proposed_action_payload:
+        buildSinglePayload(
+            resolverData.target_object_type,
+            selectedObject,
+            resolverData.proposed_action_payload
+        )
 
     };
 
@@ -465,6 +478,127 @@ function ChatPage() {
                 return {};
         }
     }
+
+    function getActionParamValue(
+        objectType,
+        actionParam,
+        item
+    ) {
+
+        if (objectType === "USER") {
+
+            if (
+                actionParam ===
+                "sam_account_name"
+            ) {
+                return item.sam_account_name;
+            }
+
+            if (
+                actionParam ===
+                "user_dn"
+            ) {
+                return item.distinguished_name;
+            }
+
+        }
+
+        if (objectType === "GROUP") {
+
+            if (
+                actionParam ===
+                "group_name"
+            ) {
+                return (
+                    item.cn ||
+                    item.name
+                );
+            }
+
+            if (
+                actionParam ===
+                "group_dn"
+            ) {
+                return item.distinguished_name;
+            }
+
+        }
+
+        if (objectType === "OU") {
+
+            if (
+                actionParam ===
+                "target_ou_dn"
+            ) {
+                return item.distinguished_name;
+            }
+
+            if (
+                actionParam ===
+                "ou"
+            ) {
+                return item.ou;
+            }
+
+        }
+
+        if (objectType === "COMPUTER") {
+
+            if (
+                actionParam ===
+                "computer_name"
+            ) {
+                return item.computer_name;
+            }
+
+        }
+
+        return null;
+    }
+
+
+    function buildSinglePayload(
+        objectType,
+        selectedObject,
+        existingPayload = {}
+    ) {
+
+        const payload = {
+            ...existingPayload
+        };
+
+        if (objectType === "USER") {
+
+            payload.sam_account_name =
+                selectedObject.sam_account_name;
+
+        }
+
+        if (objectType === "GROUP") {
+
+            payload.group_name =
+                selectedObject.cn ||
+                selectedObject.name;
+
+        }
+
+        if (objectType === "OU") {
+
+            payload.target_ou_dn =
+                selectedObject.distinguished_name;
+
+        }
+
+        if (objectType === "COMPUTER") {
+
+            payload.computer_name =
+                selectedObject.computer_name;
+
+        }
+
+        return payload;
+    }
+
 
     return (
         <div className="chat-page">

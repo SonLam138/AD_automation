@@ -5,7 +5,8 @@ from app.agent.llm_action_detector import (
 from app.search_tools import (
     search_user,
     search_group,
-    search_ou
+    search_ou,
+    search_computer
 )
 
 from app.agent.pending_action_store import create_pending_action
@@ -29,6 +30,7 @@ SEARCH_TOOL_MAP = {
     "search_user": search_user,
     "search_group": search_group,
     "search_ou": search_ou,
+    "search_computer": search_computer
 }
 
 def _get_action_param_value(
@@ -38,6 +40,7 @@ def _get_action_param_value(
 ):
     """
     Convert resolved AD object to action payload value.
+    Use in Happy Case ( count = 1)
     """
 
     if object_type == "USER":
@@ -77,33 +80,40 @@ def _get_action_param_value(
                 "ou"
             )
 
+    if object_type == "COMPUTER":
+
+        if action_param == "computer_name":
+            return item.get(
+                "computer_name"
+            )    
+
     return None
 
 
-def _resolve_search_status(
-    result: dict
-):
-    """
-    Convert search result count to resolution status.
-    """
+# def _resolve_search_status(
+#     result: dict
+# ):
+#     """
+#     Convert search result count to resolution status.
+#     """
 
-    if not result.get(
-        "success"
-    ):
-        return "SEARCH_FAILED"
+#     if not result.get(
+#         "success"
+#     ):
+#         return "SEARCH_FAILED"
 
-    count = result.get(
-        "count",
-        0
-    )
+#     count = result.get(
+#         "count",
+#         0
+#     )
 
-    if count == 0:
-        return "NOT_FOUND"
+#     if count == 0:
+#         return "NOT_FOUND"
 
-    if count == 1:
-        return "RESOLVED"
+#     if count == 1:
+#         return "RESOLVED"
 
-    return "AMBIGUOUS"
+#     return "AMBIGUOUS"
 
 #===============================================
 # OBJECT NEED SECRET KEY
@@ -122,12 +132,17 @@ SENSITIVE_GROUPS = {
     "schema admins"
 }
 
+SENSITIVE_COMPUTER_OUS = {
+    "OU=Servers",
+    "OU=Domain Controllers",
+    "OU=PAMBT"
+}
 
 def get_approval_policy(
     action: str,
     resolved_objects: dict
 ):
-    # Check User
+    # Check User name
     user = (resolved_objects.get("user") or resolved_objects.get("USER"))
 
     if user:
@@ -140,7 +155,7 @@ def get_approval_policy(
         if username in SENSITIVE_USERS:
             return "admin_secret"
 
-    # Check Group
+    # Check Group name
     group = (resolved_objects.get("group") or resolved_objects.get("GROUP"))
 
     if group:
@@ -152,8 +167,22 @@ def get_approval_policy(
 
         if group_name in SENSITIVE_GROUPS:
             return "admin_secret"
+        
+    # Check Computer in OU
+    computer = (resolved_objects.get("computer") or resolved_objects.get("COMPUTER"))
+    if computer:
+        computer_dn = (
+        computer.get("distinguished_name")
+        or ""
+        )
+        for sensitive_ou in SENSITIVE_COMPUTER_OUS:
+            if sensitive_ou.lower() in computer_dn.lower():
+                return "admin_secret"
 
     return "normal"
+
+    
+
 
 
 def get_candidate_approval_policy(
@@ -301,10 +330,19 @@ def resolve_action(
             state = "WAITING_REQUIRED_OBJECT"
 
             continue
-
+        
+        print(
+            "OBJECT_TYPE =",
+            object_type
+            )
+        print(
+            "SEARCH_TOOL =",
+            search_tool_name
+            )
         search_func = SEARCH_TOOL_MAP.get(
             search_tool_name
         )
+
 
         #
         # TOOL NOT FOUND
@@ -343,16 +381,6 @@ def resolve_action(
             "results",
             []
         )
-        # print("RESULTS TYPE =", type(results))
-        # if results:
-        #     print(
-        #     "FIRST ITEM TYPE =",
-        #     type(results[0])
-        #     )
-        #     print(
-        #     "FIRST ITEM =",
-        #     results[0]
-        #     )
         results = filter_candidates_by_action(
             action,
             results

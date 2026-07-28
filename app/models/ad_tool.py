@@ -26,5 +26,10 @@ class AssistantMessageRequest(
     message: str
 
 
+class DisableComputerRequest(
+    BaseModel
+):
+    computer_name: str
+
 class VerifySecretRequest(BaseModel):
     secret: str

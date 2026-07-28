@@ -1,42 +1,141 @@
 import { useState } from "react";
 import "./ConfirmActionCard.css";
+
 import {
     executeAction
-}
-from "../services/actionExecutor";
-import { verifySecret } from "../services/adToolApi";
-import { getRandomVerifySecretMessage } from "../components/verifySecretMsg";
+} from "../services/actionExecutor";
 
-function ConfirmActionCard({ 
-                data, 
-                onFinished ,
-                onCancel,
-                onVerifyMessage
-            }){
-    const [showSecretInput, setShowSecretInput] = useState(false);
-    const [secret, setSecret] = useState("");
-    const [executing, setExecuting] = useState(false);
-    const [completed, setCompleted] = useState(false);
-    const [cancelled, setCancelled] = useState(false);
-    const action = data?.action;
-    const approvalPolicy = data?.approval_policy;
-    const payload = data?.proposed_action_payload || {};
-    const samAccountName = payload?.sam_account_name;
-    const groupName = payload?.group_name;
+import {
+    verifySecret
+} from "../services/adToolApi";
+
+import {
+    getRandomVerifySecretMessage
+} from "../components/verifySecretMsg";
+
+
+function ConfirmActionCard({
+    data,
+    onFinished,
+    onCancel,
+    onVerifyMessage
+}) {
+    const [showSecretInput, setShowSecretInput] =
+        useState(false);
+
+    const [secret, setSecret] =
+        useState("");
+
+    const [executing, setExecuting] =
+        useState(false);
+
+    const [completed, setCompleted] =
+        useState(false);
+
+    const [cancelled, setCancelled] =
+        useState(false);
+
+    const action =
+        data?.action;
+
+    const approvalPolicy =
+        data?.approval_policy;
+
+    const payload =
+        data?.proposed_action_payload || {};
+
+
+    const formatPayloadLabel = (
+        key
+    ) => {
+
+        const labelMap = {
+            sam_account_name:
+                "User",
+
+            user_dn:
+                "User DN",
+
+            group_name:
+                "Group",
+
+            group_dn:
+                "Group DN",
+
+            target_ou_dn:
+                "Target OU",
+
+            ou:
+                "OU",
+
+            computer_name:
+                "Computer",
+
+            computer_dn:
+                "Computer DN"
+        };
+
+        return (
+            labelMap[key] ||
+            key
+                .replaceAll("_", " ")
+                .replace(
+                    /\b\w/g,
+                    (char) =>
+                        char.toUpperCase()
+                )
+        );
+    };
+
+
+    const formatPayloadValue = (
+        value
+    ) => {
+
+        if (
+            value === null ||
+            value === undefined ||
+            value === ""
+        ) {
+            return "-";
+        }
+
+        if (
+            typeof value === "object"
+        ) {
+            return JSON.stringify(
+                value
+            );
+        }
+
+        return String(
+            value
+        );
+    };
+
 
     const handleConfirm = () => {
-        if (approvalPolicy === "admin_secret") {
+
+        if (
+            approvalPolicy === "admin_secret"
+        ) {
             setShowSecretInput(true);
             return;
         }
 
-        if (approvalPolicy === "normal") {
+        if (
+            approvalPolicy === "normal"
+        ) {
             handleExecute();
             return;
         }
 
-        console.warn("Unknown approval_policy:", approvalPolicy);
+        console.warn(
+            "Unknown approval_policy:",
+            approvalPolicy
+        );
     };
+
 
     const handleExecute = async () => {
 
@@ -52,9 +151,11 @@ function ConfirmActionCard({
                 approvalPolicy === "admin_secret"
             ) {
 
-                if (onVerifyMessage) {
+                if (
+                    onVerifyMessage
+                ) {
                     onVerifyMessage(
-                    getRandomVerifySecretMessage()
+                        getRandomVerifySecretMessage()
                     );
                 }
 
@@ -67,9 +168,14 @@ function ConfirmActionCard({
                     !verifyResult.success
                 ) {
 
-                    alert(
-                        "Admin Secret không hợp lệ"
-                    );
+                    if (onVerifyMessage) {
+                        onVerifyMessage(
+                            "🔐 Admin Secret không chính xác. Em Ngáo chưa thể thực hiện hành động này. Anh/chị vui lòng kiểm tra lại và thử lại."
+                        );
+
+                    }
+
+                    setExecuting(false);
 
                     return;
                 }
@@ -84,46 +190,86 @@ function ConfirmActionCard({
                     action,
                     payload
                 );
-                setCompleted(true);
-                if (onFinished) {
-                    onFinished(result);
-                }
+
+            setCompleted(true);
+
+            if (
+                onFinished
+            ) {
+                onFinished(
+                    result
+                );
+            }
 
             console.log(
                 "EXECUTE RESULT",
                 result
             );
 
-
-
-
         } catch (error) {
 
-            console.error(
-                "EXECUTE ERROR",
-                error
-            );
+                console.error(
+                    "EXECUTE ERROR",
+                    error
+                );
 
-            alert(
-                "Có lỗi khi thực hiện thao tác"
-            );
+                let errorMessage =
+                    "⚠️ Em Ngáo gặp lỗi khi thực hiện thao tác.";
 
-        } finally {
+                const detail =
+                    error?.response?.data?.detail
+                    || error?.message
+                    || "";
 
-            setExecuting(false);
+                if (
+                    detail.includes(
+                        "Access denied"
+                    )
+                ) {
 
-        }
+                    errorMessage =
+                        "🚫 Anh/chị chưa được cấp quyền thực hiện hành động này. Vui lòng liên hệ quản trị viên nếu cần hỗ trợ.";
+
+                } else if (
+                    detail.includes(
+                        "secret"
+                    )
+                ) {
+
+                    errorMessage =
+                        "🔐 Admin Secret không chính xác. Vui lòng kiểm tra lại.";
+
+                } else if (
+                    detail
+                ) {
+
+                    errorMessage =
+                        `⚠️ Em Ngáo gặp lỗi khi thực hiện thao tác.\n\nChi tiết: ${detail}`;
+                }
+
+                if (onVerifyMessage) {
+                    onVerifyMessage(
+                    errorMessage
+                );}
+
+                setExecuting(false);
+
+            }
     };
+
 
     const handleCancel = () => {
 
         setCancelled(true);
 
-        if (onCancel) {
+        if (
+            onCancel
+        ) {
             onCancel();
         }
 
     };
+
 
     return (
         <div className="confirm-card">
@@ -143,30 +289,56 @@ function ConfirmActionCard({
             <div className="confirm-card-body">
 
                 <div className="confirm-row">
-                    <span className="confirm-label">Action</span>
-                    <span className="confirm-value">{action}</span>
-                </div>
-
-                <div className="confirm-row">
-                    <span className="confirm-label">User</span>
-                    <span className="confirm-value">{samAccountName}</span>
-                </div>
-                {groupName && (
-                <div className="confirm-row">
                     <span className="confirm-label">
-                        Group
+                        Action
                     </span>
 
                     <span className="confirm-value">
-                        {groupName}
+                        {action}
                     </span>
                 </div>
+
+                {Object.entries(payload).map(
+                    ([key, value]) => (
+
+                        <div
+                            className="confirm-row"
+                            key={key}
+                        >
+
+                            <span className="confirm-label">
+
+                                {key
+                                    .replaceAll("_", " ")
+                                    .replace(
+                                        /\b\w/g,
+                                        (char) =>
+                                            char.toUpperCase()
+                                    )}
+
+                            </span>
+
+                            <span className="confirm-value">
+                                {String(value)}
+                            </span>
+
+                        </div>
+
+                    )
                 )}
+
                 <div className="confirm-row">
-                    <span className="confirm-label">Policy</span>
-                    <span className={`policy-badge ${approvalPolicy}`}>
+
+                    <span className="confirm-label">
+                        Policy
+                    </span>
+
+                    <span
+                        className={`policy-badge ${approvalPolicy}`}
+                    >
                         {approvalPolicy}
                     </span>
+
                 </div>
 
             </div>

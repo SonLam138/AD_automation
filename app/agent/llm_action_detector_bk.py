@@ -74,20 +74,13 @@ def detect_action_by_llm(
     user_text: str
 ):
     """
-    LLM Action Detector.
+    LLM Action Detector v0.
 
-    Responsibility:
-    - Ask LLM to detect action
-    - Validate action
-    - Validate confidence
-    - Load action metadata from ACTION_REGISTRY
-
-    Important:
+    IMPORTANT:
+    - LLM only detects action.
     - Requirements are loaded from registry.
-    - Search is NOT performed here.
-    - LDAP action is NOT performed here.
-    - extracted_keywords must be passed through as-is.
-    - Object types must NOT be hard-coded here.
+    - No search here.
+    - No action here.
     """
 
     if not user_text or not user_text.strip():
@@ -100,6 +93,7 @@ def detect_action_by_llm(
     prompt = build_action_detection_prompt(
         user_text
     )
+
     raw_response = ask_llm(
         prompt
     )
@@ -107,7 +101,7 @@ def detect_action_by_llm(
     parsed = _extract_json(
         raw_response
     )
-    print(parsed)
+
     if not parsed:
 
         return _build_stop_response(
@@ -131,22 +125,6 @@ def detect_action_by_llm(
         "reason",
         ""
     )
-
-    need_clarification = parsed.get(
-        "need_clarification",
-        False
-    )
-
-    extracted_keywords = parsed.get(
-        "extracted_keywords",
-        {}
-    )
-
-    if not isinstance(
-        extracted_keywords,
-        dict
-    ):
-        extracted_keywords = {}
 
     if action in [
         None,
@@ -185,69 +163,62 @@ def detect_action_by_llm(
     action_config = ACTION_REGISTRY[
         action
     ]
+    
+    extracted_keywords = parsed.get(
+        "extracted_keywords",
+        {}
+    )
+
+    if not isinstance(
+        extracted_keywords,
+        dict
+    ):
+        extracted_keywords = {}
 
     return {
         "success": True,
+        "status": "ACTION_DETECTED",
+        "action": action,
+        "display_name": action_config.get(
+            "display_name"
+        ),
+        "confidence": confidence,
+        "reason": reason,
 
-        "status":
-            "ACTION_DETECTED",
+        # Requirement lấy từ registry, không lấy từ LLM
+        "requirements": action_config.get(
+            "required_objects",
+            []
+        ),
 
-        "action":
-            action,
-
-        "display_name":
-            action_config.get(
-                "display_name"
+        "extracted_keywords": {
+            "USER": extracted_keywords.get(
+                "USER"
             ),
-
-        "confidence":
-            confidence,
-
-        "reason":
-            reason,
-
-        "need_clarification":
-            need_clarification,
-
-        #
-        # Requirements are always loaded from registry.
-        # LLM must not decide required objects.
-        #
-        "requirements":
-            action_config.get(
-                "required_objects",
-                []
+            "GROUP": extracted_keywords.get(
+                "GROUP"
             ),
+            "OU": extracted_keywords.get(
+                "OU"
+            )
+        },
 
-        #
-        # IMPORTANT:
-        # Pass through extracted keywords from LLM.
-        # Do NOT hard-code USER/GROUP/OU/COMPUTER here.
-        #
-        "extracted_keywords":
-            extracted_keywords,
+        "action_tool": action_config.get(
+            "action_tool"
+        ),
 
-        "action_tool":
-            action_config.get(
-                "action_tool"
-            ),
+        "action_api": action_config.get(
+            "action_api"
+        ),
 
-        "action_api":
-            action_config.get(
-                "action_api"
-            ),
+        "required_action_group": action_config.get(
+            "required_action_group"
+        ),
 
-        "required_action_group":
-            action_config.get(
-                "required_action_group"
-            ),
+        "confirm_required": action_config.get(
+            "confirm_required",
+            True
+        ),
 
-        "confirm_required":
-            action_config.get(
-                "confirm_required",
-                True
-            ),
-
-        "raw_llm_response":
-            parsed
+        "raw_llm_response": parsed
     }

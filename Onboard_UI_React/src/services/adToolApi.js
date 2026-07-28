@@ -52,3 +52,16 @@ export async function verifySecret(secret) {
 
     return response.data;
 }
+
+export async function disableComputer(
+    payload
+) {
+
+    const response =
+        await axiosClient.post(
+            "/api/ad/disable-computer",
+            payload
+        );
+
+    return response.data;
+}

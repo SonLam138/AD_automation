@@ -5372,5 +5372,600 @@
     "proposed_action_payload": {},
     "approval_policy": "normal",
     "action_id": "b5c6f28d-092f-4113-b03c-226cbf8826f2"
+  },
+  "12282b49-f6b7-48c4-989e-1a18c2a6f612": {
+    "status": "NOT_FOUND",
+    "state": "WAITING_REQUIRED_OBJECT",
+    "next_step": "ASK_REQUIRED_OBJECT",
+    "action": "disable_computer",
+    "target_object_type": "COMPUTER",
+    "resolved_objects": {},
+    "candidate_objects": {},
+    "proposed_action_payload": {},
+    "approval_policy": null,
+    "action_id": "12282b49-f6b7-48c4-989e-1a18c2a6f612"
+  },
+  "b2a33738-627b-4ad0-91cb-7cd0ddf033b0": {
+    "status": "NOT_FOUND",
+    "state": "WAITING_REQUIRED_OBJECT",
+    "next_step": "ASK_REQUIRED_OBJECT",
+    "action": "disable_computer",
+    "target_object_type": "COMPUTER",
+    "resolved_objects": {},
+    "candidate_objects": {},
+    "proposed_action_payload": {},
+    "approval_policy": null,
+    "action_id": "b2a33738-627b-4ad0-91cb-7cd0ddf033b0"
+  },
+  "742d22f7-fd05-4c64-aede-195494c0a9ac": {
+    "status": "NEED_OBJECT_SELECTION",
+    "state": "WAITING_OBJECT_SELECTION",
+    "next_step": "ASK_OBJECT_SELECTION",
+    "action": "disable_user",
+    "target_object_type": "USER",
+    "resolved_objects": {},
+    "candidate_objects": {
+      "USER": [
+        {
+          "object_type": "USER",
+          "display_name": "Nguyen Minh Son",
+          "sam_account_name": "sonnm",
+          "mail": "sonnm@automate.com.vn",
+          "department": "",
+          "title": "",
+          "distinguished_name": "CN=Nguyen Minh Son,OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false,
+          "approval_policy": "admin_secret"
+        },
+        {
+          "object_type": "USER",
+          "display_name": "Nguyen Minh Son - Test",
+          "sam_account_name": "sonnm2",
+          "mail": "",
+          "department": "",
+          "title": "",
+          "distinguished_name": "CN=Nguyen Minh Son - Test,OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false,
+          "approval_policy": "normal"
+        }
+      ]
+    },
+    "proposed_action_payload": {},
+    "approval_policy": "admin_secret",
+    "action_id": "742d22f7-fd05-4c64-aede-195494c0a9ac"
+  },
+  "4a285084-8ea1-4299-b01e-6dc62e7394c5": {
+    "status": "NEED_OBJECT_SELECTION",
+    "state": "WAITING_OBJECT_SELECTION",
+    "next_step": "ASK_OBJECT_SELECTION",
+    "action": "disable_computer",
+    "target_object_type": "COMPUTER",
+    "resolved_objects": {},
+    "candidate_objects": {
+      "COMPUTER": [
+        {
+          "object_type": "COMPUTER",
+          "computer_name": "Client-01",
+          "dns_host_name": "Client-01",
+          "distinguished_name": "CN=Client-01,CN=Computers,DC=automate,DC=com,DC=vn",
+          "user_account_control": "4128",
+          "is_disabled": false,
+          "approval_policy": "normal"
+        },
+        {
+          "object_type": "COMPUTER",
+          "computer_name": "Client-02",
+          "dns_host_name": "Client-02",
+          "distinguished_name": "CN=Client-02,CN=Computers,DC=automate,DC=com,DC=vn",
+          "user_account_control": "4128",
+          "is_disabled": false,
+          "approval_policy": "normal"
+        }
+      ]
+    },
+    "proposed_action_payload": {},
+    "approval_policy": "normal",
+    "action_id": "4a285084-8ea1-4299-b01e-6dc62e7394c5"
+  },
+  "f4d104dd-fd6a-4b3a-98ab-08805d65832e": {
+    "status": "NEED_OBJECT_SELECTION",
+    "state": "WAITING_OBJECT_SELECTION",
+    "next_step": "ASK_OBJECT_SELECTION",
+    "action": "disable_computer",
+    "target_object_type": "COMPUTER",
+    "resolved_objects": {},
+    "candidate_objects": {
+      "COMPUTER": [
+        {
+          "object_type": "COMPUTER",
+          "computer_name": "Client-01",
+          "dns_host_name": "Client-01",
+          "distinguished_name": "CN=Client-01,CN=Computers,DC=automate,DC=com,DC=vn",
+          "user_account_control": "4128",
+          "is_disabled": false,
+          "approval_policy": "normal"
+        },
+        {
+          "object_type": "COMPUTER",
+          "computer_name": "Client-02",
+          "dns_host_name": "Client-02",
+          "distinguished_name": "CN=Client-02,CN=Computers,DC=automate,DC=com,DC=vn",
+          "user_account_control": "4128",
+          "is_disabled": false,
+          "approval_policy": "normal"
+        }
+      ]
+    },
+    "proposed_action_payload": {},
+    "approval_policy": "normal",
+    "action_id": "f4d104dd-fd6a-4b3a-98ab-08805d65832e"
+  },
+  "1bef38f4-cc0b-47ae-bbbe-cdf0cadbbe64": {
+    "status": "NEED_OBJECT_SELECTION",
+    "state": "WAITING_OBJECT_SELECTION",
+    "next_step": "ASK_OBJECT_SELECTION",
+    "action": "disable_computer",
+    "target_object_type": "COMPUTER",
+    "resolved_objects": {},
+    "candidate_objects": {
+      "COMPUTER": [
+        {
+          "object_type": "COMPUTER",
+          "computer_name": "Client-01",
+          "dns_host_name": "Client-01",
+          "distinguished_name": "CN=Client-01,CN=Computers,DC=automate,DC=com,DC=vn",
+          "user_account_control": "4128",
+          "is_disabled": false,
+          "approval_policy": "normal"
+        },
+        {
+          "object_type": "COMPUTER",
+          "computer_name": "Client-02",
+          "dns_host_name": "Client-02",
+          "distinguished_name": "CN=Client-02,CN=Computers,DC=automate,DC=com,DC=vn",
+          "user_account_control": "4128",
+          "is_disabled": false,
+          "approval_policy": "normal"
+        }
+      ]
+    },
+    "proposed_action_payload": {},
+    "approval_policy": "normal",
+    "action_id": "1bef38f4-cc0b-47ae-bbbe-cdf0cadbbe64"
+  },
+  "b2f4bc80-ceff-40b3-b64d-7b474e0aa3cf": {
+    "status": "NEED_OBJECT_SELECTION",
+    "state": "WAITING_OBJECT_SELECTION",
+    "next_step": "ASK_OBJECT_SELECTION",
+    "action": "disable_computer",
+    "target_object_type": "COMPUTER",
+    "resolved_objects": {},
+    "candidate_objects": {
+      "COMPUTER": [
+        {
+          "object_type": "COMPUTER",
+          "computer_name": "Client-01",
+          "dns_host_name": "Client-01",
+          "distinguished_name": "CN=Client-01,CN=Computers,DC=automate,DC=com,DC=vn",
+          "user_account_control": "4128",
+          "is_disabled": false,
+          "approval_policy": "normal"
+        },
+        {
+          "object_type": "COMPUTER",
+          "computer_name": "Client-02",
+          "dns_host_name": "Client-02",
+          "distinguished_name": "CN=Client-02,CN=Computers,DC=automate,DC=com,DC=vn",
+          "user_account_control": "4128",
+          "is_disabled": false,
+          "approval_policy": "normal"
+        }
+      ]
+    },
+    "proposed_action_payload": {},
+    "approval_policy": "normal",
+    "action_id": "b2f4bc80-ceff-40b3-b64d-7b474e0aa3cf"
+  },
+  "4bb69ba6-0711-4f75-84fb-3084de433471": {
+    "status": "NEED_OBJECT_SELECTION",
+    "state": "WAITING_OBJECT_SELECTION",
+    "next_step": "ASK_OBJECT_SELECTION",
+    "action": "disable_computer",
+    "target_object_type": "COMPUTER",
+    "resolved_objects": {},
+    "candidate_objects": {
+      "COMPUTER": [
+        {
+          "object_type": "COMPUTER",
+          "computer_name": "Client-01",
+          "dns_host_name": "Client-01",
+          "distinguished_name": "CN=Client-01,CN=Computers,DC=automate,DC=com,DC=vn",
+          "user_account_control": "4128",
+          "is_disabled": false,
+          "approval_policy": "normal"
+        },
+        {
+          "object_type": "COMPUTER",
+          "computer_name": "Client-02",
+          "dns_host_name": "Client-02",
+          "distinguished_name": "CN=Client-02,CN=Computers,DC=automate,DC=com,DC=vn",
+          "user_account_control": "4128",
+          "is_disabled": false,
+          "approval_policy": "normal"
+        }
+      ]
+    },
+    "proposed_action_payload": {},
+    "approval_policy": "normal",
+    "action_id": "4bb69ba6-0711-4f75-84fb-3084de433471"
+  },
+  "d079edcb-e469-4e78-858b-62c75492af27": {
+    "status": "NEED_OBJECT_SELECTION",
+    "state": "WAITING_OBJECT_SELECTION",
+    "next_step": "ASK_OBJECT_SELECTION",
+    "action": "disable_computer",
+    "target_object_type": "COMPUTER",
+    "resolved_objects": {},
+    "candidate_objects": {
+      "COMPUTER": [
+        {
+          "object_type": "COMPUTER",
+          "computer_name": "Client-01",
+          "dns_host_name": "Client-01",
+          "distinguished_name": "CN=Client-01,CN=Computers,DC=automate,DC=com,DC=vn",
+          "user_account_control": "4128",
+          "is_disabled": false,
+          "approval_policy": "normal"
+        },
+        {
+          "object_type": "COMPUTER",
+          "computer_name": "Client-02",
+          "dns_host_name": "Client-02",
+          "distinguished_name": "CN=Client-02,CN=Computers,DC=automate,DC=com,DC=vn",
+          "user_account_control": "4128",
+          "is_disabled": false,
+          "approval_policy": "normal"
+        }
+      ]
+    },
+    "proposed_action_payload": {},
+    "approval_policy": "normal",
+    "action_id": "d079edcb-e469-4e78-858b-62c75492af27"
+  },
+  "503fc735-2b81-499a-9974-50e704d87aaf": {
+    "status": "NEED_OBJECT_SELECTION",
+    "state": "WAITING_OBJECT_SELECTION",
+    "next_step": "ASK_OBJECT_SELECTION",
+    "action": "disable_computer",
+    "target_object_type": "COMPUTER",
+    "resolved_objects": {},
+    "candidate_objects": {
+      "COMPUTER": [
+        {
+          "object_type": "COMPUTER",
+          "computer_name": "Client-01",
+          "dns_host_name": "Client-01",
+          "distinguished_name": "CN=Client-01,CN=Computers,DC=automate,DC=com,DC=vn",
+          "user_account_control": "4128",
+          "is_disabled": false,
+          "approval_policy": "normal"
+        },
+        {
+          "object_type": "COMPUTER",
+          "computer_name": "Client-02",
+          "dns_host_name": "Client-02",
+          "distinguished_name": "CN=Client-02,CN=Computers,DC=automate,DC=com,DC=vn",
+          "user_account_control": "4128",
+          "is_disabled": false,
+          "approval_policy": "normal"
+        }
+      ]
+    },
+    "proposed_action_payload": {},
+    "approval_policy": "normal",
+    "action_id": "503fc735-2b81-499a-9974-50e704d87aaf"
+  },
+  "6c4bfdbf-0118-4a62-929a-8d91d303492d": {
+    "status": "NEED_OBJECT_SELECTION",
+    "state": "WAITING_OBJECT_SELECTION",
+    "next_step": "ASK_OBJECT_SELECTION",
+    "action": "disable_computer",
+    "target_object_type": "COMPUTER",
+    "resolved_objects": {},
+    "candidate_objects": {
+      "COMPUTER": [
+        {
+          "object_type": "COMPUTER",
+          "computer_name": "Client-01",
+          "dns_host_name": "Client-01",
+          "distinguished_name": "CN=Client-01,CN=Computers,DC=automate,DC=com,DC=vn",
+          "user_account_control": "4128",
+          "is_disabled": false,
+          "approval_policy": "normal"
+        },
+        {
+          "object_type": "COMPUTER",
+          "computer_name": "Client-02",
+          "dns_host_name": "Client-02",
+          "distinguished_name": "CN=Client-02,CN=Computers,DC=automate,DC=com,DC=vn",
+          "user_account_control": "4128",
+          "is_disabled": false,
+          "approval_policy": "normal"
+        }
+      ]
+    },
+    "proposed_action_payload": {},
+    "approval_policy": "normal",
+    "action_id": "6c4bfdbf-0118-4a62-929a-8d91d303492d"
+  },
+  "3edd36f2-22c0-45df-8e62-8bc8821ecc06": {
+    "status": "NEED_OBJECT_SELECTION",
+    "state": "WAITING_OBJECT_SELECTION",
+    "next_step": "ASK_OBJECT_SELECTION",
+    "action": "add_group_member",
+    "target_object_type": "GROUP",
+    "resolved_objects": {
+      "USER": {
+        "object_type": "USER",
+        "display_name": "Onboard Approver",
+        "sam_account_name": "Onboard.approve",
+        "mail": "",
+        "department": "",
+        "title": "",
+        "distinguished_name": "CN=Onboard Approver,OU=HO,DC=automate,DC=com,DC=vn",
+        "user_account_control": "66050",
+        "is_disabled": true
+      }
+    },
+    "candidate_objects": {
+      "GROUP": [
+        {
+          "object_type": "GROUP",
+          "name": "TestGroup",
+          "cn": "TestGroup",
+          "description": "",
+          "mail": "",
+          "distinguished_name": "CN=TestGroup,OU=HO,DC=automate,DC=com,DC=vn",
+          "approval_policy": "normal"
+        },
+        {
+          "object_type": "GROUP",
+          "name": "Test_grp",
+          "cn": "Test_grp",
+          "description": "",
+          "mail": "",
+          "distinguished_name": "CN=Test_grp,OU=HO,DC=automate,DC=com,DC=vn",
+          "approval_policy": "normal"
+        }
+      ]
+    },
+    "proposed_action_payload": {
+      "sam_account_name": "Onboard.approve"
+    },
+    "approval_policy": "normal",
+    "action_id": "3edd36f2-22c0-45df-8e62-8bc8821ecc06"
+  },
+  "453389ca-06db-4709-acc6-1c37dc400ff3": {
+    "status": "NEED_OBJECT_SELECTION",
+    "state": "WAITING_OBJECT_SELECTION",
+    "next_step": "ASK_OBJECT_SELECTION",
+    "action": "disable_computer",
+    "target_object_type": "COMPUTER",
+    "resolved_objects": {},
+    "candidate_objects": {
+      "COMPUTER": [
+        {
+          "object_type": "COMPUTER",
+          "computer_name": "Client-01",
+          "dns_host_name": "Client-01",
+          "distinguished_name": "CN=Client-01,CN=Computers,DC=automate,DC=com,DC=vn",
+          "user_account_control": "4128",
+          "is_disabled": false,
+          "approval_policy": "normal"
+        },
+        {
+          "object_type": "COMPUTER",
+          "computer_name": "Client-02",
+          "dns_host_name": "Client-02",
+          "distinguished_name": "CN=Client-02,CN=Computers,DC=automate,DC=com,DC=vn",
+          "user_account_control": "4128",
+          "is_disabled": false,
+          "approval_policy": "normal"
+        }
+      ]
+    },
+    "proposed_action_payload": {},
+    "approval_policy": "normal",
+    "action_id": "453389ca-06db-4709-acc6-1c37dc400ff3"
+  },
+  "5310f31c-a4b2-4e20-8682-f406925d8397": {
+    "status": "NEED_OBJECT_SELECTION",
+    "state": "WAITING_OBJECT_SELECTION",
+    "next_step": "ASK_OBJECT_SELECTION",
+    "action": "disable_computer",
+    "target_object_type": "COMPUTER",
+    "resolved_objects": {},
+    "candidate_objects": {
+      "COMPUTER": [
+        {
+          "object_type": "COMPUTER",
+          "computer_name": "Client-01",
+          "dns_host_name": "Client-01",
+          "distinguished_name": "CN=Client-01,CN=Computers,DC=automate,DC=com,DC=vn",
+          "user_account_control": "4128",
+          "is_disabled": false,
+          "approval_policy": "normal"
+        },
+        {
+          "object_type": "COMPUTER",
+          "computer_name": "Client-02",
+          "dns_host_name": "Client-02",
+          "distinguished_name": "CN=Client-02,CN=Computers,DC=automate,DC=com,DC=vn",
+          "user_account_control": "4128",
+          "is_disabled": false,
+          "approval_policy": "normal"
+        }
+      ]
+    },
+    "proposed_action_payload": {},
+    "approval_policy": "normal",
+    "action_id": "5310f31c-a4b2-4e20-8682-f406925d8397"
+  },
+  "5c6a6db3-d911-4928-bfd7-6b79c18c0ed4": {
+    "status": "NEED_OBJECT_SELECTION",
+    "state": "WAITING_OBJECT_SELECTION",
+    "next_step": "ASK_OBJECT_SELECTION",
+    "action": "disable_computer",
+    "target_object_type": "COMPUTER",
+    "resolved_objects": {},
+    "candidate_objects": {
+      "COMPUTER": [
+        {
+          "object_type": "COMPUTER",
+          "computer_name": "Client-01",
+          "dns_host_name": "Client-01",
+          "distinguished_name": "CN=Client-01,CN=Computers,DC=automate,DC=com,DC=vn",
+          "user_account_control": "4128",
+          "is_disabled": false,
+          "approval_policy": "normal"
+        },
+        {
+          "object_type": "COMPUTER",
+          "computer_name": "Client-02",
+          "dns_host_name": "Client-02",
+          "distinguished_name": "CN=Client-02,OU=Servers,DC=automate,DC=com,DC=vn",
+          "user_account_control": "4128",
+          "is_disabled": false,
+          "approval_policy": "admin_secret"
+        }
+      ]
+    },
+    "proposed_action_payload": {},
+    "approval_policy": "admin_secret",
+    "action_id": "5c6a6db3-d911-4928-bfd7-6b79c18c0ed4"
+  },
+  "7a9af0ba-f234-4779-8238-6f804a928be3": {
+    "status": "NEED_OBJECT_SELECTION",
+    "state": "WAITING_OBJECT_SELECTION",
+    "next_step": "ASK_OBJECT_SELECTION",
+    "action": "disable_computer",
+    "target_object_type": "COMPUTER",
+    "resolved_objects": {},
+    "candidate_objects": {
+      "COMPUTER": [
+        {
+          "object_type": "COMPUTER",
+          "computer_name": "Client-01",
+          "dns_host_name": "Client-01",
+          "distinguished_name": "CN=Client-01,CN=Computers,DC=automate,DC=com,DC=vn",
+          "user_account_control": "4128",
+          "is_disabled": false,
+          "approval_policy": "normal"
+        },
+        {
+          "object_type": "COMPUTER",
+          "computer_name": "Client-02",
+          "dns_host_name": "Client-02",
+          "distinguished_name": "CN=Client-02,OU=Servers,DC=automate,DC=com,DC=vn",
+          "user_account_control": "4128",
+          "is_disabled": false,
+          "approval_policy": "admin_secret"
+        }
+      ]
+    },
+    "proposed_action_payload": {},
+    "approval_policy": "admin_secret",
+    "action_id": "7a9af0ba-f234-4779-8238-6f804a928be3"
+  },
+  "3b5800cc-ce44-426b-90d6-36ca1a132f95": {
+    "status": "NEED_OBJECT_SELECTION",
+    "state": "WAITING_OBJECT_SELECTION",
+    "next_step": "ASK_OBJECT_SELECTION",
+    "action": "disable_computer",
+    "target_object_type": "COMPUTER",
+    "resolved_objects": {},
+    "candidate_objects": {
+      "COMPUTER": [
+        {
+          "object_type": "COMPUTER",
+          "computer_name": "Client-01",
+          "dns_host_name": "Client-01",
+          "distinguished_name": "CN=Client-01,CN=Computers,DC=automate,DC=com,DC=vn",
+          "user_account_control": "4128",
+          "is_disabled": false,
+          "approval_policy": "normal"
+        },
+        {
+          "object_type": "COMPUTER",
+          "computer_name": "Client-02",
+          "dns_host_name": "Client-02",
+          "distinguished_name": "CN=Client-02,OU=Servers,DC=automate,DC=com,DC=vn",
+          "user_account_control": "4128",
+          "is_disabled": false,
+          "approval_policy": "admin_secret"
+        }
+      ]
+    },
+    "proposed_action_payload": {},
+    "approval_policy": "admin_secret",
+    "action_id": "3b5800cc-ce44-426b-90d6-36ca1a132f95"
+  },
+  "45751eeb-3cbd-47cc-b0e3-1c88bb0418b8": {
+    "status": "READY_TO_CONFIRM",
+    "state": "CONFIRM_READY",
+    "next_step": "CONFIRM_ACTION",
+    "action": "disable_computer",
+    "target_object_type": null,
+    "resolved_objects": {
+      "COMPUTER": {
+        "object_type": "COMPUTER",
+        "computer_name": "single-comp",
+        "dns_host_name": "single-comp",
+        "distinguished_name": "CN=single-comp,CN=Computers,DC=automate,DC=com,DC=vn",
+        "user_account_control": "4128",
+        "is_disabled": false
+      }
+    },
+    "candidate_objects": {},
+    "proposed_action_payload": {
+      "computer_name": "single-comp"
+    },
+    "approval_policy": "normal",
+    "action_id": "45751eeb-3cbd-47cc-b0e3-1c88bb0418b8"
+  },
+  "c458a0a7-fe23-44b9-b177-f366de44510d": {
+    "status": "NEED_OBJECT_SELECTION",
+    "state": "WAITING_OBJECT_SELECTION",
+    "next_step": "ASK_OBJECT_SELECTION",
+    "action": "disable_computer",
+    "target_object_type": "COMPUTER",
+    "resolved_objects": {},
+    "candidate_objects": {
+      "COMPUTER": [
+        {
+          "object_type": "COMPUTER",
+          "computer_name": "Client-01",
+          "dns_host_name": "Client-01",
+          "distinguished_name": "CN=Client-01,CN=Computers,DC=automate,DC=com,DC=vn",
+          "user_account_control": "4128",
+          "is_disabled": false,
+          "approval_policy": "normal"
+        },
+        {
+          "object_type": "COMPUTER",
+          "computer_name": "Client-02",
+          "dns_host_name": "Client-02",
+          "distinguished_name": "CN=Client-02,OU=Servers,DC=automate,DC=com,DC=vn",
+          "user_account_control": "4130",
+          "is_disabled": true,
+          "approval_policy": "admin_secret"
+        }
+      ]
+    },
+    "proposed_action_payload": {},
+    "approval_policy": "admin_secret",
+    "action_id": "c458a0a7-fe23-44b9-b177-f366de44510d"
   }
 }

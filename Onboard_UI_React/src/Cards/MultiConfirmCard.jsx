@@ -157,9 +157,12 @@ function MultiConfirmCard({
                 if (
                     !verifyResult.success
                 ) {
-                    alert(
-                        "Admin Secret không hợp lệ"
-                    );
+
+                    if (onVerifyMessage) {
+                        onVerifyMessage(
+                            "🔐 Admin Secret không chính xác. Em Ngáo chưa thể thực hiện hành động này. Anh/chị vui lòng kiểm tra lại và thử lại."
+                        );
+                    }
 
                     return;
                 }
@@ -192,9 +195,17 @@ function MultiConfirmCard({
                 error
             );
 
-            alert(
-                "Có lỗi khi thực hiện thao tác"
-            );
+            if (onVerifyMessage) {
+                const detail =
+                    error?.response?.data?.detail
+                    || error?.message
+                    || "Unknown Error";
+
+                onVerifyMessage(
+                    `⚠️ Em Ngáo gặp lỗi khi thực hiện thao tác.\n\nChi tiết: ${detail}`
+                );
+
+            }
 
         } finally {
             setExecuting(false);

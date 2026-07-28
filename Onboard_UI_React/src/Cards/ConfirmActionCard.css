@@ -27,32 +27,6 @@
     /*overflow: hidden;*/
 }
 
-/* Lớp ánh vàng rất nhẹ phía trên card 
-.confirm-card::before {
-    content: "";
-
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-
-    height: 3px;
-
-    background:
-        linear-gradient(
-            90deg,
-            transparent,
-            #ffd700,
-            transparent
-        );
-
-    opacity: 0.85;
-}
-*/
-/* =========================
-   HEADER
-========================= */
-
 .confirm-card-header {
     display: flex;
     justify-content: space-between;

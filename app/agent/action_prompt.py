@@ -73,6 +73,7 @@ LUẬT BẮT BUỘC:
 13. Với USER, chỉ lấy tên hoặc tài khoản thật, bỏ : anh,chị, ông, bà, tài khoản, user, không thêm dấu '.
 14. Với GROUP, lấy tên group hoặc ghi vấn là group, bỏ từ "nhóm", "group", không thêm dấu '.
 15. Với OU, lấy tên OU hoặc nghi vấn là OU, bỏ từ "OU" phía trước, "đơn vị", không thêm dấu '.
+16. Với COMPUTER, chỉ lấy tên, bỏ : computer, tài khoản, máy tính, không thêm dấu '.
 16. extracted_keyword không được chứa các từ sau : Anh, chị, ông, bà, group, nhóm, OU, đơn vị
 16. Chỉ trả JSON hợp lệ, không giải thích thêm.
 
@@ -81,7 +82,7 @@ USER_INPUT:
 
 FORMAT OUTPUT BẮT BUỘC:
 {{
-  "action": "disable_user | add_group_member | remove_group_member | move_user_to_ou | null",
+  "action": "disable_user | add_group_member | remove_group_member | move_user_to_ou | disable_computer | null",
   "confidence": 0.0,
   "reason": "ngắn gọn vì sao chọn action này",
   "need_clarification": true,  
@@ -89,6 +90,7 @@ FORMAT OUTPUT BẮT BUỘC:
     "USER": "keyword hoặc null",
     "GROUP": "keyword hoặc null",
     "OU": "keyword hoặc null"
+    "COMPUTER": "keyword hoặc null"
     }}
 }}
 """

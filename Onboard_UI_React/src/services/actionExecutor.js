@@ -3,12 +3,14 @@ import {
     disableUser,
     addGroup,
     removeGroup,
-    moveUser
+    moveUser,
+    disableComputer
 } from "./adToolApi";
 
-const ACTION_MAP = {
+const ACTION_MAP = { //Map từ action trong resolver thành action execute
 
     disable_user: disableUser,
+    disable_computer: disableComputer, 
 
     add_group: addGroup,
     add_group_member: addGroup,

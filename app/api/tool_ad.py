@@ -9,7 +9,8 @@ from app.models.ad_tool import (
     AddGroupRequest,
     RemoveGroupRequest,
     MoveUserRequest,
-    VerifySecretRequest
+    VerifySecretRequest,
+    DisableComputerRequest
 )
 from app.agent.execution_response import (
     generate_execution_response
@@ -219,10 +220,61 @@ def move_user(
             )
 
 
-    # return ldap.move_user_to_ou(
-    #     request.sam_account_name,
-    #     request.target_ou_dn
-    # )
+@router.post(
+    "/disable-computer"
+)
+def disable_computer(
+    request: DisableComputerRequest,
+
+    current_user=Depends(
+        require_group(
+            [
+                "ad_computer_mgmt"
+            ]
+        )
+    )
+):
+
+    try:
+
+        result = ldap.disable_computer(
+            request.computer_name
+        )
+
+        execution_contract = {
+            "state":
+                "ACTION_SUCCESS",
+
+            "action":
+                "disable_computer",
+
+            "proposed_action_payload": {
+                "computer_name":
+                    request.computer_name
+            },
+
+            "execution_result":
+                result
+        }
+
+        message = (
+            generate_execution_response(
+                execution_contract
+            )
+        )
+
+        return {
+            "success": True,
+            "message": message,
+            "execution_result": result
+        }
+
+    except Exception as ex:
+
+        raise HTTPException(
+            status_code=500,
+            detail=str(ex)
+        )
 
 @router.post("/verify-admin-secret")
 def verify_admin_secret(

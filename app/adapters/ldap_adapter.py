@@ -1530,3 +1530,68 @@ class LDAPAdapter:
             "user": sam_account_name,
             "target_ou": target_ou_dn
         }
+    #================================
+    # AD TOOL - DISABLE COMPUTER #
+    #================================
+    def disable_computer(
+        self,
+        computer_name: str
+    ):
+
+        search_filter = (
+            f"(sAMAccountName={computer_name}$)"
+        )
+
+        self.connection.search(
+            search_base=LDAP_BASE_DN,
+            search_filter=search_filter,
+            attributes=[
+                "distinguishedName",
+                "userAccountControl"
+            ]
+        )
+
+        if not self.connection.entries:
+            raise Exception(
+                f"Computer not found: {computer_name}"
+            )
+
+        computer = self.connection.entries[0]
+
+        computer_dn = str(
+            computer.distinguishedName.value
+        )
+
+        current_uac = int(
+            computer.userAccountControl.value
+        )
+
+        ACCOUNTDISABLE = 2
+
+        new_uac = (
+            current_uac | ACCOUNTDISABLE
+        )
+
+        success = self.connection.modify(
+            computer_dn,
+            {
+                "userAccountControl": [
+                    (
+                        MODIFY_REPLACE,
+                        [new_uac]
+                    )
+                ]
+            }
+        )
+
+        if not success:
+            raise Exception(
+                self.connection.result
+            )
+
+        return {
+            "success": True,
+            "action": "disable_computer",
+            "computer_name": computer_name,
+            "computer_dn": computer_dn
+        }

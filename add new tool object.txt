@@ -1,0 +1,453 @@
+======================================================================
+OBJECT TYPE ONBOARDING PLAYBOOK (V4/V5)
+======================================================================
+
+TRIẾT LÝ
+
+KHÔNG phát triển Tool mới.
+
+PHẢI phát triển Object Type mới.
+
+Sau khi Object Type được framework hỗ trợ:
+
+    Resolver
+    Multi Selector
+    Multi Confirm
+    Secret
+    Approval
+    Execute
+
+sẽ tự tái sử dụng.
+
+======================================================================
+PHASE 0 - BUSINESS ANALYSIS
+======================================================================
+
+Mục tiêu:
+    Chốt định nghĩa nghiệp vụ của Object mới.
+
+Ví dụ:
+    COMPUTER
+
+Cần xác định:
+
+    Object Name:
+        COMPUTER
+
+    Display Field:
+        computer_name
+
+    Unique Identifier:
+        computer_name
+
+    Distinguished Name:
+        distinguished_name
+
+    Approval Policy:
+        normal/admin_secret
+
+OUTPUT:
+
+    Schema draft của Object.
+
+======================================================================
+PHASE 1 - SEARCH LAYER
+======================================================================
+
+Mục tiêu:
+    Đưa Object mới vào hệ search.
+
+STEP 1.1
+    Rà các search hiện có:
+
+        search_user()
+        search_group()
+        search_ou()
+
+STEP 1.2
+    Tạo:
+
+        search_computer()
+
+STEP 1.3
+    Test độc lập.
+
+Ví dụ:
+
+        search_computer("PC001")
+
+OUTPUT:
+
+    Trả được danh sách candidate object.
+
+======================================================================
+PHASE 2 - OBJECT SCHEMA
+======================================================================
+
+Mục tiêu:
+    Chuẩn hóa schema object.
+
+Ví dụ COMPUTER:
+
+{
+    "object_type": "COMPUTER",
+
+    "computer_name": "",
+
+    "dns_host_name": "",
+
+    "distinguished_name": "",
+
+    "approval_policy": ""
+}
+
+Quy tắc bắt buộc:
+
+    object_type
+    distinguished_name
+    approval_policy
+
+phải tồn tại với mọi object.
+
+OUTPUT:
+
+    Schema chính thức.
+
+======================================================================
+PHASE 3 - UI COMPATIBILITY
+======================================================================
+
+Mục tiêu:
+    Đảm bảo UI render được Object mới.
+
+STEP 3.1
+
+Rà:
+
+    getDisplayValue()
+
+Bổ sung:
+
+    computer_name
+
+STEP 3.2
+
+Rà:
+
+    getSecondaryValue()
+
+Ví dụ:
+
+    computer_name
+    dns_host_name
+
+STEP 3.3
+
+Mock test:
+
+{
+    "COMPUTER": [...]
+}
+
+OUTPUT:
+
+    MultiSelector render đúng.
+
+======================================================================
+PHASE 4 - RESOLVER COMPATIBILITY
+======================================================================
+
+Mục tiêu:
+    Cho phép resolver xử lý Object mới.
+
+STEP 4.1
+
+Chọn Tool đầu tiên.
+
+Ví dụ:
+
+    Disable Computer
+
+STEP 4.2
+
+Khai báo:
+
+    required_objects = [
+        "COMPUTER"
+    ]
+
+hoặc:
+
+    [
+        "COMPUTER",
+        "OU"
+    ]
+
+STEP 4.3
+
+Xác nhận resolver sinh:
+
+    candidate_objects
+
+đúng format framework.
+
+Ví dụ:
+
+{
+    "COMPUTER": [...]
+}
+
+OUTPUT:
+
+    Resolver hỗ trợ object mới.
+
+======================================================================
+PHASE 5 - PAYLOAD BUILDER
+======================================================================
+
+Mục tiêu:
+    Chuyển selected_objects thành payload API.
+
+STEP 5.1
+
+Chốt contract backend.
+
+Ví dụ:
+
+{
+    "computer_name": "PC001"
+}
+
+STEP 5.2
+
+Thêm mapping payload.
+
+Ví dụ:
+
+    buildComputerPayload()
+
+hoặc
+
+    case "disable_computer"
+
+OUTPUT:
+
+    Execute payload đúng schema API.
+
+======================================================================
+PHASE 6 - EXECUTE LAYER
+======================================================================
+
+Mục tiêu:
+    Nối action tới backend.
+
+STEP 6.1
+
+Backend API
+
+    POST /disable-computer
+
+STEP 6.2
+
+Frontend API
+
+    disableComputer()
+
+STEP 6.3
+
+ACTION_MAP
+
+    disable_computer
+        -> disableComputer
+
+OUTPUT:
+
+    Execute chạy được.
+
+======================================================================
+PHASE 7 - E2E TEST
+======================================================================
+
+CASE 01
+
+Single
+
+    disable PC001
+
+CASE 02
+
+Multi Candidate
+
+    disable PC
+
+↓
+
+selector
+
+↓
+
+confirm
+
+↓
+
+execute
+
+CASE 03
+
+Approval
+
+    computer có admin_secret
+
+↓
+
+secret
+
+↓
+
+execute
+
+CASE 04
+
+Multi Framework
+
+    N-N
+
+    COMPUTER + OU
+
+    COMPUTER + GROUP
+
+OUTPUT:
+
+    Chứng minh object mới hoạt động hoàn chỉnh.
+
+======================================================================
+CHECKLIST PASS
+======================================================================
+
+[ ] Search
+[ ] Schema
+[ ] UI Render
+[ ] Resolver
+[ ] Payload Builder
+[ ] Execute
+[ ] E2E
+
+======================================================================
+QUY TẮC QUAN TRỌNG NHẤT
+======================================================================
+
+KHÔNG hỏi:
+
+    Làm tool gì?
+
+PHẢI hỏi:
+
+    Onboard object type nào?
+
+Sau khi object type được framework hỗ trợ:
+
+    Disable
+    Move
+    Add
+    Remove
+    Assign
+
+chỉ còn là:
+
+    Resolver
+    Payload Builder
+    API Mapping
+
+KHÔNG phải viết lại framework.
+======================================================================
+
+
+======================================================================
+CASE CỤ THỂ - ADD OBJECT COMPUTER
+======================================================================
+
+
+1. Xac dinh schema object Computer ( dung de tra ra output trong search_tool và resolve cuối cùng)
+ Vd :
+	{
+    "object_type": "COMPUTER",
+
+    "computer_name": "",
+
+    "dns_host_name": "",
+
+    "distinguished_name": "",
+
+    "is_disabled": false,
+
+    "approval_policy": "normal"
+	}
+    approval_policy dựa theo CN của OU
+
+2. Action Registry :
+        "disable_computer": {
+        "display_name": "Disable AD Computer",
+
+        "description": (
+            "Disable an Active Directory COMPUTER account"
+        ),
+
+        "intent_hints": [
+            "disable computer",
+            "disable tài khoản máy tính",
+            "disable máy tính",
+            "Vô hiệu hóa computer",
+            "Vô hiệu hóa máy tính",
+            "khóa tài khoản máy tính",
+            "khóa máy tính",
+            "khóa computer"
+            
+        ],
+
+        "required_objects": [
+            {
+                "object_type": "COMPUTER",
+                "search_tool": "search_computer",
+                "required": True,
+                "action_param": "computer_name"
+            }
+        ],
+
+        "action_tool": "disable_computer",
+
+        "action_api": "/api/ad/disable-computer",
+
+        "required_action_group": "ad_computer_mgmt",
+
+        "confirm_required": True
+    }
+
+3. Kiểm tra action_promt bổ sung các prompt liên quan đến COMPUTER
+4. Sau khi ngáo resolved action --> file llm_action_dectector.py để :
+    - Validate kết quả của ngáo
+    - Bổ sung metadata từ Action Registry
+    - Hoàn thiện schema cho run_agent
+5. Xây dựng search_tool
+6. Nối vào run_agent
+    Bổ sung Action tool map
+7. Chuyển qua UI : điểm chạm đầu tiên là selector, tức là sau khi user gõ --> render được selector
+8. Kiến trúc luồng single hiện tại :
+    if (
+        target_object_type === "GROUP"
+    ) {
+        return <GroupSelector />
+    }
+
+    return (
+        <ObjectSelector />
+    )
+có nghĩa là nếu Object_type là GROUP thì trả GroupSelector
+không thì trả ObjectSelector (hybrid generic)
+9. Executor :
+    9.1 Backend API (ad_tool.py)
+    9.2 UI API (adToolAPI.js)
+    9.3 Thêm Action Map trong actionExecutor.js
+
+** Lưu ý : có 2 chỗ cần kiểm tra hard Object : 
+    - hàm def _get_action_param_value trong run_agent : TH resolved ngay sau input --> buil luôn payload ở backen
+    - function getActionParamValue trong chatpage.jsx : TH Need select object --> build payload trên UI

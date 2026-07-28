@@ -1,70 +1,136 @@
 import "./ObjectSelector.css";
+
 function ObjectSelector({
     Data,
     onSelect
 }) {
+
     const completed =
-    Data?.completed || false;
+        Data?.completed || false;
 
-    const selectedUser =
-    Data?.selectedUser;
-    console.log(
-        "COMPLETED =",
-        completed
-    );
+    const objectType =
+        Data?.target_object_type;
 
-    console.log(
-        "SELECTED USER =",
-        selectedUser
-    );
-    const users =
-        Data?.candidate_objects?.USER || [];
+    const objects =
+        Data?.candidate_objects?.[
+            objectType
+        ] || [];
+
+    const selectedObject =
+        Data?.selectedObject;
+
+    const getTitle = (
+        item
+    ) => {
 
         return (
-            <div className="object-selector">
+            item.display_name ||
+            item.computer_name ||
+            item.ou ||
+            item.name ||
+            item.cn ||
+            "Unknown"
+        );
+    };
 
-                {users.map((user) => {
+    const getSubtitle = (
+        item
+    ) => {
 
-                    const isSelected =
-                        Data?.selectedUser?.sam_account_name
-                        ===
-                        user.sam_account_name;
+        return (
+            item.sam_account_name ||
+            item.dns_host_name ||
+            item.distinguished_name ||
+            ""
+        );
+    };
 
-                    return (
+    const isSameObject = (
+        selected,
+        candidate
+    ) => {
 
-                        <button
-                            disabled={completed}
-                            key={user.distinguished_name}
-                            className={
-                                isSelected
-                                    ? "object-option selected"
-                                    : "object-option"
-                            }
-                            onClick={() =>
-                                onSelect(
-                                    Data,
-                                    user
-                                )
-                            }
-                        >
-                            <div className="object-option-title">
+        if (
+            !selected ||
+            !candidate
+        ) {
+            return false;
+        }
 
-                                {isSelected && completed && "✅ Đã chọn: "}
+        return (
+            selected.distinguished_name
+            ===
+            candidate.distinguished_name
+        );
+    };
 
-                                {user.display_name}
+    return (
 
-                            </div>
-                            <div className="object-sam">
-                                ({user.sam_account_name})
-                            </div>
-                        </button>
+        <div className="object-selector">
 
+            {objects.map((item) => {
+
+                const isSelected =
+                    isSameObject(
+                        selectedObject,
+                        item
                     );
 
-                })}
+                return (
 
-            </div>
-        );
+                    <button
+                        disabled={completed}
+                        key={
+                            item.distinguished_name
+                        }
+                        className={
+                            isSelected
+                                ? "object-option selected"
+                                : "object-option"
+                        }
+                        onClick={() =>
+                            onSelect(
+                                Data,
+                                item
+                            )
+                        }
+                    >
+
+                        <div className="object-option-title">
+
+                            {item.approval_policy === "admin_secret" &&
+                                "🔐 "}
+
+                            {isSelected &&
+                                completed &&
+                                "✅ Đã chọn: "}
+
+                            {getTitle(item)}
+
+                        </div>
+
+                        {!!getSubtitle(item) && (
+
+                            <div className="object-sam">
+                                (
+                                {getSubtitle(
+                                    item
+                                )}
+                                )
+                            </div>
+
+                        )}
+
+                    </button>
+
+                );
+
+            })}
+
+        </div>
+
+    );
+
 }
 
 export default ObjectSelector;

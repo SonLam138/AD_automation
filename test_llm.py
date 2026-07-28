@@ -27,7 +27,7 @@ ldap.connect(
 
 
 test_inputs = [
-    "chuyển user sonnm sang OU HO"
+    "Disable computer client"
 ]
 
 

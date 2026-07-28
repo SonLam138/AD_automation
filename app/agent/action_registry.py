@@ -176,7 +176,46 @@ ACTION_REGISTRY = {
         "required_action_group": "ad_move_ou",
 
         "confirm_required": True
+    },
+
+    "disable_computer": {
+        "display_name": "Disable AD Computer",
+
+        "description": (
+            "Disable an Active Directory COMPUTER account"
+        ),
+
+        "intent_hints": [
+            "disable computer",
+            "disable tài khoản máy tính",
+            "disable máy tính",
+            "Vô hiệu hóa computer",
+            "Vô hiệu hóa máy tính",
+            "khóa tài khoản máy tính",
+            "khóa máy tính",
+            "khóa computer"
+            
+        ],
+
+        "required_objects": [
+            {
+                "object_type": "COMPUTER",
+                "search_tool": "search_computer",
+                "required": True,
+                "action_param": "computer_name"
+            }
+        ],
+
+        "action_tool": "disable_computer",
+
+        "action_api": "/api/ad/disable-computer",
+
+        "required_action_group": "ad_computer_mgmt",
+
+        "confirm_required": True
     }
+
+
 }
 
 
