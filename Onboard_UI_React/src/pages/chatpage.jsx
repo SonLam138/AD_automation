@@ -24,6 +24,14 @@ import {
 }
 from "../components/jwtHelper";
 
+const LOADING_MESSAGES = [
+    "🤔 Ngáo đang phân tích yêu cầu...",
+    "📋 Đang đối chiếu thông tin trong Active Directory...",
+    "🔍 Đang rà soát đối tượng liên quan...",
+    "🧠 Đang suy nghĩ phương án xử lý...",
+    "☕ Cho Ngáo thêm vài giây nhé..."
+];
+
 
 function ChatPage() {
     const displayName = getCurrentUserName();
@@ -46,12 +54,49 @@ function ChatPage() {
     const messagesEndRef = useRef(null);
     const [loading, setLoading] = useState(false);
     const [input, setInput] = useState("");
+    const [loadingMessage, setLoadingMessage] =
+    useState(
+        LOADING_MESSAGES[0]
+    );
+
     const [activeAction, setActiveAction] = useState(null);
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({
             behavior: "smooth"
         });
     }, [messages, loading]);
+
+
+    useEffect(() => {
+
+        if (!loading) {
+            return;
+        }
+
+        let index = 0;
+
+        const interval = setInterval(() => {
+
+            index++;
+
+            if (
+                index < LOADING_MESSAGES.length
+            ) {
+                setLoadingMessage(
+                    LOADING_MESSAGES[index]
+                );
+            }
+
+        }, 30000);
+
+        return () => clearInterval(
+            interval
+        );
+
+    }, [loading]);
+
+
+
 
     const handleSend = async () => {
 
@@ -85,6 +130,10 @@ function ChatPage() {
 
         setInput("");
 
+        setLoadingMessage(
+            LOADING_MESSAGES[0]
+        );
+        
         setLoading(true);
 
         try {
@@ -106,13 +155,20 @@ function ChatPage() {
                 data: result
             }
         ]);
-        if (result.state) {
+        if (
+            result.state === "CONFIRM_READY" ||
+            result.state === "WAITING_OBJECT_SELECTION"
+        ) {
 
             setActiveAction({
                 actionId: result.action_id,
                 state: result.state
             });
-        }
+
+        } else {
+
+    setActiveAction(null);
+}
 
 
         } catch (error) {
@@ -142,10 +198,26 @@ function ChatPage() {
             selectedObject,
             resolverData.proposed_action_payload
             );
-            console.log(
-            "CONFIRM PAYLOAD",
+
+        if (resolverData.new_value) {
+            payload.new_value =
+                resolverData.new_value;
+        }
+        console.log(
+            "resolverData",
+            resolverData
+        );
+
+        console.log(
+            "payload",
             payload
-            );
+        );
+
+        const resolvedObjects = {
+            ...resolverData.resolved_objects,
+            [resolverData.target_object_type]:
+            selectedObject
+            };
 
         const approvalPolicy =
             getMultiApprovalPolicy(
@@ -771,6 +843,14 @@ function ChatPage() {
                         );
                     }
 
+                    if (
+                        msg.text === undefined
+                        || msg.text === null
+                        || msg.text === ""
+                    ) {
+                        return null;
+                    }
+
                     return (
                         <div
                             key={idx}
@@ -783,11 +863,9 @@ function ChatPage() {
                 })}
 
                 {loading && (
-
                     <div className="message assistant loading-bubble">
-                        🤖 Ngáo đang suy nghĩ...
+                        {loadingMessage}
                     </div>
-
                 )}
                 <div ref={messagesEndRef}></div>
 

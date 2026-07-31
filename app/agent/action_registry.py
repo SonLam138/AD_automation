@@ -25,7 +25,8 @@ ACTION_REGISTRY = {
                 "object_type": "USER",
                 "search_tool": "search_user",
                 "required": True,
-                "action_param": "sam_account_name"
+                "action_param": "sam_account_name",
+                "payload_key": "sam_account_name"
             }
         ],
 
@@ -57,7 +58,9 @@ ACTION_REGISTRY = {
             "add vào nhóm",
             "add vao nhom",
             "cho vào nhóm",
-            "cho vao nhom"
+            "cho vao nhom",
+            "...vào group",
+            "...vào nhóm"
         ],
 
         "required_objects": [
@@ -65,13 +68,15 @@ ACTION_REGISTRY = {
                 "object_type": "USER",
                 "search_tool": "search_user",
                 "required": True,
-                "action_param": "sam_account_name"
+                "action_param": "sam_account_name",
+                "payload_key": "sam_account_name"
             },
             {
                 "object_type": "GROUP",
                 "search_tool": "search_group",
                 "required": True,
-                "action_param": "group_name"
+                "action_param": "group_name",
+                "payload_key": "group_name"
             }
         ],
 
@@ -104,7 +109,9 @@ ACTION_REGISTRY = {
             "xoa khoi nhom",
             "xóa khỏi nhóm",
             "remove khỏi nhóm",
-            "remove khoi nhom"
+            "remove khoi nhom",
+            "...ra khỏi nhóm",
+            "...ra khỏi group"
         ],
 
         "required_objects": [
@@ -112,13 +119,15 @@ ACTION_REGISTRY = {
                 "object_type": "USER",
                 "search_tool": "search_user",
                 "required": True,
-                "action_param": "sam_account_name"
+                "action_param": "sam_account_name",
+                "payload_key": "sam_account_name"
             },
             {
                 "object_type": "GROUP",
                 "search_tool": "search_group",
                 "required": True,
-                "action_param": "group_name"
+                "action_param": "group_name",
+                "payload_key": "computer_name"
             }
         ],
 
@@ -159,13 +168,15 @@ ACTION_REGISTRY = {
                 "object_type": "USER",
                 "search_tool": "search_user",
                 "required": True,
-                "action_param": "sam_account_name"
+                "action_param": "sam_account_name",
+                "payload_key": "sam_account_name"
             },
             {
                 "object_type": "OU",
                 "search_tool": "search_ou",
                 "required": True,
-                "action_param": "target_ou_dn"
+                "action_param": "target_ou_dn",
+                "payload_key": "target_ou_dn"
             }
         ],
 
@@ -202,7 +213,8 @@ ACTION_REGISTRY = {
                 "object_type": "COMPUTER",
                 "search_tool": "search_computer",
                 "required": True,
-                "action_param": "computer_name"
+                "action_param": "computer_name",
+                "payload_key": "computer_name"
             }
         ],
 
@@ -211,6 +223,123 @@ ACTION_REGISTRY = {
         "action_api": "/api/ad/disable-computer",
 
         "required_action_group": "ad_computer_mgmt",
+
+        "confirm_required": True
+    },
+
+    "update_user_displayName": {
+        "display_name": "update user displayname",
+
+        "description": (
+            "Modify displayname of Active Directory Object USER to new value. Should be understand Modify...Object...Attribute"
+        ),
+
+        "intent_hints": [
+            "update displayname",
+            "modify displayname",
+            "cập nhật displayname",
+            "Đổi displayname",
+            "Đổi tên hiển thị",
+            "update tên hiển thị",
+            "Cập nhật tên hiển thị",
+            "Modify tên hiển thị",
+            
+        ],
+
+        "required_objects": [
+            {
+                "object_type": "USER",
+                "search_tool": "search_user",
+                "required": True,
+                "action_param": "displayname",
+                "payload_key": "sam_account_name",
+                "new_value": "new value"
+            }
+        ],
+
+        "action_tool": "update_user_displayName",
+
+        "action_api": "/api/ad/modify_displayname",
+
+        "required_action_group": "ad_user_mgmt",
+
+        "confirm_required": True
+    },
+
+    "update_user_department": {
+        "department": "update user department",
+
+        "description": (
+            "Modify department of Active Directory Object USER to new value. Should be understand Modify...Object...Attribute"
+        ),
+
+        "intent_hints": [
+            "update department",
+            "modify department",
+            "cập nhật department",
+            "Đổi department",
+            "Đổi tên phòng",
+            "update tên phòng",
+            "Cập nhật tên phòng",
+            "Modify tên phòng"
+            
+        ],
+
+        "required_objects": [
+            {
+                "object_type": "USER",
+                "search_tool": "search_user",
+                "required": True,
+                "action_param": "department",
+                "payload_key": "sam_account_name",
+                "new_value": "new value"
+            }
+        ],
+
+        "action_tool": "update_user_department",
+
+        "action_api": "/api/ad/modify_department",
+
+        "required_action_group": "ad_user_mgmt",
+
+        "confirm_required": True
+    },
+
+    "update_user_description": {
+        "description": "update user description",
+
+        "description": (
+            "Modify description of Active Directory Object USER to new value. Should be understand Modify...Object...Attribute"
+        ),
+
+        "intent_hints": [
+            "update description",
+            "modify description",
+            "cập nhật description",
+            "Đổi description",
+            "Đổi mô tả",
+            "update mô tả",
+            "Cập nhật mô tả",
+            "Modify mô tả"
+            
+        ],
+
+        "required_objects": [
+            {
+                "object_type": "USER",
+                "search_tool": "search_user",
+                "required": True,
+                "action_param": "description",
+                "payload_key": "sam_account_name",
+                "new_value": "new value"
+            }
+        ],
+
+        "action_tool": "update_user_description",
+
+        "action_api": "/api/ad/modify_description",
+
+        "required_action_group": "ad_user_mgmt",
 
         "confirm_required": True
     }

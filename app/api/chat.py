@@ -26,6 +26,7 @@ from app.config import (
     LDAP_PASSWORD
 )
 
+
 router = APIRouter()
 
 ldap = LDAPAdapter()

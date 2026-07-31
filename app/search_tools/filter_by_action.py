@@ -19,4 +19,11 @@ def filter_candidates_by_action(
             if user.get("is_disabled", False)
         ]
 
+    if action == "disable_user":
+        return [
+            user
+            for user in users
+            if not user.get("is_disabled", False)
+        ]
+
     return users

@@ -33,3 +33,10 @@ class DisableComputerRequest(
 
 class VerifySecretRequest(BaseModel):
     secret: str
+
+class UpdateUserDisplayNameRequest(
+    BaseModel
+):
+    sam_account_name: str
+
+    new_value: str

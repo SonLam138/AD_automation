@@ -10,7 +10,8 @@ from app.models.ad_tool import (
     RemoveGroupRequest,
     MoveUserRequest,
     VerifySecretRequest,
-    DisableComputerRequest
+    DisableComputerRequest,
+    UpdateUserDisplayNameRequest
 )
 from app.agent.execution_response import (
     generate_execution_response
@@ -286,3 +287,178 @@ def verify_admin_secret(
             request.secret ==
             ADMIN_APPROVAL_SECRET
     }
+
+
+@router.post(
+    "/update-user-displayname"
+)
+def update_user_displayname(
+    request: UpdateUserDisplayNameRequest,
+
+    current_user=Depends(
+        require_group(
+            [
+                "ad_modify_user"
+            ]
+        )
+    )
+):
+
+    try:
+
+        result = ldap.update_user_displayname(
+            request.sam_account_name,
+            request.new_value
+        )
+
+        execution_contract = {
+            "state":
+                "ACTION_SUCCESS",
+
+            "action":
+                "update_user_displayName",
+
+            "proposed_action_payload": {
+                "sam_account_name":
+                    request.sam_account_name,
+
+                "new_display_name":
+                    request.new_value
+            },
+
+            "execution_result":
+                result
+        }
+
+        message = generate_execution_response(
+            execution_contract
+        )
+
+        return {
+            "success": True,
+            "message": message,
+            "execution_result": result
+        }
+
+    except Exception as ex:
+
+        raise HTTPException(
+            status_code=500,
+            detail=str(ex)
+        )
+
+@router.post(
+    "/update-user-department"
+)
+def update_user_department(
+    request: UpdateUserDisplayNameRequest,
+
+    current_user=Depends(
+        require_group(
+            [
+                "ad_modify_user"
+            ]
+        )
+    )
+):
+
+    try:
+
+        result = ldap.update_user_department(
+            request.sam_account_name,
+            request.new_value
+        )
+
+        execution_contract = {
+            "state":
+                "ACTION_SUCCESS",
+
+            "action":
+                "update_user_department",
+
+            "proposed_action_payload": {
+                "sam_account_name":
+                    request.sam_account_name,
+
+                "new_department":
+                    request.new_value
+            },
+
+            "execution_result":
+                result
+        }
+
+        message = generate_execution_response(
+            execution_contract
+        )
+
+        return {
+            "success": True,
+            "message": message,
+            "execution_result": result
+        }
+
+    except Exception as ex:
+
+        raise HTTPException(
+            status_code=500,
+            detail=str(ex)
+        )
+
+@router.post(
+    "/update-user-description"
+)
+def update_user_description(
+    request: UpdateUserDisplayNameRequest,  # Dùng chung modle với DisplayName 
+
+    current_user=Depends(
+        require_group(
+            [
+                "ad_modify_user"
+            ]
+        )
+    )
+):
+
+    try:
+
+        result = ldap.update_user_description(
+            request.sam_account_name,
+            request.new_value
+        )
+
+        execution_contract = {
+            "state":
+                "ACTION_SUCCESS",
+
+            "action":
+                "update_user_description",
+
+            "proposed_action_payload": {
+                "sam_account_name":
+                    request.sam_account_name,
+
+                "new_description":
+                    request.new_value
+            },
+
+            "execution_result":
+                result
+        }
+
+        message = generate_execution_response(
+            execution_contract
+        )
+
+        return {
+            "success": True,
+            "message": message,
+            "execution_result": result
+        }
+
+    except Exception as ex:
+
+        raise HTTPException(
+            status_code=500,
+            detail=str(ex)
+        )

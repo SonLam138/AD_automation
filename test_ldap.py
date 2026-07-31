@@ -1,19 +1,21 @@
-from ldap3 import Server
-from ldap3 import Connection
-from ldap3 import ALL
+from ldap3 import Server, Connection, ALL
 
 server = Server(
-    "DC-01.automate.com.vn",
+    "192.168.1.9",
     port=636,
     use_ssl=True,
     get_info=ALL
 )
 
+print("creating connection")
+
 conn = Connection(
     server,
-    user="svc_ad_capability@automate.com.vn",
-    password="Password123!",
-    auto_bind=True
+    user="Administrator@automate.com.vn",
+    password="C0anhtien@123"
 )
 
-print(conn.bound)
+print("binding")
+
+print(conn.bind())
+print(conn.result)

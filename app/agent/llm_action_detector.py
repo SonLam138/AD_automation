@@ -148,6 +148,9 @@ def detect_action_by_llm(
     ):
         extracted_keywords = {}
 
+    new_value = parsed.get("new_value")
+
+
     if action in [
         None,
         "",
@@ -206,8 +209,8 @@ def detect_action_by_llm(
         "reason":
             reason,
 
-        "need_clarification":
-            need_clarification,
+        # "need_clarification":
+        #     need_clarification,
 
         #
         # Requirements are always loaded from registry.
@@ -226,6 +229,12 @@ def detect_action_by_llm(
         #
         "extracted_keywords":
             extracted_keywords,
+
+        "new_value":
+           new_value,
+
+        # "payload_key":
+        #     action_config.get("payload_key"),
 
         "action_tool":
             action_config.get(

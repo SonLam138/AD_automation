@@ -65,3 +65,39 @@ export async function disableComputer(
 
     return response.data;
 }
+
+export async function updateUserDisplayName(
+    payload
+) {
+    const response =
+        await axiosClient.post(
+            "/api/ad/update-user-displayname",
+            payload
+        );
+
+    return response.data;
+}
+
+export async function updateUserDepartment(
+    payload
+) {
+    const response =
+        await axiosClient.post(
+            "/api/ad/update-user-department",
+            payload
+        );
+
+    return response.data;
+}
+
+export async function updateUserDescription(
+    payload
+) {
+    const response =
+        await axiosClient.post(
+            "/api/ad/update-user-description",
+            payload
+        );
+
+    return response.data;
+}

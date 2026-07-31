@@ -78,7 +78,7 @@
 }
 
 .confirm-label {
-    width: 72px;
+    min-width: 140px;
     flex-shrink: 0;
 
     color: #bca55c;

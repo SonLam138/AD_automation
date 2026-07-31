@@ -4,7 +4,10 @@ import {
     addGroup,
     removeGroup,
     moveUser,
-    disableComputer
+    disableComputer,
+    updateUserDisplayName,
+    updateUserDepartment,
+    updateUserDescription
 } from "./adToolApi";
 
 const ACTION_MAP = { //Map từ action trong resolver thành action execute
@@ -19,7 +22,10 @@ const ACTION_MAP = { //Map từ action trong resolver thành action execute
     remove_group_member: removeGroup,
 
     move_user: moveUser,
-    move_user_to_ou: moveUser
+    move_user_to_ou: moveUser,
+    update_user_displayName: updateUserDisplayName,
+    update_user_department: updateUserDepartment,
+    update_user_description: updateUserDescription
 };
 
 export async function executeAction(

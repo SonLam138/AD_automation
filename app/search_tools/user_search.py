@@ -4,6 +4,28 @@ from app.config import (
     LDAP_BASE_DN
 )
 
+# ==================================================
+# EXCLUDED OU
+# ==================================================
+
+EXCLUDED_USER_OUS = [
+    "OU=Account Disabled"
+]
+
+
+def _is_excluded_ou(
+    distinguished_name: str
+) -> bool:
+
+    dn = (
+        distinguished_name or ""
+    ).lower()
+
+    return any(
+        ou.lower() in dn
+        for ou in EXCLUDED_USER_OUS
+    )
+
 
 def _get_attr_value(
     entry,
@@ -175,6 +197,15 @@ def search_user(
                     uac
                 )
         }
+
+        # ==========================================
+        # EXCLUDED OU
+        # ==========================================
+
+        if _is_excluded_ou(
+            item["distinguished_name"]
+        ):
+            continue
 
         results.append(
             item

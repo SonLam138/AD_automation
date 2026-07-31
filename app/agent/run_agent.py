@@ -1,3 +1,11 @@
+
+from app.utils.perf import PerfTimer
+import time
+from app.search_tools.messages import (
+    build_missing_keyword_message,
+    build_resolver_message
+)
+
 from app.agent.llm_action_detector import (
     detect_action_by_llm
 )
@@ -20,8 +28,6 @@ from app.agent.action_handle import (
     handle_confirm_action,
     handle_admin_secret
 )
-from app.agent.response_planner import (
-    generate_user_response)
 
 from app.search_tools.filter_by_action import filter_candidates_by_action
 
@@ -45,7 +51,12 @@ def _get_action_param_value(
 
     if object_type == "USER":
 
-        if action_param == "sam_account_name":
+        if action_param in (
+            "sam_account_name",
+            "displayname",
+            "department",
+            "description"
+        ):
             return item.get(
                 "sam_account_name"
             )
@@ -89,35 +100,6 @@ def _get_action_param_value(
 
     return None
 
-
-# def _resolve_search_status(
-#     result: dict
-# ):
-#     """
-#     Convert search result count to resolution status.
-#     """
-
-#     if not result.get(
-#         "success"
-#     ):
-#         return "SEARCH_FAILED"
-
-#     count = result.get(
-#         "count",
-#         0
-#     )
-
-#     if count == 0:
-#         return "NOT_FOUND"
-
-#     if count == 1:
-#         return "RESOLVED"
-
-#     return "AMBIGUOUS"
-
-#===============================================
-# OBJECT NEED SECRET KEY
-#===============================================
 
 SENSITIVE_USERS = {
     "administrator",
@@ -233,9 +215,21 @@ def resolve_action(
     No execution.
     """
 
+    timer = PerfTimer(
+    scope="RESOLVER"
+)
+
+    timer.checkpoint(
+        "START"
+    )
+
     detect_result = detect_action_by_llm(
         user_text
     )
+    print("detect_result")
+    timer.checkpoint(
+        "LLM_DETECT_ACTION"
+        )
 
     if not detect_result.get(
         "success"
@@ -261,6 +255,8 @@ def resolve_action(
             "candidate_objects":
                 {},
 
+            "new_value":
+                {},
             "proposed_action_payload":
                 {}
         }
@@ -274,11 +270,20 @@ def resolve_action(
         "extracted_keywords",
         {}
     )
+    new_value = detect_result.get(
+    "new_value"
+    )
 
     action = detect_result.get(
         "action"
     )
+    
+    new_value = detect_result.get(
+        "new_value"
+    )
 
+    message = ""
+    
     resolved_objects = {}
 
     candidate_objects = {}
@@ -308,13 +313,17 @@ def resolve_action(
         action_param = requirement.get(
             "action_param"
         )
+        payload_key = requirement.get("payload_key")
 
         keyword = extracted_keywords.get(
             object_type
         )
+        timer.checkpoint(
+            f"START_OBJECT_{object_type}"
+        )
 
         #
-        # NOT_FOUND
+        # MISSING KEYWORD
         #
         if not keyword:
 
@@ -327,7 +336,10 @@ def resolve_action(
             target_object_type = (
                 object_type
             )
+
             state = "WAITING_REQUIRED_OBJECT"
+
+            message = build_missing_keyword_message(object_type)
 
             continue
         
@@ -377,15 +389,41 @@ def resolve_action(
             keyword,
             limit=100
         )
-        results = search_result.get(
+        timer.checkpoint(
+            "SEARCH_RESULT"
+            )
+        all_results = search_result.get(
             "results",
             []
         )
         results = filter_candidates_by_action(
             action,
-            results
+            all_results
         )
         count = len(results)
+
+        #
+        # OBJECT DISABLED
+        #
+        if (
+            len(all_results) == 1
+            and all_results[0].get(
+                "is_disabled",
+                False
+            )
+        ):
+            disabled_user = all_results[0]
+
+            return {
+                "status": "OBJECT_DISABLED",
+                "state": "OBJECT_DISABLED",
+                "message": (
+                    f"Ngáo tìm thấy tài khoản "
+                    f"{disabled_user.get('sam_account_name')} "
+                    f"nhưng tài khoản hiện đang bị vô hiệu hóa (Disabled)."
+                ),
+                "disabled_object": disabled_user
+            }
 
         #
         # NOT FOUND
@@ -442,11 +480,13 @@ def resolve_action(
                         candidates=[item]
                     )
                 )
-
+                
                 enriched_results.append(
                     item_copy
                 )
-
+            timer.checkpoint(
+                "GET_CANDIDATE_POLICY"
+            )
             candidate_objects[
                 object_type
             ] = enriched_results
@@ -474,10 +514,18 @@ def resolve_action(
             action_param=action_param,
             item=item
         )
-
+        
         proposed_action_payload[
-            action_param
+            payload_key
         ] = value
+        
+        new_value = detect_result.get(
+            "new_value"
+            )
+        if new_value:
+            proposed_action_payload[
+            "new_value"
+            ] = new_value
 
     #
     # READY TO CONFIRM
@@ -526,6 +574,9 @@ def resolve_action(
 
         "proposed_action_payload":
             proposed_action_payload,
+
+        "new_value":
+            new_value,
         
         "approval_policy":
             approval_policy
@@ -549,29 +600,18 @@ def resolve_action(
 
         result["action_id"] = action_id
 
-
-    # ==========================================
-    # COPILOT RESPONSE
-    # ==========================================
-
-    try:
-
-        result["message"] = (
-            generate_user_response(
-                resolver_result=result
-            )
+    if message:
+        result["message"] = message
+    else:
+        result["message"] = build_resolver_message(
+            result
         )
 
-    except Exception as ex:
 
-        print(
-            "GENERATE RESPONSE ERROR =",
-            ex
-        )
+    timer.finish(
+    "END"
+    )
 
-        result["message"] = (
-            "Tôi đã xử lý yêu cầu nhưng chưa thể tạo phản hồi."
-        )
     print(result)
     return result
 

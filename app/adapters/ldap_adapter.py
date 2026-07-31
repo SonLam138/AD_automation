@@ -1333,8 +1333,206 @@ class LDAPAdapter:
             "sam_account_name": sam_account_name,
             "user_dn": user_dn
         }
+
+    #===================================
+    # AD TOOL - UPDATE USER DISPLAYNAME
+    #===================================
+    def update_user_displayname(
+        self,
+        sam_account_name: str,
+        new_display_name: str
+    ):
+
+        search_filter = (
+            f"(sAMAccountName={sam_account_name})"
+        )
+
+        self.connection.search(
+            search_base=LDAP_BASE_DN,
+            search_filter=search_filter,
+            attributes=[
+                "distinguishedName",
+                "displayName"
+            ]
+        )
+
+        if not self.connection.entries:
+            raise Exception(
+                f"User not found: {sam_account_name}"
+            )
+
+        user = self.connection.entries[0]
+
+        user_dn = str(
+            user.distinguishedName.value
+        )
+
+        success = self.connection.modify(
+            user_dn,
+            {
+                "displayName": [
+                    (
+                        MODIFY_REPLACE,
+                        [new_display_name]
+                    )
+                ]
+            }
+        )
+
+        if not success:
+            raise Exception(
+                self.connection.result
+            )
+
+        return {
+            "success": True,
+            "action":
+                "update_user_displayName",
+
+            "sam_account_name":
+                sam_account_name,
+
+            "new_display_name":
+                new_display_name,
+
+            "user_dn":
+                user_dn
+        }
+
+
+    #==================================
+    # AD TOOL - UPDATE USER DEPARTMENT
+    #==================================
+    def update_user_department(
+        self,
+        sam_account_name: str,
+        new_value: str
+    ):
+
+        search_filter = (
+            f"(sAMAccountName={sam_account_name})"
+        )
+
+        self.connection.search(
+            search_base=LDAP_BASE_DN,
+            search_filter=search_filter,
+            attributes=[
+                "distinguishedName",
+                "displayName"
+            ]
+        )
+
+        if not self.connection.entries:
+            raise Exception(
+                f"User not found: {sam_account_name}"
+            )
+
+        user = self.connection.entries[0]
+
+        user_dn = str(
+            user.distinguishedName.value
+        )
+
+        success = self.connection.modify(
+            user_dn,
+            {
+                "department": [
+                    (
+                        MODIFY_REPLACE,
+                        [new_value]
+                    )
+                ]
+            }
+        )
+
+        if not success:
+            raise Exception(
+                self.connection.result
+            )
+
+        return {
+            "success": True,
+            "action":
+                "update_user_department",
+
+            "sam_account_name":
+                sam_account_name,
+
+            "new_value":
+                new_value,
+
+            "user_dn":
+                user_dn
+        }
+
+    #==================================
+    # AD TOOL - UPDATE USER DESCRIPTON
+    #==================================
+    def update_user_description(
+        self,
+        sam_account_name: str,
+        new_value: str
+    ):
+
+        search_filter = (
+            f"(sAMAccountName={sam_account_name})"
+        )
+
+        self.connection.search(
+            search_base=LDAP_BASE_DN,
+            search_filter=search_filter,
+            attributes=[
+                "distinguishedName",
+                "displayName"
+            ]
+        )
+
+        if not self.connection.entries:
+            raise Exception(
+                f"User not found: {sam_account_name}"
+            )
+
+        user = self.connection.entries[0]
+
+        user_dn = str(
+            user.distinguishedName.value
+        )
+
+        success = self.connection.modify(
+            user_dn,
+            {
+                "description": [
+                    (
+                        MODIFY_REPLACE,
+                        [new_value]
+                    )
+                ]
+            }
+        )
+
+        if not success:
+            raise Exception(
+                self.connection.result
+            )
+
+        return {
+            "success": True,
+            "action":
+                "update_user_description",
+
+            "sam_account_name":
+                sam_account_name,
+
+            "new_value":
+                new_value,
+
+            "user_dn":
+                user_dn
+        }
+
+
     #================================
-    # AD TOOL - ADD GROUP MEMBER #
+    # AD TOOL - ADD GROUP MEMBER 
     #================================
     def add_group_member(
         self,
