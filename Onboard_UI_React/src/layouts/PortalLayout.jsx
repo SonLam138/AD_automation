@@ -12,6 +12,12 @@ export default function PortalLayout() {
     const location = useLocation();
 
     const menuItems = [
+
+        {
+            key: "monitor",
+            label: "Monitor Dashboard",
+            path: "/portal/monitor"
+        },
         {
             key: "onboarding",
             label: "New Onboarding",

@@ -13,6 +13,7 @@ import AutomationToolsPage from "./pages/AutomationToolsPage";
 import ReportingPage from "./pages/ReportingPage";
 import AiLabPage from "./pages/AiLabPage";
 import ChatPage from "./pages/ChatPage";
+import MonitorDashboard from "./pages/MonitorDashboard";
 
 function App() {
 
@@ -68,6 +69,10 @@ function App() {
                 <Route
                     path="reporting"
                     element={<ReportingPage />}
+                />
+                <Route
+                    path="monitor"
+                    element={<MonitorDashboard />}
                 />
 
                 {/* Ngao */}

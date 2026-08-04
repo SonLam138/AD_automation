@@ -5,13 +5,22 @@ from fastapi import HTTPException
 import asyncio
 import json
 import queue
-
+from Monitor.runtime_monitor_writer import (
+    get_runtime_monitor_snapshot
+)
+from Monitor.monitor_writer import (
+    search_records
+)
 from fastapi import Request
 from fastapi.responses import StreamingResponse
 
 from app.event.runtime_bus import (
-    subscribe,
-    unsubscribe
+    subscribe as runtime_subscribe,
+    unsubscribe as runtime_unsubscribe
+)
+from app.event.monitor_bus import (
+    subscribe as monitor_subscribe,
+    unsubscribe as monitor_unsubscribe  
 )
 
 from app.auth.rbac import require_group
@@ -757,7 +766,7 @@ async def stream_runtime_events(
     "============= SSE ENTERED ============="
     )
     
-    subscriber_queue = subscribe()
+    subscriber_queue = runtime_subscribe()
 
     async def event_generator():
         try:
@@ -794,7 +803,7 @@ async def stream_runtime_events(
                 )
 
         finally:
-            unsubscribe(
+            runtime_unsubscribe(
                 subscriber_queue
             )
 
@@ -867,3 +876,84 @@ def submit_detection_feedback(
                 e
             )
         }
+
+#==============================================
+# MONITOR DASHBOARD REFRESH API
+#==============================================
+@router.get(
+    "/monitor/stream"
+)
+async def stream_monitor(
+    request: Request
+):
+    subscriber_queue = monitor_subscribe()
+
+    async def event_generator():
+        try:
+            yield ": connected\n\n"
+
+            while True:
+
+                if await request.is_disconnected():
+                    break
+
+                try:
+                    event = await asyncio.to_thread(
+                        subscriber_queue.get,
+                        True,
+                        15
+                    )
+                    print(
+                        "SSE GOT EVENT =",
+                        event
+                    )
+
+                except queue.Empty:
+                    yield ": heartbeat\n\n"
+                    continue
+
+                yield (
+                    "event: monitor_refresh\n"
+                    "data: "
+                    + json.dumps(event)
+                    + "\n\n"
+                )
+        finally:
+            monitor_unsubscribe(
+                subscriber_queue
+            )
+
+    return StreamingResponse(
+        event_generator(),
+        media_type="text/event-stream",
+        headers={
+            "Cache-Control": "no-cache",
+            "Connection": "keep-alive",
+            "X-Accel-Buffering": "no"
+        }
+    )
+@router.get(
+    "/monitor/dashboard"
+)
+def get_monitor_dashboard():
+    return get_runtime_monitor_snapshot()
+
+
+@router.get(
+    "/monitor/search"
+)
+def search_monitor(
+    object_type: str = None,
+    action_user: str = None,
+    object_name: str = None,
+    from_date: str = None,
+    to_date: str = None
+):
+
+    return search_records(
+        object_type=object_type,
+        action_user=action_user,
+        object_name=object_name,
+        from_date=from_date,
+        to_date=to_date
+    )

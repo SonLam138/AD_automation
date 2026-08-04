@@ -146,10 +146,7 @@ function ChatPage() {
             console.log("Calling backend...");
 
             const result = await sendMessage(userText);
-            console.log(
-                "RUNTIME EVENTS",
-                result.events
-            );
+
             if (
                 result.events &&
                 result.events.length > 0 &&

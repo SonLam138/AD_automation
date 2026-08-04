@@ -726,7 +726,7 @@ def resolve_action(
             result
         )
 
-    result["events"] = [runtime_events]
+    #result["events"] = [runtime_events]
 
     timer.finish(
     "END"

@@ -1,9 +1,12 @@
 import "./AutomationToolsPage.css";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 export default function AutomationToolsPage() {
 
     const navigate = useNavigate();
+    const [showHints, setShowHints] =
+    useState(false);
 
     const handleStartAssistant = () => {
 
@@ -47,11 +50,11 @@ export default function AutomationToolsPage() {
                 <div className="assistant-features">
 
                     <div className="feature-box">
-                        👤 Disable User
+                        👤 Disable/Enable Users
                     </div>
 
                     <div className="feature-box">
-                        ↔️ Add/Remove Group Members
+                        ↔️ Group membership
                     </div>
 
                     <div className="feature-box">
@@ -59,11 +62,16 @@ export default function AutomationToolsPage() {
                     </div>
 
                     <div className="feature-box">
-                        🔓 Unlock User
+                        🪪 Modify basic attributes
                     </div>
 
-                    <div className="feature-box">
-                        👥 Group Management
+                    <div
+                        className="feature-box"
+                        onClick={() =>
+                            setShowHints(true)
+                        }
+                    >
+                        📖 Fast lane hints (click to see)
                     </div>
 
                 </div>
@@ -76,7 +84,68 @@ export default function AutomationToolsPage() {
             </button>
 
             </div>
+            {
+                showHints && (
 
+                    <div className="modal-overlay">
+
+                        <div className="fastlane-modal">
+
+                            <div className="fastlane-header">
+                                ⚡ Fast Lane Cheatsheet
+                            </div>
+
+                            <div className="fastlane-content">
+
+                                <div className="hint-item">
+                                    Tôi cần disable user/Tôi cần khóa user [USER]
+                                </div>
+
+                                <div className="hint-item">
+                                    Tôi cần disable computer/Tôi cần khóa máy tính [COMPUTER]
+                                </div>
+
+                                <div className="hint-item">
+                                    Tôi cần add group member/tôi cần thêm thành viên nhóm [USER] [GROUP]
+                                </div>
+
+                                <div className="hint-item">
+                                    Tôi cần xóa group member/Tôi cần xóa thành viên nhóm [USER] [GROUP]
+                                </div>
+
+                                <div className="hint-item">
+                                    Tôi cần move OU/Tôi cần chuyển OU [USER] [OU]
+                                </div>
+
+                                <div className="hint-item">
+                                    Tôi cần đổi department/Tôi cần đổi tên phòng [USER] [NEW_DEPARTMENT]
+                                </div>
+
+                                <div className="hint-item">
+                                    Tôi cần đổi displayname/Tôi cần đổi tên hiển thị [USER] [NEW_DISPLAYNAME]
+                                </div>
+
+                                <div className="hint-item">
+                                    Tôi cần đổi description/Tôi cần đổi mô tả [USER] [NEW_DESCRIPTION]
+                                </div>
+
+                            </div>
+
+                            <button
+                                className="close-btn"
+                                onClick={() =>
+                                    setShowHints(false)
+                                }
+                            >
+                                Close
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                )
+            }
         </div>
 
     );

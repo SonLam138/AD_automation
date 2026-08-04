@@ -1,5 +1,7 @@
 from Monitor.monitor_writer import write_search_record
-
+from Monitor.runtime_monitor_writer import (
+    update_runtime_from_event
+)
 
 class MonitorConsumer:
     """
@@ -20,7 +22,9 @@ class MonitorConsumer:
         event_name = event.get(
             "event_name"
         )
-
+        update_runtime_from_event(
+            event_name
+        )
         if event_name == "QUERY_RECEIVED":
             self._handle_query_received(
                 event
