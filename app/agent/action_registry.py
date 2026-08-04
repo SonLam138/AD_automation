@@ -273,8 +273,8 @@ ACTION_REGISTRY = {
             "Tôi cần đổi tên hiển thị",
             ],
         "kw_template": [
-            "Tôi cần đổi displayname {USER} thành {new_value}",
-            "Tôi cần đổi tên hiển thị {USER} thành {new_value}",
+            "Tôi cần đổi displayname {USER} {new_value}",
+            "Tôi cần đổi tên hiển thị {USER} {new_value}",
             ],
         "intent_hints": [
             "update displayname",
@@ -319,8 +319,8 @@ ACTION_REGISTRY = {
             "Tôi cần đổi tên phòng",
             ],
         "kw_template": [
-            "Tôi cần đổi department {USER} thành {new_value}",
-            "Tôi cần đổi tên phòng {USER} thành {new_value}",
+            "Tôi cần đổi department {USER} {new_value}",
+            "Tôi cần đổi tên phòng {USER} {new_value}",
             ],
         "intent_hints": [
             "update department",
@@ -365,8 +365,8 @@ ACTION_REGISTRY = {
             "Tôi cần đổi mô tả",
             ],
         "kw_template": [""
-            "Tôi cần đổi description {USER} thành {new_value}",
-            "Tôi cần đổi mô tả {USER} thành {new_value}",
+            "Tôi cần đổi description {USER} {new_value}",
+            "Tôi cần đổi mô tả {USER} {new_value}",
             ],
         "intent_hints": [
             "update description",
