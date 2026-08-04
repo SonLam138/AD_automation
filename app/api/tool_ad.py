@@ -2,6 +2,18 @@ from fastapi import APIRouter
 from fastapi import Depends
 from fastapi import HTTPException
 
+import asyncio
+import json
+import queue
+
+from fastapi import Request
+from fastapi.responses import StreamingResponse
+
+from app.event.runtime_bus import (
+    subscribe,
+    unsubscribe
+)
+
 from app.auth.rbac import require_group
 
 from app.models.ad_tool import (
@@ -11,7 +23,8 @@ from app.models.ad_tool import (
     MoveUserRequest,
     VerifySecretRequest,
     DisableComputerRequest,
-    UpdateUserDisplayNameRequest
+    UpdateUserDisplayNameRequest,
+    DetectionFeedbackRequest
 )
 from app.agent.execution_response import (
     generate_execution_response
@@ -19,7 +32,12 @@ from app.agent.execution_response import (
 from app.adapters.ldap_adapter import (
     LDAPAdapter
 )
-
+from app.event.feedback_builder import (
+    get_detection_event_by_id,
+    build_detection_feedback_event,
+    save_detection_feedback_dataset
+)
+from app.event.event_emitter import emit_event
 from app.config import *
 
 
@@ -45,13 +63,36 @@ def disable_user(
         )
     )
 ):
+    emit_event(
+        event_name="CONFIRM_ACCEPTED",
+
+        action="disable_user",
+
+        request=request.model_dump()
+    )
+
+    emit_event(
+        event_name="ACTION_STARTED",
+
+        action="disable_user",
+
+        request=request.model_dump()
+    )
 
     try:
 
         result = ldap.disable_user(
             request.sam_account_name
         )
+        emit_event(
+            event_name="ACTION_COMPLETED",
 
+            action="disable_user",
+
+            request=request.model_dump(),
+
+            execution_result=result
+        )
 
 
         execution_contract = {
@@ -75,6 +116,15 @@ def disable_user(
         }
 
     except Exception as ex:
+        emit_event(
+            event_name="ACTION_FAILED",
+
+            action="disable_user",
+
+            request=request.model_dump(),
+
+            error=str(ex)
+        )
 
         raise HTTPException(
             status_code=500,
@@ -93,13 +143,37 @@ def add_group(
         )
     )
 ):
+    emit_event(
+        event_name="CONFIRM_ACCEPTED",
+
+        action="add_group_member",
+
+        request=request.model_dump()
+    )
+
+    emit_event(
+        event_name="ACTION_STARTED",
+
+        action="add_group_member",
+
+        request=request.model_dump()
+    )
+
     try:
 
         result = ldap.add_group_member(
             request.sam_account_name,
 	    request.group_name
         )
+        emit_event(
+            event_name="ACTION_COMPLETED",
 
+            action="add_group_member",
+
+            request=request.model_dump(),
+
+            execution_result=result
+        )
         execution_contract = {
             "state": "ACTION_SUCCESS",
             "action": "add_group_member",
@@ -121,7 +195,15 @@ def add_group(
         }
 
     except Exception as ex:
+        emit_event(
+            event_name="ACTION_FAILED",
 
+            action="add_group_member",
+
+            request=request.model_dump(),
+
+            error=str(ex)
+        )
         raise HTTPException(
             status_code=500,
             detail=str(ex)
@@ -139,6 +221,21 @@ def remove_group(
         )
     )
 ):
+    emit_event(
+        event_name="CONFIRM_ACCEPTED",
+
+        action="remove_group_member",
+
+        request=request.model_dump()
+    )
+
+    emit_event(
+        event_name="ACTION_STARTED",
+
+        action="remove_group_member",
+
+        request=request.model_dump()
+    )
 
     try:
 
@@ -146,6 +243,16 @@ def remove_group(
             request.sam_account_name,
 	        request.group_name
         )
+        emit_event(
+            event_name="ACTION_COMPLETED",
+
+            action="remove_group_member",
+
+            request=request.model_dump(),
+
+            execution_result=result
+        )
+
 
         execution_contract = {
             "state": "ACTION_SUCCESS",
@@ -167,7 +274,15 @@ def remove_group(
             "execution_result": result
         }
     except Exception as ex:
+        emit_event(
+            event_name="ACTION_FAILED",
 
+            action="remove_group_member",
+
+            request=request.model_dump(),
+
+            error=str(ex)
+        )
         raise HTTPException(
             status_code=500,
             detail=str(ex)
@@ -186,13 +301,37 @@ def move_user(
         )
     )
 ):
+    emit_event(
+        event_name="CONFIRM_ACCEPTED",
+
+        action="move_user_to_ou",
+
+        request=request.model_dump()
+    )
+
+    emit_event(
+        event_name="ACTION_STARTED",
+
+        action="move_user_to_ou",
+
+        request=request.model_dump()
+    )
+
     try:
 
         result = ldap.move_user_to_ou(
             request.sam_account_name,
             request.target_ou_dn
             )
+        emit_event(
+            event_name="ACTION_COMPLETED",
 
+            action="move_user_to_ou",
+
+            request=request.model_dump(),
+
+            execution_result=result
+        )
         execution_contract = {
             "state": "ACTION_SUCCESS",
             "action": "move_user_to_ou",
@@ -214,11 +353,19 @@ def move_user(
         }
 
     except Exception as ex:
-    
-            raise HTTPException(
-                status_code=500,
-                detail=str(ex)
-            )
+        emit_event(
+            event_name="ACTION_FAILED",
+
+            action="move_user_to_ou",
+
+            request=request.model_dump(),
+
+            error=str(ex)
+        )
+        raise HTTPException(
+            status_code=500,
+            detail=str(ex)
+        )
 
 
 @router.post(
@@ -235,11 +382,35 @@ def disable_computer(
         )
     )
 ):
+    emit_event(
+            event_name="CONFIRM_ACCEPTED",
+    
+            action="disable_computer",
+    
+            request=request.model_dump()
+        )
+    
+    emit_event(
+            event_name="ACTION_STARTED",
+    
+            action="disable_computer",
+    
+            request=request.model_dump()
+        )
 
     try:
 
         result = ldap.disable_computer(
             request.computer_name
+        )
+        emit_event(
+            event_name="ACTION_COMPLETED",
+
+            action="disable_computer",
+
+            request=request.model_dump(),
+
+            execution_result=result
         )
 
         execution_contract = {
@@ -271,7 +442,15 @@ def disable_computer(
         }
 
     except Exception as ex:
+        emit_event(
+            event_name="ACTION_FAILED",
 
+            action="disable_computer",
+
+            request=request.model_dump(),
+
+            error=str(ex)
+        )
         raise HTTPException(
             status_code=500,
             detail=str(ex)
@@ -303,12 +482,35 @@ def update_user_displayname(
         )
     )
 ):
+    emit_event(
+        event_name="CONFIRM_ACCEPTED",
+
+        action="update_user_displayName",
+
+        request=request.model_dump()
+    )
+    emit_event(
+        event_name="ACTION_STARTED",
+
+        action="update_user_displayName",
+
+        request=request.model_dump()
+    )
 
     try:
 
         result = ldap.update_user_displayname(
             request.sam_account_name,
             request.new_value
+        )
+        emit_event(
+            event_name="ACTION_COMPLETED",
+
+            action="update_user_displayName",
+
+            request=request.model_dump(),
+
+            execution_result=result
         )
 
         execution_contract = {
@@ -341,6 +543,15 @@ def update_user_displayname(
         }
 
     except Exception as ex:
+        emit_event(
+            event_name="ACTION_FAILED",
+
+            action="update_user_displayName",
+
+            request=request.model_dump(),
+
+            error=str(ex)
+        )
 
         raise HTTPException(
             status_code=500,
@@ -361,12 +572,35 @@ def update_user_department(
         )
     )
 ):
+    emit_event(
+        event_name="CONFIRM_ACCEPTED",
+
+        action="update_user_department",
+
+        request=request.model_dump()
+    )
+    emit_event(
+        event_name="ACTION_STARTED",
+
+        action="update_user_department",
+
+        request=request.model_dump()
+    )
 
     try:
 
         result = ldap.update_user_department(
             request.sam_account_name,
             request.new_value
+        )
+        emit_event(
+            event_name="ACTION_COMPLETED",
+
+            action="update_user_department",
+
+            request=request.model_dump(),
+
+            execution_result=result
         )
 
         execution_contract = {
@@ -399,6 +633,15 @@ def update_user_department(
         }
 
     except Exception as ex:
+        emit_event(
+            event_name="ACTION_FAILED",
+
+            action="update_user_department",
+
+            request=request.model_dump(),
+
+            error=str(ex)
+        )
 
         raise HTTPException(
             status_code=500,
@@ -419,12 +662,35 @@ def update_user_description(
         )
     )
 ):
+    emit_event(
+        event_name="CONFIRM_ACCEPTED",
+
+        action="update_user_description",
+
+        request=request.model_dump()
+    )
+    emit_event(
+        event_name="ACTION_STARTED",
+
+        action="update_user_description",
+
+        request=request.model_dump()
+    )
 
     try:
 
         result = ldap.update_user_description(
             request.sam_account_name,
             request.new_value
+        )
+        emit_event(
+            event_name="ACTION_COMPLETED",
+
+            action="update_user_description",
+
+            request=request.model_dump(),
+
+            execution_result=result
         )
 
         execution_contract = {
@@ -457,8 +723,147 @@ def update_user_description(
         }
 
     except Exception as ex:
+        emit_event(
+            event_name="ACTION_FAILED",
+
+            action="update_user_description",
+
+            request=request.model_dump(),
+
+            error=str(ex)
+        )
 
         raise HTTPException(
             status_code=500,
             detail=str(ex)
         )
+
+@router.get(
+    "/runtime-events/stream"
+)
+async def stream_runtime_events(
+    request: Request,
+
+    current_user=Depends(
+        require_group(
+            [
+                "ad_login"
+            ]
+        )
+    )
+):
+
+    print(
+    "============= SSE ENTERED ============="
+    )
+    
+    subscriber_queue = subscribe()
+
+    async def event_generator():
+        try:
+            yield ": connected\n\n"
+
+            while True:
+
+                if await request.is_disconnected():
+                    break
+
+                try:
+                    event = await asyncio.to_thread(
+                        subscriber_queue.get,
+                        True,
+                        15
+                    )
+                    print(
+                        "SSE GOT EVENT =",
+                        event
+                    )
+
+                except queue.Empty:
+                    yield ": heartbeat\n\n"
+                    continue
+
+                yield (
+                    "event: runtime_event\n"
+                    "data: "
+                    + json.dumps(
+                        event,
+                        ensure_ascii=False
+                    )
+                    + "\n\n"
+                )
+
+        finally:
+            unsubscribe(
+                subscriber_queue
+            )
+
+            print(
+                "RUNTIME SSE DISCONNECTED"
+            )
+
+    return StreamingResponse(
+        event_generator(),
+        media_type="text/event-stream",
+        headers={
+            "Cache-Control": "no-cache",
+            "Connection": "keep-alive",
+            "X-Accel-Buffering": "no"
+        }
+    )
+
+
+@router.post(
+    "/feedback/detection"
+)
+def submit_detection_feedback(
+    request: DetectionFeedbackRequest,
+
+    current_user=Depends(
+        require_group(
+            [
+                "ad_modify_user"
+            ]
+        )
+    )
+):
+    try:
+
+        detection_event = (
+            get_detection_event_by_id(
+                request.event_id
+            )
+        )
+
+        if not detection_event:
+            return {
+                "success": False,
+                "message":
+                    "Detection event not found"
+            }
+
+        feedback_event = (
+            build_detection_feedback_event(
+                detection_event,
+                request.feedback
+            )
+        )
+
+        save_detection_feedback_dataset(
+            feedback_event
+        )
+
+        return {
+            "success": True,
+            "message":
+                "Detection feedback saved"
+        }
+
+    except Exception as e:
+
+        return {
+            "success": False,
+            "message": str(
+                e
+            )
+        }

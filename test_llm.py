@@ -29,7 +29,7 @@ ldap.connect(
 
 
 test_inputs = [
-    "disable user sonnm"
+    "Tôi cần đổi mô tả SonNM thành Nguyen Minh Son"
 ]
 
 # prompt = build_action_detection_prompt(

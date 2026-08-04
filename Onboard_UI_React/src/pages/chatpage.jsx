@@ -24,6 +24,7 @@ import {
 }
 from "../components/jwtHelper";
 
+
 const LOADING_MESSAGES = [
     "🤔 Ngáo đang phân tích yêu cầu...",
     "📋 Đang đối chiếu thông tin trong Active Directory...",
@@ -58,6 +59,10 @@ function ChatPage() {
     useState(
         LOADING_MESSAGES[0]
     );
+    const [
+        runtimeEvent,
+        setRuntimeEvent
+    ] = useState(null);
 
     const [activeAction, setActiveAction] = useState(null);
     useEffect(() => {
@@ -129,6 +134,7 @@ function ChatPage() {
         ]);
 
         setInput("");
+        setRuntimeEvent(null);
 
         setLoadingMessage(
             LOADING_MESSAGES[0]
@@ -140,6 +146,19 @@ function ChatPage() {
             console.log("Calling backend...");
 
             const result = await sendMessage(userText);
+            console.log(
+                "RUNTIME EVENTS",
+                result.events
+            );
+            if (
+                result.events &&
+                result.events.length > 0 &&
+                result.events[0].length > 0
+            ) {
+                setRuntimeEvent(
+                    result.events[0][0]
+                );
+            }
 
             setMessages(prev => [
             ...prev,
@@ -317,7 +336,7 @@ function ChatPage() {
     proposed_action_payload:
         buildSinglePayload(
             resolverData.target_object_type,
-            selectedObject,
+            selectedGroup,
             resolverData.proposed_action_payload
         )
 
@@ -864,7 +883,17 @@ function ChatPage() {
 
                 {loading && (
                     <div className="message assistant loading-bubble">
-                        {loadingMessage}
+
+                        {runtimeEvent && (
+                            <EventBubble
+                                event={runtimeEvent}
+                            />
+                        )}
+
+                        <div>
+                            {loadingMessage}
+                        </div>
+
                     </div>
                 )}
                 <div ref={messagesEndRef}></div>

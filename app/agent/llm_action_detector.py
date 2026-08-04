@@ -9,10 +9,14 @@ from app.agent.action_registry import (
     ACTION_REGISTRY
 )
 
+from app.agent.llm_action_detector_bk import detect_action_by_llm
 from app.agent.llm_client import (
     ask_llm
 )
-
+from app.agent.fast_command_detector import (
+    detect_fast_command,
+    extract_keywords
+)
 
 MIN_ACTION_CONFIDENCE = 0.70
 
@@ -68,6 +72,134 @@ def _build_stop_response(
         "raw_llm_response": raw_llm_response,
         "user_text": user_text
     }
+
+def detect_action(
+    user_text: str
+):
+    fast_result = detect_fast_command(
+    user_text
+    )
+
+    if fast_result:
+
+        variables = extract_keywords(
+            action_config=fast_result[
+                "action_config"
+            ],
+            user_text=user_text
+        )
+
+        extracted_keywords = {}
+
+        for key, value in variables.items():
+
+            if key == "new_value":
+                continue
+
+            extracted_keywords[key] = value
+
+        return build_detect_result(
+            action=fast_result["action"],
+
+            action_config=fast_result[
+                "action_config"
+            ],
+
+            extracted_keywords=
+                extracted_keywords,
+
+            confidence=1.0,
+
+            reason=
+                "Fast command matched",
+
+            new_value=variables.get(
+                "new_value"
+            ),
+
+            source="fast_command",
+
+            raw_response={
+                "fast_result": fast_result,
+                "variables": variables
+            }
+        )
+    
+    return detect_action_by_llm(user_text=user_text)
+
+
+
+def build_detect_result(
+    action: str,
+    extracted_keywords: dict,
+    action_config: dict,
+    confidence: float = 1.0,
+    reason: str = "",
+    new_value: str = None,
+    source: str = "llm",
+    raw_response=None
+):
+    return {
+    "success": True,
+
+    "status":
+        "ACTION_DETECTED",
+
+    "action":
+        action,
+
+    "display_name":
+        action_config.get(
+            "display_name"
+        ),
+
+    "confidence":
+        confidence,
+
+    "reason":
+        reason,
+
+    "requirements":
+        action_config.get(
+            "required_objects",
+            []
+        ),
+
+    "extracted_keywords":
+        extracted_keywords,
+
+    "new_value":
+        new_value,
+
+    "action_tool":
+        action_config.get(
+            "action_tool"
+        ),
+
+    "action_api":
+        action_config.get(
+            "action_api"
+        ),
+
+    "required_action_group":
+        action_config.get(
+            "required_action_group"
+        ),
+
+    "confirm_required":
+        action_config.get(
+            "confirm_required",
+            True
+        ),
+
+    "source":
+        source,
+
+    "raw_llm_response":
+        raw_response
+    }
+
+
 
 
 def detect_action_by_llm(
@@ -189,74 +321,13 @@ def detect_action_by_llm(
         action
     ]
 
-    return {
-        "success": True,
-
-        "status":
-            "ACTION_DETECTED",
-
-        "action":
-            action,
-
-        "display_name":
-            action_config.get(
-                "display_name"
-            ),
-
-        "confidence":
-            confidence,
-
-        "reason":
-            reason,
-
-        # "need_clarification":
-        #     need_clarification,
-
-        #
-        # Requirements are always loaded from registry.
-        # LLM must not decide required objects.
-        #
-        "requirements":
-            action_config.get(
-                "required_objects",
-                []
-            ),
-
-        #
-        # IMPORTANT:
-        # Pass through extracted keywords from LLM.
-        # Do NOT hard-code USER/GROUP/OU/COMPUTER here.
-        #
-        "extracted_keywords":
-            extracted_keywords,
-
-        "new_value":
-           new_value,
-
-        # "payload_key":
-        #     action_config.get("payload_key"),
-
-        "action_tool":
-            action_config.get(
-                "action_tool"
-            ),
-
-        "action_api":
-            action_config.get(
-                "action_api"
-            ),
-
-        "required_action_group":
-            action_config.get(
-                "required_action_group"
-            ),
-
-        "confirm_required":
-            action_config.get(
-                "confirm_required",
-                True
-            ),
-
-        "raw_llm_response":
-            parsed
-    }
+    return build_detect_result(
+        action=action,
+        extracted_keywords=extracted_keywords,
+        action_config=action_config,
+        confidence=confidence,
+        reason=reason,
+        new_value=new_value,
+        source="llm",
+        raw_response=parsed
+    )

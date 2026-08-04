@@ -40,3 +40,7 @@ class UpdateUserDisplayNameRequest(
     sam_account_name: str
 
     new_value: str
+
+class DetectionFeedbackRequest(BaseModel):
+    event_id: str
+    feedback: str

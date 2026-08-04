@@ -1,3 +1,4 @@
+import uuid
 from fastapi import (
     APIRouter,
     Depends,
@@ -52,14 +53,15 @@ def assistant_message(
 
     try:
 
-        print(
-            "LDAP CONNECTED =",
-            ldap.connection.bound
+        request_id = str(
+            uuid.uuid4()
         )
 
         result = resolve_action(
             user_text=request.message,
-            ldap_connection=ldap.connection
+            ldap_connection=ldap.connection,
+            username=current_user["sub"],
+            request_id=request_id
         )
 
         return result

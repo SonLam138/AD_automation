@@ -1,0 +1,1 @@
+{"event_name": "DETECTION_FEEDBACK", "user_query": "disable user sonnm", "detected_action": "disable_user", "detected_keywords": {"USER": "sonnm"}, "user_feedback": "ACCEPT", "detection_correct": true}

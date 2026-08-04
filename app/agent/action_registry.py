@@ -5,7 +5,14 @@ ACTION_REGISTRY = {
         "description": (
             "Disable or lock an Active Directory user account"
         ),
-
+        "fast_command": [
+            "Tôi cần disable user",
+            "Tôi cần khóa user"
+        ],
+        "kw_template": [
+            "Tôi cần disable user {USER}",
+            "Tôi cần khóa user {USER}"
+        ],
         "intent_hints": [
             "disable user",
             "disable account",
@@ -45,7 +52,14 @@ ACTION_REGISTRY = {
         "description": (
             "Add an Active Directory user to a group"
         ),
-
+        "fast_command": [
+            "Tôi cần add group member",
+            "Tôi cần thêm thành viên nhóm"
+        ],
+        "kw_template": [
+            "Tôi cần add group member {USER} {GROUP}",
+            "Tôi cần thêm thành viên nhóm {USER} {GROUP}"
+        ],
         "intent_hints": [
             "add ... group",
             "add to group",
@@ -95,7 +109,14 @@ ACTION_REGISTRY = {
         "description": (
             "Remove an Active Directory user from a group"
         ),
-
+        "fast_command": [
+            "Tôi cần xóa group member",
+            "Tôi cần xóa thành viên nhóm"
+        ],
+        "kw_template": [
+            "Tôi cần xóa group member {USER} {GROUP}",
+            "Tôi cần xóa thành viên nhóm {USER} {GROUP}"
+        ],
         "intent_hints": [
             "remove... group",
             "remove from group",
@@ -127,7 +148,7 @@ ACTION_REGISTRY = {
                 "search_tool": "search_group",
                 "required": True,
                 "action_param": "group_name",
-                "payload_key": "computer_name"
+                "payload_key": "group_name"
             }
         ],
 
@@ -146,7 +167,14 @@ ACTION_REGISTRY = {
         "description": (
             "Move an Active Directory user to another OU"
         ),
-
+        "fast_command": [
+            "Tôi cần move OU",
+            "Tôi cần chuyển OU"
+        ],
+        "kw_template": [
+            "Tôi cần move OU {USER} {OU}",
+            "Tôi cần chuyển OU {USER} {OU}"
+        ],
         "intent_hints": [
             "move user",
             "move to ou",
@@ -195,7 +223,14 @@ ACTION_REGISTRY = {
         "description": (
             "Disable an Active Directory COMPUTER account"
         ),
-
+        "fast_command": [
+            "Tôi cần disable computer",
+            "Tôi cần khóa máy tính"
+        ],
+        "kw_template": [
+            "Tôi cần disable computer {COMPUTER}",
+            "Tôi cần khóa máy tính {COMPUTER}"
+        ],
         "intent_hints": [
             "disable computer",
             "disable tài khoản máy tính",
@@ -233,7 +268,14 @@ ACTION_REGISTRY = {
         "description": (
             "Modify displayname of Active Directory Object USER to new value. Should be understand Modify...Object...Attribute"
         ),
-
+        "fast_command": [""
+            "Tôi cần đổi displayname",
+            "Tôi cần đổi tên hiển thị",
+            ],
+        "kw_template": [
+            "Tôi cần đổi displayname {USER} thành {new_value}",
+            "Tôi cần đổi tên hiển thị {USER} thành {new_value}",
+            ],
         "intent_hints": [
             "update displayname",
             "modify displayname",
@@ -272,7 +314,14 @@ ACTION_REGISTRY = {
         "description": (
             "Modify department of Active Directory Object USER to new value. Should be understand Modify...Object...Attribute"
         ),
-
+        "fast_command": [""
+            "Tôi cần đổi department",
+            "Tôi cần đổi tên phòng",
+            ],
+        "kw_template": [
+            "Tôi cần đổi department {USER} thành {new_value}",
+            "Tôi cần đổi tên phòng {USER} thành {new_value}",
+            ],
         "intent_hints": [
             "update department",
             "modify department",
@@ -311,7 +360,14 @@ ACTION_REGISTRY = {
         "description": (
             "Modify description of Active Directory Object USER to new value. Should be understand Modify...Object...Attribute"
         ),
-
+        "fast_command": [""
+            "Tôi cần đổi description",
+            "Tôi cần đổi mô tả",
+            ],
+        "kw_template": [""
+            "Tôi cần đổi description {USER} thành {new_value}",
+            "Tôi cần đổi mô tả {USER} thành {new_value}",
+            ],
         "intent_hints": [
             "update description",
             "modify description",

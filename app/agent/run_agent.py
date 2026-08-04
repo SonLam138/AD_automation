@@ -5,9 +5,9 @@ from app.search_tools.messages import (
     build_missing_keyword_message,
     build_resolver_message
 )
-
 from app.agent.llm_action_detector import (
-    detect_action_by_llm
+    detect_action_by_llm,
+    detect_action
 )
 
 from app.search_tools import (
@@ -30,7 +30,7 @@ from app.agent.action_handle import (
 )
 
 from app.search_tools.filter_by_action import filter_candidates_by_action
-
+from app.event.event_emitter import emit_event
 
 SEARCH_TOOL_MAP = {
     "search_user": search_user,
@@ -199,7 +199,9 @@ def get_candidate_approval_policy(
 
 def resolve_action(
     user_text: str,
-    ldap_connection
+    ldap_connection,
+    username=None,
+    request_id=None
 ):
     """
     Resolve Action Phase
@@ -218,12 +220,26 @@ def resolve_action(
     timer = PerfTimer(
     scope="RESOLVER"
 )
-
+    runtime_events = []
     timer.checkpoint(
         "START"
     )
-
-    detect_result = detect_action_by_llm(
+    runtime_events.append(
+        emit_event(
+            event_name="QUERY_RECEIVED",
+            request_id=request_id,
+            user_query=user_text,
+            username=username
+        )
+    )
+    runtime_events.append(
+        emit_event(
+            event_name="DETECTION_STARTED",
+            request_id=request_id,
+            user_query=user_text
+        )
+    )
+    detect_result = detect_action(
         user_text
     )
     print("detect_result")
@@ -260,6 +276,28 @@ def resolve_action(
             "proposed_action_payload":
                 {}
         }
+
+    detection_event = emit_event(
+        event_name="DETECTION_RESULT",
+
+        user_query=user_text,
+
+        detected_action=detect_result.get(
+            "action"
+        ),
+
+        detected_keywords=detect_result.get(
+            "extracted_keywords",
+            {}
+        ),
+
+        requirements=detect_result.get(
+            "requirements",
+            []
+        )
+    )
+
+    runtime_events.append(detection_event)
 
     requirements = detect_result.get(
         "requirements",
@@ -384,6 +422,16 @@ def resolve_action(
                     proposed_action_payload
             }
 
+        runtime_events.append(
+            emit_event(
+                event_name="OBJECT_SEARCH_STARTED",
+                request_id=request_id,
+                action=action,
+                object_type=object_type,
+                keyword=keyword,
+                search_tool=search_tool_name
+            )
+        )
         search_result = search_func(
             ldap_connection,
             keyword,
@@ -414,6 +462,23 @@ def resolve_action(
         ):
             disabled_user = all_results[0]
 
+            runtime_events.append(
+                emit_event(
+                    event_name="OBJECT_DISABLED",
+                    request_id=request_id,
+
+                    action=action,
+
+                    object_type=object_type,
+
+                    keyword=keyword,
+
+                    object_name=disabled_user.get(
+                        "sam_account_name"
+                    )
+                )
+            )
+
             return {
                 "status": "OBJECT_DISABLED",
                 "state": "OBJECT_DISABLED",
@@ -426,9 +491,18 @@ def resolve_action(
             }
 
         #
-        # NOT FOUND
+        # OBJECT NOT FOUND
         #
         if count == 0:
+            runtime_events.append(
+                emit_event(
+                    event_name="OBJECT_NOT_FOUND",
+                    request_id=request_id,
+                    action=action,
+                    object_type=object_type,
+                    keyword=keyword
+                )
+            )
 
             if final_status != (
                 "NEED_OBJECT_SELECTION"
@@ -453,6 +527,17 @@ def resolve_action(
         # NEED_OBJECT_SELECTION
         #
         if count > 1:
+
+            runtime_events.append(
+                emit_event(
+                    event_name="OBJECT_MULTI_MATCH",
+                    request_id=request_id,
+                    action=action,
+                    object_type=object_type,
+                    keyword=keyword,
+                    match_count=count
+                )
+            )
 
             final_status = (
                 "NEED_OBJECT_SELECTION"
@@ -497,12 +582,36 @@ def resolve_action(
             object_type=object_type,
             candidates=results
             ))
+            runtime_events.append(
+                emit_event(
+                    event_name="APPROVAL_POLICY_RESOLVED",
+                    request_id=request_id,
+
+                    action=action,
+
+                    object_type=object_type,
+
+                    policy=approval_policy,
+
+                    policy_source="MULTI_MATCH"
+                )
+            )
 
             continue
 
         #
         # RESOLVED (count == 1)
         #
+
+        runtime_events.append(
+            emit_event(
+                event_name="OBJECT_FOUND",
+                request_id=request_id,
+                action=action,
+                object_type=object_type,
+                keyword=keyword
+            )
+        )
         item = results[0]
 
         resolved_objects[
@@ -547,6 +656,16 @@ def resolve_action(
                     resolved_objects=resolved_objects
                 )
             )
+        runtime_events.append(
+            emit_event(
+            event_name="CONFIRM_READY",
+            request_id=request_id,
+            action=action,
+            approval_policy=approval_policy,
+            payload=proposed_action_payload
+            )
+            )
+  
         state = "CONFIRM_READY"
 
 
@@ -607,6 +726,7 @@ def resolve_action(
             result
         )
 
+    result["events"] = [runtime_events]
 
     timer.finish(
     "END"
