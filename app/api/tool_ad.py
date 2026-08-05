@@ -67,7 +67,7 @@ def disable_user(
     current_user=Depends(
         require_group(
             [
-                "ad_dis_user"
+                "ad_status_user"
             ]
         )
     )
@@ -139,6 +139,87 @@ def disable_user(
             status_code=500,
             detail=str(ex)
         )
+
+@router.post("/enable-user")
+def enable_user(
+    request: DisableUserRequest,
+
+    current_user=Depends(
+        require_group(
+            [
+                "ad_status_user"
+            ]
+        )
+    )
+):
+    emit_event(
+        event_name="CONFIRM_ACCEPTED",
+
+        action="enable_user",
+
+        request=request.model_dump()
+    )
+
+    emit_event(
+        event_name="ACTION_STARTED",
+
+        action="enable_user",
+
+        request=request.model_dump()
+    )
+
+    try:
+
+        result = ldap.enable_user(
+            request.sam_account_name
+        )
+        emit_event(
+            event_name="ACTION_COMPLETED",
+
+            action="enable_user",
+
+            request=request.model_dump(),
+
+            execution_result=result
+        )
+
+
+        execution_contract = {
+            "state": "ACTION_SUCCESS",
+            "action": "enable_user",
+            "proposed_action_payload": {
+                "sam_account_name":
+                    request.sam_account_name
+            },
+            "execution_result": result
+        }
+
+        message = generate_execution_response(
+            execution_contract
+        )
+
+        return {
+            "success": True,
+            "message": message,
+            "execution_result": result
+        }
+
+    except Exception as ex:
+        emit_event(
+            event_name="ACTION_FAILED",
+
+            action="enable_user",
+
+            request=request.model_dump(),
+
+            error=str(ex)
+        )
+
+        raise HTTPException(
+            status_code=500,
+            detail=str(ex)
+        )
+    
     
 @router.post("/add-group")
 def add_group(
@@ -646,6 +727,96 @@ def update_user_department(
             event_name="ACTION_FAILED",
 
             action="update_user_department",
+
+            request=request.model_dump(),
+
+            error=str(ex)
+        )
+
+        raise HTTPException(
+            status_code=500,
+            detail=str(ex)
+        )
+
+@router.post(
+    "/update-user-ip-phone"
+)
+def update_user_ip_phone(
+    request: UpdateUserDisplayNameRequest,
+
+    current_user=Depends(
+        require_group(
+            [
+                "ad_modify_user"
+            ]
+        )
+    )
+):
+    emit_event(
+        event_name="CONFIRM_ACCEPTED",
+
+        action="update_user_ip_phone",
+
+        request=request.model_dump()
+    )
+    emit_event(
+        event_name="ACTION_STARTED",
+
+        action="update_user_ip_phone",
+
+        request=request.model_dump()
+    )
+
+    try:
+
+        result = ldap.update_user_ip_phone(
+            request.sam_account_name,
+            request.new_value
+        )
+        emit_event(
+            event_name="ACTION_COMPLETED",
+
+            action="update_user_ip_phone",
+
+            request=request.model_dump(),
+
+            execution_result=result
+        )
+
+        execution_contract = {
+            "state":
+                "ACTION_SUCCESS",
+
+            "action":
+                "update_user_ip_phone",
+
+            "proposed_action_payload": {
+                "sam_account_name":
+                    request.sam_account_name,
+
+                "new_ip_phone":
+                    request.new_value
+            },
+
+            "execution_result":
+                result
+        }
+
+        message = generate_execution_response(
+            execution_contract
+        )
+
+        return {
+            "success": True,
+            "message": message,
+            "execution_result": result
+        }
+
+    except Exception as ex:
+        emit_event(
+            event_name="ACTION_FAILED",
+
+            action="update_user_ip_phone",
 
             request=request.model_dump(),
 

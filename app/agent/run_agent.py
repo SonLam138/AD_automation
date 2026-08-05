@@ -55,7 +55,8 @@ def _get_action_param_value(
             "sam_account_name",
             "displayname",
             "department",
-            "description"
+            "description",
+            "ipPhone"
         ):
             return item.get(
                 "sam_account_name"
@@ -453,12 +454,16 @@ def resolve_action(
         #
         # OBJECT DISABLED
         #
+        ALLOW_DISABLED_OBJECT_ACTIONS = [
+            "enable_user"
+        ]
         if (
             len(all_results) == 1
             and all_results[0].get(
                 "is_disabled",
                 False
             )
+            and action not in ALLOW_DISABLED_OBJECT_ACTIONS
         ):
             disabled_user = all_results[0]
 

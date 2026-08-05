@@ -29,7 +29,7 @@ ldap.connect(
 
 
 test_inputs = [
-    "Tôi cần đổi mô tả SonNM thành Nguyen Minh Son"
+    "toi cần đổi sdt IP SonNM 41555"
 ]
 
 # prompt = build_action_detection_prompt(

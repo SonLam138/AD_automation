@@ -1,7 +1,33 @@
 
 from app.agent.action_registry import ACTION_REGISTRY
 import re
+import unicodedata
 
+def normalize_text(
+    text: str
+):
+    if not text:
+        return ""
+
+    text = text.lower().strip()
+
+    text = unicodedata.normalize(
+        "NFD",
+        text
+    )
+
+    text = "".join(
+        c
+        for c in text
+        if unicodedata.category(c) != "Mn"
+    )
+
+    text = text.replace(
+        "đ",
+        "d"
+    )
+
+    return text
 
 
 def parse_fast_command(
@@ -19,25 +45,31 @@ def parse_fast_command(
 
     """
 
-    pattern = re.escape(template)
+    normalized_template = normalize_text(
+        template
+    )
+
+    pattern = re.escape(
+        normalized_template
+    )
 
     pattern = pattern.replace(
-        r"\{USER\}",
+        r"\{user\}",
         r"(?P<USER>.+?)"
     )
 
     pattern = pattern.replace(
-        r"\{OU\}",
+        r"\{ou\}",
         r"(?P<OU>.+?)"
     )
 
     pattern = pattern.replace(
-        r"\{GROUP\}",
+        r"\{group\}",
         r"(?P<GROUP>.+?)"
     )
 
     pattern = pattern.replace(
-        r"\{COMPUTER\}",
+        r"\{computer\}",
         r"(?P<COMPUTER>.+?)"
     )
 
@@ -48,11 +80,17 @@ def parse_fast_command(
 
     pattern = "^" + pattern + "$"
 
-    match = re.match(
-        pattern,
-        user_text.strip(),
-        re.IGNORECASE
+    #normalized_pattern = normalize_text(pattern)
+
+    normalized_user_text = normalize_text(
+        user_text
     )
+
+    match = re.match(
+    pattern,
+    normalized_user_text,
+    re.IGNORECASE
+)
 
     if not match:
         return None
@@ -79,7 +117,9 @@ def detect_fast_command(
     if not user_text:
         return None
 
-    user_text = user_text.strip().lower()
+    normalized_user_text = normalize_text(
+        user_text
+    )
 
     for action_name, action_config in ACTION_REGISTRY.items():
 
@@ -93,8 +133,12 @@ def detect_fast_command(
 
         for command in fast_commands:
 
-            if user_text.startswith(
-                command.strip().lower()
+            normalized_command = normalize_text(
+                command
+            )
+
+            if normalized_user_text.startswith(
+                normalized_command
             ):
 
                 return {

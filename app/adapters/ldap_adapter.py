@@ -1269,7 +1269,7 @@ class LDAPAdapter:
         }
     
     #================================
-    # AD TOOL - SEARCH USER #
+    # AD TOOL - Disable User
     #================================
     def disable_user(
         self,
@@ -1330,6 +1330,72 @@ class LDAPAdapter:
         return {
             "success": True,
             "action": "disable_user",
+            "sam_account_name": sam_account_name,
+            "user_dn": user_dn
+        }
+
+    #================================
+    # AD TOOL - Enable User
+    #================================
+    def enable_user(
+        self,
+        sam_account_name: str
+    ):
+
+        search_filter = (
+            f"(sAMAccountName={sam_account_name})"
+        )
+
+        self.connection.search(
+            search_base=LDAP_BASE_DN,
+            search_filter=search_filter,
+            attributes=[
+                "distinguishedName",
+                "userAccountControl"
+            ]
+        )
+
+        if not self.connection.entries:
+            raise Exception(
+                f"User not found: {sam_account_name}"
+            )
+
+        user = self.connection.entries[0]
+
+        user_dn = str(
+            user.distinguishedName.value
+        )
+
+        current_uac = int(
+            user.userAccountControl.value
+        )
+
+        ACCOUNTDISABLE = 2
+
+        new_uac = (
+            current_uac & ~ACCOUNTDISABLE
+        )
+
+        success = self.connection.modify(
+            user_dn,
+            {
+                "userAccountControl": [
+                    (
+                        MODIFY_REPLACE,
+                        [new_uac]
+                    )
+                ]
+            }
+        )
+
+        if not success:
+            raise Exception(
+                self.connection.result
+            )
+
+        return {
+            "success": True,
+            "action": "enable_user",
             "sam_account_name": sam_account_name,
             "user_dn": user_dn
         }
@@ -1398,7 +1464,71 @@ class LDAPAdapter:
             "user_dn":
                 user_dn
         }
+    
+    #===================================
+    # AD TOOL - UPDATE USER IP PHONE
+    #===================================
+    def update_user_ip_phone(
+        self,
+        sam_account_name: str,
+        new_ip_phone: str
+    ):
 
+        search_filter = (
+            f"(sAMAccountName={sam_account_name})"
+        )
+
+        self.connection.search(
+            search_base=LDAP_BASE_DN,
+            search_filter=search_filter,
+            attributes=[
+                "distinguishedName",
+                "ipPhone"
+            ]
+        )
+
+        if not self.connection.entries:
+            raise Exception(
+                f"User not found: {sam_account_name}"
+            )
+
+        user = self.connection.entries[0]
+
+        user_dn = str(
+            user.distinguishedName.value
+        )
+
+        success = self.connection.modify(
+            user_dn,
+            {
+                "ipPhone": [
+                    (
+                        MODIFY_REPLACE,
+                        [new_ip_phone]
+                    )
+                ]
+            }
+        )
+
+        if not success:
+            raise Exception(
+                self.connection.result
+            )
+
+        return {
+            "success": True,
+            "action":
+                "update_user_ip_phone",
+
+            "sam_account_name":
+                sam_account_name,
+
+            "new_ip_phone":
+                new_ip_phone,
+
+            "user_dn":
+                user_dn
+        }
 
     #==================================
     # AD TOOL - UPDATE USER DEPARTMENT

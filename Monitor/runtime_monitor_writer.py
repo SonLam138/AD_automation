@@ -121,17 +121,11 @@ def update_runtime_from_event(
 ):
     """
     Update runtime monitor counters by runtime event name.
-
-    Rules:
-    - QUERY_RECEIVED   -> total_requests + 1
-    - ACTION_COMPLETED -> success_count + 1
-    - ACTION_FAILED    -> failed_count + 1
-
-    Other events are ignored.
     """
 
     if event_name not in [
         "QUERY_RECEIVED",
+        "OBJECT_NOT_FOUND",
         "ACTION_COMPLETED",
         "ACTION_FAILED"
     ]:
@@ -142,11 +136,14 @@ def update_runtime_from_event(
     if event_name == "QUERY_RECEIVED":
         data["total_requests"] += 1
 
-    if event_name == "ACTION_COMPLETED":
-        data["success_count"] += 1
+    elif event_name == "OBJECT_NOT_FOUND":
+        data["action_build_failed"] += 1
 
-    if event_name == "ACTION_FAILED":
-        data["failed_count"] += 1
+    elif event_name == "ACTION_COMPLETED":
+        data["execute_action_success"] += 1
+
+    elif event_name == "ACTION_FAILED":
+        data["execute_action_failed"] += 1
 
     result = write_runtime_monitor(
         data

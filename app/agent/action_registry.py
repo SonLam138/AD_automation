@@ -41,8 +41,54 @@ ACTION_REGISTRY = {
 
         "action_api": "/api/ad/disable-user",
 
-        "required_action_group": "ad_dis_user",
+        "required_action_group": "ad_status_user",
 
+        "confirm_required": True
+    },
+
+    "enable_user": {
+        "display_name": "Enable AD User",
+
+        "description": (
+            "Enable an Active Directory user account"
+        ),
+        "fast_command": [
+            "Tôi cần enable user",
+            "Tôi cần mở khóa user"
+        ],
+        "kw_template": [
+            "Tôi cần enable user {USER}",
+            "Tôi cần mở khóa user {USER}"
+        ],
+        "intent_hints": [
+            "enable user",
+            "enable account",
+            "unlock user",
+            "unlock account",
+            "mở khóa user",
+            "mo khoa user",
+            "mở khóa tài khoản",
+            "mo khoa tai khoan",
+            "kích hoạt user",
+            "enable"
+        ],
+    
+        "required_objects": [
+            {
+                "object_type": "USER",
+                "search_tool": "search_user",
+                "required": True,
+                "action_param": "sam_account_name",
+                "payload_key": "sam_account_name"
+            }
+        ],
+    
+        "action_tool": "enable_user",
+    
+        "action_api": "/api/ad/enable-user",
+    
+        "required_action_group": "ad_status_user",
+    
         "confirm_required": True
     },
 
@@ -274,7 +320,7 @@ ACTION_REGISTRY = {
             ],
         "kw_template": [
             "Tôi cần đổi displayname {USER} {new_value}",
-            "Tôi cần đổi tên hiển thị {USER} {new_value}",
+            "Tôi cần đổi tên hiển thị {USER} {new_value}"
             ],
         "intent_hints": [
             "update displayname",
@@ -316,11 +362,11 @@ ACTION_REGISTRY = {
         ),
         "fast_command": [""
             "Tôi cần đổi department",
-            "Tôi cần đổi tên phòng",
+            "Tôi cần đổi tên phòng"
             ],
         "kw_template": [
             "Tôi cần đổi department {USER} {new_value}",
-            "Tôi cần đổi tên phòng {USER} {new_value}",
+            "Tôi cần đổi tên phòng {USER} {new_value}"
             ],
         "intent_hints": [
             "update department",
@@ -354,6 +400,54 @@ ACTION_REGISTRY = {
         "confirm_required": True
     },
 
+    "update_user_IPphone": {
+        "IPphone": "update user IP phone",
+
+        "description": (
+            "Modify IP phone of Active Directory Object USER to new value. Should be understand Modify...Object...Attribute"
+        ),
+        "fast_command": [""
+            "Tôi cần đổi IPphone",
+            "Tôi cần đổi số điện thoại IP",
+            "Tôi cần đổi sdt IP"
+            ],
+        "kw_template": [
+            "Tôi cần đổi IPphone {USER} {new_value}",
+            "Tôi cần đổi số điện thoại IP {USER} {new_value}",
+            "Tôi cần đổi sdt IP {USER} {new_value}"
+            ],
+        "intent_hints": [
+            "update IPphone",
+            "modify IPphone",
+            "cập nhật IPphone",
+            "Đổi IPphone",
+            "Đổi số điện thoại IP",
+            "update số điện thoại IP",
+            "Cập nhật số điện thoại IP",
+            "Modify số điện thoại IP"
+    
+        ],
+    
+        "required_objects": [
+            {
+                "object_type": "USER",
+                "search_tool": "search_user",
+                "required": True,
+                "action_param": "ipPhone",
+                "payload_key": "sam_account_name",
+                "new_value": "new value"
+            }
+        ],
+    
+        "action_tool": "update_user_ip_phone",
+    
+        "action_api": "/api/ad/update-user-ip-phone",
+    
+        "required_action_group": "ad_user_mgmt",
+    
+        "confirm_required": True
+    },
+
     "update_user_description": {
         "description": "update user description",
 
@@ -362,11 +456,11 @@ ACTION_REGISTRY = {
         ),
         "fast_command": [""
             "Tôi cần đổi description",
-            "Tôi cần đổi mô tả",
+            "Tôi cần đổi mô tả"
             ],
         "kw_template": [""
             "Tôi cần đổi description {USER} {new_value}",
-            "Tôi cần đổi mô tả {USER} {new_value}",
+            "Tôi cần đổi mô tả {USER} {new_value}"
             ],
         "intent_hints": [
             "update description",

@@ -9086,5 +9086,248 @@
     "new_value": null,
     "approval_policy": "normal",
     "action_id": "ec32688e-5ef7-4f3a-87c5-8807866e1693"
+  },
+  "f2d3d75f-47cf-408a-b2cd-9406cc7ddc0b": {
+    "status": "NOT_FOUND",
+    "state": "WAITING_REQUIRED_OBJECT",
+    "next_step": "ASK_REQUIRED_OBJECT",
+    "action": "disable_user",
+    "target_object_type": "USER",
+    "resolved_objects": {},
+    "candidate_objects": {},
+    "proposed_action_payload": {},
+    "new_value": null,
+    "approval_policy": null,
+    "action_id": "f2d3d75f-47cf-408a-b2cd-9406cc7ddc0b"
+  },
+  "871ae48f-62bc-4990-9691-090fb77a5e1a": {
+    "status": "NOT_FOUND",
+    "state": "WAITING_REQUIRED_OBJECT",
+    "next_step": "ASK_REQUIRED_OBJECT",
+    "action": "disable_user",
+    "target_object_type": "USER",
+    "resolved_objects": {},
+    "candidate_objects": {},
+    "proposed_action_payload": {},
+    "new_value": null,
+    "approval_policy": null,
+    "action_id": "871ae48f-62bc-4990-9691-090fb77a5e1a"
+  },
+  "7be0084a-1670-4926-9fbe-ae56bdc8d474": {
+    "status": "NOT_FOUND",
+    "state": "WAITING_REQUIRED_OBJECT",
+    "next_step": "ASK_REQUIRED_OBJECT",
+    "action": "disable_user",
+    "target_object_type": "USER",
+    "resolved_objects": {},
+    "candidate_objects": {},
+    "proposed_action_payload": {},
+    "new_value": null,
+    "approval_policy": null,
+    "action_id": "7be0084a-1670-4926-9fbe-ae56bdc8d474"
+  },
+  "7bcb2baa-8f06-4d7e-9cde-9157f642204a": {
+    "status": "READY_TO_CONFIRM",
+    "state": "CONFIRM_READY",
+    "next_step": "CONFIRM_ACTION",
+    "action": "enable_user",
+    "target_object_type": null,
+    "resolved_objects": {
+      "USER": {
+        "object_type": "USER",
+        "display_name": "Nguyen minh son",
+        "sam_account_name": "sonnm2",
+        "mail": "",
+        "department": "",
+        "title": "",
+        "distinguished_name": "CN=Nguyen Minh Son - Test,OU=HO,DC=automate,DC=com,DC=vn",
+        "user_account_control": "514",
+        "is_disabled": true
+      }
+    },
+    "candidate_objects": {},
+    "proposed_action_payload": {
+      "sam_account_name": "sonnm2"
+    },
+    "new_value": null,
+    "approval_policy": "normal",
+    "action_id": "7bcb2baa-8f06-4d7e-9cde-9157f642204a"
+  },
+  "e0a6c115-9f02-4f17-a39b-89bbc29bb97d": {
+    "status": "READY_TO_CONFIRM",
+    "state": "CONFIRM_READY",
+    "next_step": "CONFIRM_ACTION",
+    "action": "update_user_description",
+    "target_object_type": null,
+    "resolved_objects": {
+      "USER": {
+        "object_type": "USER",
+        "display_name": "Nguyen minh son",
+        "sam_account_name": "sonnm2",
+        "mail": "",
+        "department": "",
+        "title": "",
+        "distinguished_name": "CN=Nguyen Minh Son - Test,OU=HO,DC=automate,DC=com,DC=vn",
+        "user_account_control": "512",
+        "is_disabled": false
+      }
+    },
+    "candidate_objects": {},
+    "proposed_action_payload": {
+      "sam_account_name": "sonnm2",
+      "new_value": "son minh nguyen"
+    },
+    "new_value": "son minh nguyen",
+    "approval_policy": "normal",
+    "action_id": "e0a6c115-9f02-4f17-a39b-89bbc29bb97d"
+  },
+  "8b3bd750-25cc-4dcb-91b5-2501945e55f1": {
+    "status": "READY_TO_CONFIRM",
+    "state": "CONFIRM_READY",
+    "next_step": "CONFIRM_ACTION",
+    "action": "update_user_displayName",
+    "target_object_type": null,
+    "resolved_objects": {
+      "USER": {
+        "object_type": "USER",
+        "display_name": "Nguyen minh son",
+        "sam_account_name": "sonnm2",
+        "mail": "",
+        "department": "",
+        "title": "",
+        "distinguished_name": "CN=Nguyen Minh Son - Test,OU=HO,DC=automate,DC=com,DC=vn",
+        "user_account_control": "512",
+        "is_disabled": false
+      }
+    },
+    "candidate_objects": {},
+    "proposed_action_payload": {
+      "sam_account_name": "sonnm2",
+      "new_value": "nguyen minh son-test2"
+    },
+    "new_value": "nguyen minh son-test2",
+    "approval_policy": "normal",
+    "action_id": "8b3bd750-25cc-4dcb-91b5-2501945e55f1"
+  },
+  "46ec48f1-0019-4645-bd82-10b1ff2abc90": {
+    "status": "NEED_OBJECT_SELECTION",
+    "state": "WAITING_OBJECT_SELECTION",
+    "next_step": "ASK_OBJECT_SELECTION",
+    "action": "update_user_IPphone",
+    "target_object_type": "USER",
+    "resolved_objects": {},
+    "candidate_objects": {
+      "USER": [
+        {
+          "object_type": "USER",
+          "display_name": "Nguyen Minh Son(K.CNTT-Test)",
+          "sam_account_name": "sonnm",
+          "mail": "sonnm@automate.com.vn",
+          "department": "",
+          "title": "",
+          "distinguished_name": "CN=Nguyen Minh Son,OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false,
+          "approval_policy": "admin_secret"
+        },
+        {
+          "object_type": "USER",
+          "display_name": "nguyen minh son-test2",
+          "sam_account_name": "sonnm2",
+          "mail": "",
+          "department": "",
+          "title": "",
+          "distinguished_name": "CN=Nguyen Minh Son - Test,OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false,
+          "approval_policy": "normal"
+        }
+      ]
+    },
+    "proposed_action_payload": {},
+    "new_value": "41555",
+    "approval_policy": "admin_secret",
+    "action_id": "46ec48f1-0019-4645-bd82-10b1ff2abc90"
+  },
+  "be98c63b-f1fd-4e69-b07a-2015a3401f5e": {
+    "status": "NEED_OBJECT_SELECTION",
+    "state": "WAITING_OBJECT_SELECTION",
+    "next_step": "ASK_OBJECT_SELECTION",
+    "action": "update_user_IPphone",
+    "target_object_type": "USER",
+    "resolved_objects": {},
+    "candidate_objects": {
+      "USER": [
+        {
+          "object_type": "USER",
+          "display_name": "Nguyen Minh Son(K.CNTT-Test)",
+          "sam_account_name": "sonnm",
+          "mail": "sonnm@automate.com.vn",
+          "department": "",
+          "title": "",
+          "distinguished_name": "CN=Nguyen Minh Son,OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false,
+          "approval_policy": "admin_secret"
+        },
+        {
+          "object_type": "USER",
+          "display_name": "nguyen minh son-test2",
+          "sam_account_name": "sonnm2",
+          "mail": "",
+          "department": "",
+          "title": "",
+          "distinguished_name": "CN=Nguyen Minh Son - Test,OU=HO,DC=automate,DC=com,DC=vn",
+          "user_account_control": "512",
+          "is_disabled": false,
+          "approval_policy": "normal"
+        }
+      ]
+    },
+    "proposed_action_payload": {},
+    "new_value": "1555",
+    "approval_policy": "admin_secret",
+    "action_id": "be98c63b-f1fd-4e69-b07a-2015a3401f5e"
+  },
+  "a795ad14-282f-4a46-b326-2b3fe33e40cf": {
+    "status": "READY_TO_CONFIRM",
+    "state": "CONFIRM_READY",
+    "next_step": "CONFIRM_ACTION",
+    "action": "update_user_IPphone",
+    "target_object_type": null,
+    "resolved_objects": {
+      "USER": {
+        "object_type": "USER",
+        "display_name": "nguyen minh son-test2",
+        "sam_account_name": "sonnm2",
+        "mail": "",
+        "department": "",
+        "title": "",
+        "distinguished_name": "CN=Nguyen Minh Son - Test,OU=HO,DC=automate,DC=com,DC=vn",
+        "user_account_control": "512",
+        "is_disabled": false
+      }
+    },
+    "candidate_objects": {},
+    "proposed_action_payload": {
+      "sam_account_name": "sonnm2",
+      "new_value": "1555"
+    },
+    "new_value": "1555",
+    "approval_policy": "normal",
+    "action_id": "a795ad14-282f-4a46-b326-2b3fe33e40cf"
+  },
+  "103583a6-3260-43c2-9cec-ae03ac3b0eb0": {
+    "status": "NOT_FOUND",
+    "state": "WAITING_REQUIRED_OBJECT",
+    "next_step": "ASK_REQUIRED_OBJECT",
+    "action": "update_user_displayName",
+    "target_object_type": "USER",
+    "resolved_objects": {},
+    "candidate_objects": {},
+    "proposed_action_payload": {},
+    "new_value": "ddv",
+    "approval_policy": null,
+    "action_id": "103583a6-3260-43c2-9cec-ae03ac3b0eb0"
   }
 }
