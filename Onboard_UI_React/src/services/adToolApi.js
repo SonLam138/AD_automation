@@ -10,6 +10,16 @@ export async function disableUser(payload) {
     return response.data;
 }
 
+export async function enableUser(payload) {
+
+    const response = await axiosClient.post(
+        "/api/ad/enable-user",
+        payload
+    );
+
+    return response.data;
+}
+
 export async function addGroup(payload) {
 
     const response = await axiosClient.post(
@@ -77,6 +87,20 @@ export async function updateUserDisplayName(
 
     return response.data;
 }
+
+export async function updateUserIpPhone(
+    payload
+) {
+    const response =
+        await axiosClient.post(
+            "/api/ad/update-user-ip-phone",
+            payload
+        );
+
+    return response.data;
+}
+
+
 
 export async function updateUserDepartment(
     payload

@@ -65,7 +65,7 @@
     grid-template-columns:
         repeat(
             auto-fit,
-            minmax(220px, 1fr)
+            minmax(160px, 1fr)
         );
 
     gap: 20px;
@@ -120,6 +120,11 @@
 .card-success {
     border-top-color: #2db55d;
 }
+
+.build-failed {
+    border-top-color: #ee6604;
+}
+
 
 .card-failed {
     border-top-color: #dc3545;

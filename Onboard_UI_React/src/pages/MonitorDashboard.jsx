@@ -177,22 +177,30 @@ return (
                         {dashboard.total_requests}
                     </div>
                 </div>
+                <div className="monitor-card build-failed">
+                    <div className="monitor-card-title">
+                        Build Failed
+                    </div>
+                    <div className="monitor-card-value">
+                        {dashboard.action_build_failed}
+                    </div>
+                </div>
 
                 <div className="monitor-card card-success">
                     <div className="monitor-card-title">
-                        Success
+                        Execute Success
                     </div>
                     <div className="monitor-card-value">
-                        {dashboard.success_count}
+                        {dashboard.execute_action_success}
                     </div>
                 </div>
 
                 <div className="monitor-card card-failed">
                     <div className="monitor-card-title">
-                        Failed
+                        Execute Failed
                     </div>
                     <div className="monitor-card-value">
-                        {dashboard.failed_count}
+                        {dashboard.execute_action_failed}
                     </div>
                 </div>
 

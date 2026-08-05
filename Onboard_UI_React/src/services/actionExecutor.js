@@ -7,10 +7,12 @@ import {
     disableComputer,
     updateUserDisplayName,
     updateUserDepartment,
-    updateUserDescription
+    updateUserDescription,
+    enableUser,
+    updateUserIpPhone
 } from "./adToolApi";
 
-const ACTION_MAP = { //Map từ action trong resolver thành action execute
+const ACTION_MAP = { //Map từ action trong resolver (in registry) thành action execute
 
     disable_user: disableUser,
     disable_computer: disableComputer, 
@@ -25,7 +27,9 @@ const ACTION_MAP = { //Map từ action trong resolver thành action execute
     move_user_to_ou: moveUser,
     update_user_displayName: updateUserDisplayName,
     update_user_department: updateUserDepartment,
-    update_user_description: updateUserDescription
+    update_user_description: updateUserDescription,
+    enable_user: enableUser,
+    update_user_IPphone: updateUserIpPhone
 };
 
 export async function executeAction(
