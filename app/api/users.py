@@ -5,23 +5,22 @@ from fastapi import HTTPException
 from app.auth.rbac import require_group
 
 from app.adapters.ldap_adapter import LDAPAdapter
-
+from app.adapters.ldap_container import (
+    ldap,
+)
 from app.config import (
-    LDAP_HOST,
-    LDAP_USER,
-    LDAP_PASSWORD,
     LDAP_BASE_DN
 )
 
 router = APIRouter()
 
-ldap = LDAPAdapter()
+# ldap = LDAPAdapter()
 
-ldap.connect(
-    LDAP_HOST,
-    LDAP_USER,
-    LDAP_PASSWORD
-)
+# ldap.connect(
+#     LDAP_HOST,
+#     LDAP_USER,
+#     LDAP_PASSWORD
+# )
 
 
 @router.get("/{sam_account_name}")

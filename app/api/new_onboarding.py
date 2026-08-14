@@ -11,18 +11,21 @@ from app.models.user import (
 from app.adapters.ldap_adapter import (
     LDAPAdapter
 )
+from app.adapters.ldap_container import (
+    ldap,
+)
 
 from app.config import *
 
 router = APIRouter()
 
-ldap = LDAPAdapter()
+# ldap = LDAPAdapter()
 
-ldap.connect(
-    LDAP_HOST,
-    LDAP_USER,
-    LDAP_PASSWORD
-)
+# ldap.connect(
+#     LDAP_HOST,
+#     LDAP_USER,
+#     LDAP_PASSWORD
+# )
 
 def get_current_user_value(
     current_user,

@@ -1,0 +1,44 @@
+{
+  "request_id": "REQ_09082026_13B1",
+  "workflow_id": "OFFBOARDING_RESIGNED",
+  "execute_at": "2026-08-09T00:00:00",
+  "actions": [
+    {
+      "id": "STEP_01",
+      "action_code": "disable_user",
+      "display_name": "Disable User",
+      "execution": {
+        "depends_on": [],
+        "delay_minutes": 0,
+        "retry_count": 3,
+        "continue_on_error": false
+      }
+    },
+    {
+      "id": "STEP_02",
+      "action_code": "move_disabled_ou",
+      "display_name": "Move To Disabled OU",
+      "execution": {
+        "depends_on": [
+          "STEP_01"
+        ],
+        "delay_minutes": 30,
+        "retry_count": 3,
+        "continue_on_error": false
+      }
+    },
+    {
+      "id": "STEP_03",
+      "action_code": "remove_all_groups",
+      "display_name": "Remove All Groups",
+      "execution": {
+        "depends_on": [
+          "STEP_02"
+        ],
+        "delay_minutes": 0,
+        "retry_count": 3,
+        "continue_on_error": false
+      }
+    }
+  ]
+}

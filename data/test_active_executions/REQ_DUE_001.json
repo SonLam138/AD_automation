@@ -1,0 +1,25 @@
+{
+  "request_id": "REQ_DUE_001",
+  "workflow_id": "TEST_WORKFLOW",
+  "execute_at": "2026-08-09T10:00:00",
+  "actions": [
+    {
+      "id": "STEP_01",
+      "action_code": "disable_user",
+      "display_name": "Disable User",
+      "execution": {
+        "depends_on": [],
+        "delay_minutes": 0,
+        "retry_count": 3,
+        "continue_on_error": false
+      }
+    }
+  ],
+  "status": "SCHEDULED",
+  "current_action_id": null,
+  "completed_action_ids": [],
+  "failed_action_ids": [],
+  "created_at": "2026-08-10T01:17:46.869520",
+  "updated_at": "2026-08-10T01:17:46.929199",
+  "is_scheduled": true
+}

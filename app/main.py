@@ -12,9 +12,31 @@ from app.api.onboarding_request import router as onboarding_request_router
 from app.api.tool_ad import router as tool_ad_router
 from Onboard_UI.routers.auth_router import router as onboard_ui_router
 from app.api import chat
+from app.api.workflow_request import router as workflow_request
+from app.auto_engine.runtime.runtime_container import workflow_runtime
+from contextlib import asynccontextmanager
+
+
+@asynccontextmanager
+async def lifespan(
+    app: FastAPI,
+):
+
+    workflow_runtime.start_workflow_engine()
+
+    try:
+
+        yield
+
+    finally:
+
+        workflow_runtime.stop_workflow_engine()
+
+
 
 app = FastAPI(
-    title="AD Capability Service"
+    title="AD Capability Service",
+    lifespan=lifespan
 )
 app.add_middleware(
     CORSMiddleware,
@@ -84,3 +106,8 @@ app.include_router(
     tags=["Chat"]
 )
 
+app.include_router(
+    workflow_request,
+    prefix="/api/workflow",
+    tags=["Workflow Engine"]
+)

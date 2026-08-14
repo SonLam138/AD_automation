@@ -1,51 +1,11 @@
-import json
-
-from app.adapters.ldap_adapter import (
-    LDAPAdapter
+from app.auto_engine.actions.ad_actions import (
+    DisableUserAction,
 )
 
-from app.search_tools.computer_search import (
-    search_computer
+action = DisableUserAction()
+
+result = action.execute(
+    sam_account_name="ad.auto2"
 )
 
-from app.config import (
-    LDAP_HOST,
-    LDAP_USER,
-    LDAP_PASSWORD
-)
-
-
-ldap = LDAPAdapter()
-
-ldap.connect(
-    LDAP_HOST,
-    LDAP_USER,
-    LDAP_PASSWORD
-)
-
-
-print("=" * 60)
-print("TEST SEARCH COMPUTER")
-print("=" * 60)
-
-keyword = input(
-    "Computer keyword: "
-).strip()
-
-result = search_computer(
-    connection=ldap.connection,
-    keyword=keyword,
-    limit=20
-)
-
-print(
-    json.dumps(
-        result,
-        indent=4,
-        ensure_ascii=False
-    )
-)
-
-print("=" * 60)
-print("RESULT COUNT =", result["count"])
-print("=" * 60)
+print(result)

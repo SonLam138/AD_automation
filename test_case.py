@@ -1,105 +1,111 @@
-import json
-
-from app.agent.run_agent import (
-    resolve_action,
-    handle_user_input
+from app.auto_engine.services.plan_runner import (
+    PlanRunner
 )
 
-from app.agent.action_handle import (
-    execute_action
+from app.auto_engine.services.active_execution_repository import (
+    ActiveExecutionRepository
 )
 
-from app.adapters.ldap_adapter import (
-    LDAPAdapter
-)
 
-from app.config import *
+REQUEST_ID = "REQ_10082026_E2B9"
 
 
-def print_step(
+repo = ActiveExecutionRepository()
+runner = PlanRunner()
+
+
+def print_ready_actions(
     title: str,
-    data: dict
+    active_execution
 ):
-    print("\n")
-    print("=" * 80)
-    print(title)
-    print("=" * 80)
+    actions = runner.get_ready_actions(
+        active_execution
+    )
 
-    print(
-        json.dumps(
-            data,
-            indent=2,
-            ensure_ascii=False
+    print(f"\n{title}")
+
+    if not actions:
+        print("NO READY ACTION")
+
+    for action in actions:
+        print(
+            action.id,
+            action.action_code
         )
-    )
+
+    return actions
 
 
-def test_sensitive_flow():
+# ==================================================
+# CASE 1
+# ==================================================
 
-    ldap = LDAPAdapter()
+active_execution = repo.get(
+    REQUEST_ID
+)
 
-    ldap.connect(
-        LDAP_HOST,
-        LDAP_USER,
-        LDAP_PASSWORD
-    )
+active_execution.completed_action_ids = []
 
-    #
-    # TURN 1
-    #
-    result = resolve_action(
-        user_text="disable sonnm",
-        ldap_connection=ldap.connection
-    )
+actions = print_ready_actions(
+    "CASE 1 - NOTHING COMPLETED",
+    active_execution
+)
 
-    print_step(
-        "TURN 1 - RESOLVE",
-        result
-    )
-
-    action_id = result["action_id"]
-
-    #
-    # TURN 2
-    # User: đồng ý
-    #
-    result = handle_user_input(
-        action_id,
-        "đồng ý"
-    )
-
-    print_step(
-        "TURN 2 - CONFIRM",
-        result
-    )
-
-    #
-    # TURN 3
-    # User: nhập secret
-    #
-    result = handle_user_input(
-        action_id,
-        ADMIN_APPROVAL_SECRET
-    )
-
-    print_step(
-        "TURN 3 - SECRET",
-        result
-    )
-
-    #
-    # TURN 4
-    # Execute
-    #
-    result = execute_action(
-        action_id
-    )
-
-    print_step(
-        "TURN 4 - EXECUTE",
-        result
-    )
+assert len(actions) == 1
+assert actions[0].id == "STEP_01"
 
 
-if __name__ == "__main__":
-    test_sensitive_flow()
+# ==================================================
+# CASE 2
+# ==================================================
+
+active_execution.completed_action_ids = [
+    "STEP_01"
+]
+
+actions = print_ready_actions(
+    "CASE 2 - STEP_01 COMPLETED",
+    active_execution
+)
+
+assert len(actions) == 1
+assert actions[0].id == "STEP_02"
+
+
+# ==================================================
+# CASE 3
+# ==================================================
+
+active_execution.completed_action_ids = [
+    "STEP_01",
+    "STEP_02"
+]
+
+actions = print_ready_actions(
+    "CASE 3 - STEP_01 STEP_02 COMPLETED",
+    active_execution
+)
+
+assert len(actions) == 1
+assert actions[0].id == "STEP_03"
+
+
+# ==================================================
+# CASE 4
+# ==================================================
+
+active_execution.completed_action_ids = [
+    "STEP_01",
+    "STEP_02",
+    "STEP_03"
+]
+
+actions = print_ready_actions(
+    "CASE 4 - ALL COMPLETED",
+    active_execution
+)
+
+assert len(actions) == 0
+
+
+print("\nPLAN RUNNER TEST PASSED")
