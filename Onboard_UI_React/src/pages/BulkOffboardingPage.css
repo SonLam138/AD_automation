@@ -1,0 +1,169 @@
+.review-hero {
+
+    padding: 16px 20px;
+
+    margin-bottom: 16px;
+}
+
+.review-hero h2 {
+
+    margin: 0;
+
+    font-size: 24px;
+}
+
+.review-hero.success {
+    background:
+        linear-gradient(
+            135deg,
+            #040300,
+            #271a00
+        );
+
+    color: rgb(244, 244, 5);
+}
+
+.review-hero.warning {
+
+    background:
+        #fff4e5;
+
+    border:
+        1px solid #d6a53a;
+
+    color:
+        #7a5c1f;
+}
+
+.summary-cards {
+
+    display: flex;
+
+    gap: 16px;
+
+    margin-bottom: 24px;
+}
+
+.summary-card {
+
+    flex: 1;
+
+    padding: 20px;
+
+    border-radius: 12px;
+
+    text-align: center;
+
+    background:
+        #f7f4ea;
+
+    border:
+        1px solid #e0d2a8;
+}
+
+.summary-card span {
+
+    display: block;
+
+    font-size: 14px;
+
+    color: #777;
+
+    margin-bottom: 8px;
+}
+
+.summary-card strong {
+
+    font-size: 32px;
+
+    font-weight: bold;
+
+    color:
+        #7a5c1f;
+}
+.pharaoh-card {
+
+    background: white;
+
+    border-radius: 16px;
+
+    padding: 24px;
+
+    margin-bottom: 24px;
+
+    box-shadow:
+        0 2px 12px
+        rgba(
+            0,
+            0,
+            0,
+            0.08
+        );
+}
+
+.pharaoh-sub-card {
+
+    margin-top: 24px;
+
+    padding-top: 20px;
+
+    border-top:
+        1px solid
+        #e5e5e5;
+}
+
+.execute-button {
+
+    width: 100%;
+
+    padding: 18px;
+
+    font-size: 18px;
+
+    font-weight: 600;
+
+    border: none;
+
+    border-radius: 12px;
+
+    cursor: pointer;
+
+    color: white;
+
+    background:
+        linear-gradient(
+            135deg,
+            #c89b3c,
+            #e0be74
+        );
+
+    box-shadow:
+        0 4px 12px
+        rgba(
+            200,
+            155,
+            60,
+            0.35
+        );
+}
+
+.execute-button:hover {
+
+    transform:
+        translateY(-1px);
+}
+
+.execute-button:disabled {
+
+    background:
+        #cccccc;
+
+    color:
+        #777777;
+
+    cursor:
+        not-allowed;
+
+    box-shadow:
+        none;
+}

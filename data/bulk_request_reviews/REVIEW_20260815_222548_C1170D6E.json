@@ -1,0 +1,24 @@
+{
+  "session_id": "REVIEW_20260815_222548_C1170D6E",
+  "file_name": "NewTest.xlsx",
+  "status": "READY_FOR_CONFIRM",
+  "created_at": "2026-08-15T22:25:48.457188+00:00",
+  "request_candidates": [
+    {
+      "employee_id": "",
+      "email": "ad.auto1@automate.com.vn",
+      "reason": "Nghỉ việc",
+      "effective_time": "2026-08-19T00:00:00"
+    },
+    {
+      "employee_id": "",
+      "email": "ad.auto2@automate.com.vn",
+      "reason": "Nghỉ việc",
+      "effective_time": "2026-08-19T00:00:00"
+    }
+  ],
+  "confirmation": {
+    "confirmed_at": null,
+    "created_requests": []
+  }
+}

@@ -19,9 +19,9 @@ export default function PortalLayout() {
             path: "/portal/monitor"
         },
         {
-            key: "onboarding",
-            label: "New Onboarding",
-            path: "/portal/onboarding"
+            key: "workflow",
+            label: "Workflow Engine",
+            path: "/portal/workflow"
         },
         {
             key: "automation-tools",

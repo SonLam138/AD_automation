@@ -1,1080 +1,591 @@
-import { useEffect, useState }
-    from "react";
-
 import {
-    getPendingRequests
-}
-from "../services/pendingRequestService";
+    useState
+} from "react";
+import axiosClient from "../api/axiosClient";
+export default function BulkOffboardingPage() {
 
-import {
-    getRequestDetail
-}
-from "../services/requestDetailService";
+    const [selectedFile,
+        setSelectedFile] =
+        useState(null);
 
-import {
-    createUser,
-    rejectRequest
-}
-from "../services/onboardingService";
+    const [previewResult,
+    setPreviewResult] =
+    useState(null);
 
-function PendingRequestPage() {
+    const [confirmResult,
+    setConfirmResult] =
+    useState(null);
 
-    const [requests, setRequests]
-        = useState([]);
+    const [confirmSuccess,
+    setConfirmSuccess] =
+    useState(false);
 
-    useEffect(() => {
+    const [confirmLoading,
+    setConfirmLoading] =
+    useState(false);
 
-        loadRequests();
 
-    }, []);
 
-        const [requestDetail,
-            setRequestDetail]
-            = useState(null);
+    // ==================================================
+    // STATUS DISPLAY
+    // ==================================================
 
-    const handleReview = async (
-        requestId
+    const getStatusLabel = (
+        status
     ) => {
 
+        const statusLabels = {
+
+            VALID:
+                "✅ Hợp lệ",
+
+            MISSING_IDENTITY:
+                "❌ Thiếu thông tin định danh",
+
+            MISSING_REASON:
+                "❌ Thiếu lý do",
+
+            MISSING_EFFECTIVE_TIME:
+                "❌ Thiếu thời điểm hiệu lực",
+
+            NOT_FOUND:
+                "❌ Không tìm thấy tài khoản",
+
+            MULTIPLE_MATCH:
+                "❌ Tìm thấy nhiều tài khoản",
+
+            ALREADY_DISABLED:
+                "⚠️ Tài khoản đã bị disable",
+
+            LOOKUP_FAILED:
+                "❌ Không thể tra cứu AD"
+        };
+
+        return (
+            statusLabels[status]
+            || status
+            || "Không xác định"
+        );
+    };
+
+
+    const getStatusClassName = (
+        status
+    ) => {
+
+        if (
+            status === "VALID"
+        ) {
+            return "review-status valid";
+        }
+
+        if (
+            status === "ALREADY_DISABLED"
+        ) {
+            return "review-status warning";
+        }
+
+        return "review-status invalid";
+    };
+
+
+    const handleConfirm =
+    async () => {
+
         try {
 
-            const detail =
-                await getRequestDetail(
-                    requestId
+            setConfirmLoading(
+                true
+            );
+
+            await axiosClient.post(
+
+                "api/workflow/employee-offboarding/confirm",
+
+                {
+                    session_id:
+                        previewResult.session_id
+                }
+            );
+
+            setConfirmSuccess(
+                true
+            );
+
+        } catch (error) {
+
+            console.error(
+                error
+            );
+
+        } finally {
+
+            setConfirmLoading(
+                false
+            );
+        }
+
+    };
+
+    const handlePreview = async () => {
+
+        if (!selectedFile) {
+            return;
+        }
+
+        const formData =
+            new FormData();
+
+        formData.append(
+            "file",
+            selectedFile
+        );
+
+        try {
+
+            const response =
+                await axiosClient.post(
+                    "api/workflow/employee-offboarding/preview",
+                    formData,
+                    {
+                        headers: {
+                            "Content-Type":
+                                "multipart/form-data"
+                        }
+                    }
                 );
 
-            console.log(detail);
-
-            setRequestDetail(
-                detail
+            setPreviewResult(
+                response.data
             );
 
-            setSelectedRequest(
-                requestId
+        } catch (error) {
+
+            console.error(
+                error
             );
 
         }
-        catch(error){
 
-            console.error(error);
-        }
     };
 
+    const handleFileChange = (
+        event
+    ) => {
 
-const handleReject = async () => {
+        const file =
+            event.target.files?.[0];
 
-    try {
-
-        await rejectRequest(
-
-            requestDetail
-            .request_id
-
-        );
-
-        alert(
-            "Reject Success"
-        );
-
-        setSelectedRequest(
-            null
-        );
-
-        setRequestDetail(
-            null
-        );
-
-        loadPendingRequests();
-
-    }
-    catch(error){
-
-        console.error(error);
-
-        alert(
-            "Reject Failed"
-        );
-    }
-};
-
-    const handleApprove = async () => {
-
-        try {
-
-        //    const edited_by_approver = editedByApprover;
-
-            const hr =
-                requestDetail.hr_input;
-
-            const resolver =
-                requestDetail.resolved_result;
-
-            const editedByApprover =
-            JSON.stringify(editableData)
-            !==
-            JSON.stringify({
-                display_name:
-                    resolver.display_name,
-
-                sam_account_name:
-                    resolver.sam_account_name,
-
-                target_ou_dn:
-                    resolver.target_ou_dn,
-
-                groups:
-                    resolver.groups
-            });
-            const nameParts =
-                hr.full_name.trim().split(" ");
-
-            const edited_by_approver = editedByApprover;
-
-            const lastName =
-                nameParts.pop();
-
-            const firstName =
-                nameParts.join(" ");
-
-            const createUserRequest = {
-
-                employee_id:
-                    hr.employee_id,
-
-                first_name:
-                    firstName,
-
-                last_name:
-                    lastName,
-
-                full_name:
-                    hr.full_name,
-
-                display_name:
-                    editableData.display_name,
-
-                sam_account_name:
-                    editableData.sam_account_name,
-
-                password:
-                    "Welcome@123",
-
-                target_ou_dn:
-                    editableData.target_ou_dn,
-
-                title:
-                    hr.title,
-
-                department:
-                    resolver.department,
-
-                description:
-                    `Onboard ${hr.employee_id}`,
-
-                dry_run: false,
-
-                groups:
-                Array.isArray(
-                    editableData.groups
-                )
-                ?
-                editableData.groups : [editableData.groups],
-                edited_by_approver : edited_by_approver
-
-            };
-
-            console.log(
-                "CREATE USER REQUEST"
-            );
-
-            console.log(
-                createUserRequest
-            );
-            console.log(
-                "GROUPS =",
-                createUserRequest.groups
-            );
-
-            console.log(
-                typeof createUserRequest.groups
-            );
-            const result =
-            await createUser(
-                createUserRequest
-            );
-
-            alert(
-                "Approve Success"
-            );
-
-        }
-        catch(error){
-
-            console.error(error);
-
-            alert(
-                "Approve Failed"
-            );
-        }
-    };
-
-    // ------------------------------------------------
-    const [selectedRequest,
-       setSelectedRequest]
-    = useState(null);
-    
-    const [editableData,
-        setEditableData]
-    = useState(null);
-    const [editingField,
-        setEditingField]
-    = useState(null);
-
-    useEffect(() => {
-
-        if (!requestDetail)
+        if (!file) {
             return;
+        }
 
-        setEditableData({
-
-            display_name:
-                requestDetail
-                .resolved_result
-                ?.display_name,
-
-            sam_account_name:
-                requestDetail
-                .resolved_result
-                ?.sam_account_name,
-
-            target_ou_dn:
-                requestDetail
-                .resolved_result
-                ?.target_ou_dn,
-
-            groups:
-                requestDetail
-                .resolved_result
-                ?.groups || []
-        });
-
-    }, [requestDetail]);
-
-
-    if (
-        selectedRequest &&
-        requestDetail
-    ) 
-    {
-        return (
-
-                <div>
-
-        <h2>Request Review</h2>
-
-        <p>
-            Request ID:
-            {requestDetail.request_id}
-        </p>
-
-        <p>
-            Status:
-            {requestDetail.status}
-        </p>
-
-        <hr/>
-
-        <h3>HR Information</h3>
-
-        <table border="1">
-
-            <tbody>
-
-                <tr>
-                    <td>Employee ID</td>
-                    <td>
-                        {requestDetail.hr_input?.employee_id}
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>Full Name</td>
-                    <td>
-                        {requestDetail.hr_input?.full_name}
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>Position</td>
-                    <td>
-                        {requestDetail.hr_input?.title}
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>Department</td>
-                    <td>
-                        {requestDetail.hr_input?.department}
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>Division</td>
-                    <td>
-                        {requestDetail.hr_input?.division}
-                    </td>
-                </tr>
-
-            </tbody>
-
-        </table>
-
-        <br />
-
-        <h3>Resolver Result</h3>
-
-        <table border="1">
-
-            <tbody>
-
-                                <tr>
-                    <td>
-                        DISPLAYNAME
-                    </td>
-                    <td>
-                        {
-                            editingField
-                            ===
-                            "display_name"
-                            ?
-                            <>
-                                <input
-                                    value={
-                                        editableData
-                                        ?.display_name || ""
-                                    }
-                                    style={{
-                                        width: "80%"
-                                    }}
-                                    onChange={(e) =>
-
-                                        setEditableData({
-
-                                            ...editableData,
-
-                                            display_name:
-                                                e.target.value
-                                        })
-                                    }
-                                />
-                                <button
-                                    onClick={() =>
-
-                                        setEditingField(null)
-                                    }
-                                >
-                                    Save
-                                </button>
-                            </>
-                            :
-                            <>
-                                {
-                                    editableData
-                                    ?.display_name
-                                }
-                                {" "}
-                                <button
-                                    onClick={() =>
-
-                                        setEditingField(
-                                            "display_name"
-                                        )
-                                    }
-
-                                >
-                                    Edit
-                                </button>
-                            </>
-                        }
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>
-                        USERNAME
-                    </td>
-                    <td>
-                        {
-                            editingField
-                            ===
-                            "sam_account_name"
-                            ?
-                            <>
-                                <input
-                                    value={
-                                        editableData
-                                        ?.sam_account_name || ""
-                                    }
-                                    style={{
-                                        width: "80%"
-                                    }}
-                                    onChange={(e) =>
-
-                                        setEditableData({
-
-                                            ...editableData,
-
-                                            sam_account_name:
-                                                e.target.value
-                                        })
-                                    }
-                                />
-                                <button
-                                    onClick={() =>
-
-                                        setEditingField(null)
-                                    }
-                                >
-                                    Save
-                                </button>
-                            </>
-                            :
-                            <>
-                                {
-                                    editableData
-                                    ?.sam_account_name
-                                }
-                                {" "}
-                                <button
-                                    onClick={() =>
-
-                                        setEditingField(
-                                            "sam_account_name"
-                                        )
-                                    }
-
-                                >
-                                    Edit
-                                </button>
-                            </>
-                        }
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        TARGET OU
-                    </td>
-                    <td>
-                        {
-                            editingField
-                            ===
-                            "target_ou_dn"
-                            ?
-                            <>
-                                <input
-                                    value={
-                                        editableData
-                                        ?.target_ou_dn || ""
-                                    }
-                                    style={{
-                                        width: "80%"
-                                    }}
-                                    onChange={(e) =>
-
-                                        setEditableData({
-
-                                            ...editableData,
-
-                                            target_ou_dn:
-                                                e.target.value
-                                        })
-                                    }
-                                />
-                                <button
-                                    onClick={() =>
-
-                                        setEditingField(null)
-                                    }
-                                >
-                                    Save
-                                </button>
-                            </>
-                            :
-                            <>
-                                {
-                                    editableData
-                                    ?.target_ou_dn
-                                }
-                                {" "}
-                                <button
-                                    onClick={() =>
-
-                                        setEditingField(
-                                            "target_ou_dn"
-                                        )
-                                    }
-
-                                >
-                                    Edit
-                                </button>
-                            </>
-                        }
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        MEMBER OF
-                    </td>
-                    <td>
-                        {
-                            editingField
-                            ===
-                            "groups"
-                            ?
-                            <>
-                                <input
-                                    value={
-                                        editableData
-                                        ?.groups || ""
-                                    }
-                                    style={{
-                                        width: "80%"
-                                    }}
-                                    onChange={(e) =>
-
-                                        setEditableData({
-
-                                            ...editableData,
-
-                                            groups:
-                                                e.target.value
-                                        })
-                                    }
-                                />
-                                <button
-                                    onClick={() =>
-
-                                        setEditingField(null)
-                                    }
-                                >
-                                    Save
-                                </button>
-                            </>
-                            :
-                            <>
-                                {
-                                    editableData
-                                    ?.groups
-                                }
-                                {" "}
-                                <button
-                                    onClick={() =>
-
-                                        setEditingField(
-                                            "groups"
-                                        )
-                                    }
-
-                                >
-                                    Edit
-                                </button>
-                            </>
-                        }
-                    </td>
-                </tr>      
-            </tbody>
-
-        </table>
-
-        <br />
-
-        <button
-            onClick={handleApprove}
-        >
-            Approve
-        </button>
-
-        <button
-            onClick={handleReject}
-        >
-            Reject
-        </button>
-
-        <button
-            onClick={() => {
-                setSelectedRequest(null);
-                setRequestDetail(null);
-            }}
-        >
-            Back
-        </button>
-
-    </div>
+        setSelectedFile(
+            file
         );
-    }
-
-
-
-    const loadRequests = async () => {
-
-        try {
-
-            const data =
-                await getPendingRequests();
-
-            console.log(data);
-
-            setRequests(data);
-
-        }
-        catch(error){
-
-            console.error(error);
-        }
-    }
+        setPreviewResult(null);
+    };
 
     return (
-    <div>
 
-        <h2>Pending Requests</h2>
+        <div>
 
-        <table border="1">
+            <h2>
+                Bulk Offboarding Import
+            </h2>
 
-        <thead>
-            <tr>
-            <th>Request ID</th>
-            <th>Họ tên</th>
-            <th>Chức danh</th>
-            <th>Phòng ban</th>
-            <th>Khối</th>
-            <th>Status</th>
-            <th>Action</th>
-            </tr>
-        </thead>
+            <p>
+                Upload danh sách nhân sự nghỉ việc
+                từ file Excel.
+            </p>
 
-        <tbody>
-
-            {requests.map((request) => (
-                console.log(request),
-            <tr key={request.request_id}>
-
-                <td>{request.request_id}</td>
-                <td>{request.hr_input?.full_name}</td>
-
-                <td>{request.hr_input?.title}</td>
-
-                <td>{request.hr_input?.department}</td>
-
-                <td>{request.hr_input?.division}</td>
-
-                <td>{request.status}</td>
-
-                <td>
-                <button
-                    onClick={() =>
-                        handleReview(
-                            request.request_id
-                        )
-                    }
-                >
-                    Review
-                </button>
-                </td>
-
-            </tr>
-            
-            ))}
-        
-        </tbody>
-
-        </table>
-
-    </div>
-    );
-}
-export default PendingRequestPage;
-
-
-===========================================================================
-
-    if (selectedRequest && requestDetail)
-    {
-        const cardStyle = {
-            background: "#FFFDF7",
-            border: "1px solid #D4AF37",
-            borderRadius: "14px",
-            padding: "20px",
-            color: "#222",
-            textAlign: "left",
-            flex: 1,
-            boxShadow: "0 4px 12px rgba(0,0,0,0.08)"
-        };
-
-        const labelStyle = {
-            fontSize: "12px",
-            fontWeight: "700",
-            color: "#B8860B",
-            textTransform: "uppercase",
-            marginBottom: "4px"
-        };
-
-        const valueStyle = {
-            fontSize: "15px",
-            color: "#222",
-            marginBottom: "16px",
-            wordBreak: "break-word"
-        };
-
-        const nameParts =
-            requestDetail.hr_input?.full_name
-                ?.trim()
-                .split(" ") || [];
-
-        const lastName =
-            nameParts.length > 0
-                ? nameParts[nameParts.length - 1]
-                : "";
-
-        const firstName =
-            nameParts.length > 1
-                ? nameParts.slice(0, -1).join(" ")
-                : "";
-
-        return (
-            <div
-                style={{
-                    maxWidth: "1400px",
-                    margin: "0 auto",
-                    padding: "20px",
-                    background: "#F8F6F0",
-                    minHeight: "100vh"
-                }}
+            <input
+                type="file"
+                accept=".xlsx,.xls"
+                onChange={
+                    handleFileChange
+                }
+            />
+            <button
+                onClick={
+                    handlePreview
+                }
             >
-                {/ HEADER /}
+                Preview File
+            </button>
 
-                <div
-                style={{
-                        bacground:
-                            "lnear-gradient(135deg,#F4D06F,#D4AF7)",
-                        color: "#22",
-                        padding: 24px",
-                        borderRdius: "16px",
-                        arginBottom: "24px",
-                    boxShadow: "0 6px 16px rgba(,0,0,0.15)"
-                    }}
-            >
-                    <h2
-                    style={{
-                        margin: 0,
-                        fontSize: "28px"
-                    }}
-                    
-                        {requestDetai.hr_input?.full_name}
-                </h2>
+            {
+                selectedFile && (
+                    <div>
 
-                    <div
-                    style={{
-                            marginTop: "10px"
-                        }}
-                    >
-                        <strong>Employee ID:</strong>{" "}
-                        {requestDetail.hr_input?.employee_id}
+                        <p>
+                            File:
+                            {" "}
+                            {
+                                selectedFile.name
+                            }
+                        </p>
+
+                        <p>
+                            Size:
+                            {" "}
+                            {
+                                selectedFile.size
+                            }
+                            {" "}
+                            bytes
+                        </p>
+
                     </div>
+                )
+            }
+            {
+                previewResult && (
 
-                    <div
-                        style={{
-                            marginTop: "4px"
-                        }}
-                    >
-                        <strong>Status:</strong>{" "}
-                        {requestDetail.status}
-                    </div>
-                </div>
+                    <div className="review-container">
 
-                {/ 2 COLUMNS /}
+                        {/* ======================================
+                            REVIEW HEADER
+                        ====================================== */}
 
-                <div
-                    style={{
-                        display: "flex",
-                        gap: "20px",
-                        alignItems: "flex-start"
-                    }}
-                >
-                    {/ HCM /}
-
-                    <div styl={cardStyle}>
-                        h3
-                            style={
-                                color "#B8860B",
-                            marginTop: 0,
-                            borderBottom:
-                                "2px solid D4AF37",
-                            paddingBottom: "10px"
-                        }}
-                    >
-                            Thông tn nhân sự từ HCM
-                    </h3>
-
-                        <div tyle={labelStyle}>
-                        Họ và tên
-                    </div>
-                        <divstyle={valueStyle}>
-                        {requestDetail.hr_input?.ull_name}
-                        </di>
-
-                        <div {style=labelStyle}>
-                        Mã nhân viên
-                    </div>
-                        <div stle={valueStyle}>
-                        {requestDetail.hr_input?.empoyee_id}
-                        </div
-
-                        <div style={abelStyle}>
-                        Chức danh
-                        </dv>
-                        <div {style=valueStyle}>
-                        {requestDetail.hr_input?.title}
-                    </div>
-
-                    <div style={labelStyle}>
-                            Phòng/Ban
-                        </div>
-                        <div style={valueStyle}>
-                            {requestDetail.hr_input?.department}
-                        </div>
-
-                        <div style={labelStyle}>
-                            Khối
-                        </div>
-                        <div style={valueStyle}>
-                            {requestDetail.hr_input?.division}
-                        </div>
-                    </div>
-
-                    {/ AD /}
-
-                    <div style{cardStyle}>
-                        <3
-                            style={{                            color:"#B8860B",
-                            marginTop: 0,
-                            borderBottom:
-                                "2px solid #4AF37",
-                            paddingBottom: "10px"
-                        }}
-                    >
-                            Thông tin tạo tài khoản
+                        <h3>
+                            Bulk Offboarding Review
                         </h3>
 
-                        <div style={labelStyle}>
-                            firstName
-                        </div>
-                        <div style={valueStyle}>
-                            {firstName}
-                        </div>
-
-                        <div style={labelStyle}>
-                            lastName
-                        </div>
-                        <div style={valueStyle}>
-                            {lastName}
-                        </div>
-
-                        {/ DISPLAY NAME /}
-
-                        <div style{labelStyle}>
-                        displayName
-                    </div>
-
-                        <div style={valueStyle}>
-                            {editableData?.display_name}
+                        <p>
+                            File:
                             {" "}
-                            <button
-                                onClick={() =>
-                                    setEditingField(
-                                        "display_name"
-                                    )
-                                }
-                            >
-                                Edit
-                            </button>
+                            <strong>
+                                {previewResult.file_name}
+                            </strong>
+                        </p>
+
+
+                        {/* ======================================
+                            SUMMARY
+                        ====================================== */}
+
+                        <div className="review-summary">
+
+                            <div className="summary-item">
+
+                                <span>
+                                    Tổng số dòng:
+                                </span>
+
+                                <strong>
+                                    {previewResult.total_rows}
+                                </strong>
+
+                            </div>
+
+                            <div className="summary-item">
+
+                                <span>
+                                    Hợp lệ:
+                                </span>
+
+                                <strong>
+                                    {previewResult.valid_rows}
+                                </strong>
+
+                            </div>
+
+                            <div className="summary-item">
+
+                                <span>
+                                    Không hợp lệ:
+                                </span>
+
+                                <strong>
+                                    {previewResult.invalid_rows}
+                                </strong>
+
+                            </div>
+
                         </div>
 
-                        {/ USERNAME /}
 
-                        div style={labelStyle}>
-                        Username
-                    </div>
+                        {/* ======================================
+                            GLOBAL REVIEW MESSAGE
+                        ====================================== */}
 
-                        <div style={valueStyle}>
-                            {editableData?.sam_account_name}
-                            {" "}
-                            <button
-                                onClick={() =>
-                                    setEditingField(
-                                        "sam_account_name"
-                                    )
-                                }
-                            >
-                                Edit
-                            </button>
-                        </div>
+                        {
+                            previewResult.can_confirm
+                                ? (
 
-                        {/ TARGET OU /}
+                                    <div className="review-message success">
 
-                        <div style{labelStyle}>
-                        targetOU
-                        </iv>
+                                        <h4>
+                                            ✅ Dữ liệu hợp lệ
+                                        </h4>
 
-                        <div style={valueStyle}>
-                            {editableData?.target_ou_dn}
-                            {" "}
-                            <button
-                                onClick={() =>
-                                    setEditingField(
-                                        "target_ou_dn"
-                                    )
-                                }
-                            >
-                                Edit
-                            </button>
-                        </div>
+                                        <p>
+                                            Tất cả các dòng trong file
+                                            đã được kiểm tra trên Active Directory.
+                                        </p>
 
-                        {/ GROUPS /}
+                                        <p>
+                                            Có thể tiếp tục tạo
+                                            Offboarding Requests.
+                                        </p>
 
-                        <dv style={labelStyle}>
-                        memberOf
-                    </div>
+                                    </div>
 
-                        <iv style={valueStyle}>
-                        {Array.isArray(
-                            editableData?groups
-                            )
-                            ? editabeData.groups.map(
-                                    (group) => (
-                                        <pan
-                                            key={group}
-                                            styl={{
-                                                display:
-                                                    "inline-block",
-                                                bacground:
-                                                    "#D4AF37",
-                                                color:
-                                                    "#22",
-                                                borderRadius:
-                                                    "20px",
-                                                paddig:
-                                                    "6px 12px",
-                                                margin:
-                                                    "4px"
-                                                fontSize:
-                                                    "12px",
-                                                fontWeight:
-                                                    "600"
-                                            }}
-                                        >
-                                            {group}
-                                        </span>
-                                    )
                                 )
-                                : editableData?.groups}
+                                : (
+
+                                    <div className="review-message warning">
+
+                                        <h4>
+                                            ⚠️ Không thể tạo Requests
+                                        </h4>
+
+                                        <p>
+                                            Phát hiện
+                                            {" "}
+                                            <strong>
+                                                {
+                                                    previewResult
+                                                        .invalid_rows
+                                                }
+                                            </strong>
+                                            {" "}
+                                            dòng dữ liệu không hợp lệ.
+                                        </p>
+
+                                        <p>
+                                            Vui lòng kiểm tra chi tiết
+                                            bên dưới, sửa file Excel và
+                                            thực hiện Preview lại.
+                                        </p>
+
+                                        <p>
+                                            Không có tài khoản nào được
+                                            thay đổi trong bước Review này.
+                                        </p>
+
+                                    </div>
+
+                                )
+                        }
+
+
+                        {/* ======================================
+                            REVIEW TABLE
+                        ====================================== */}
+
+                        {
+                            previewResult.rows.some(
+                                row =>
+                                    row.status !== "VALID"
+                            ) && (
+                                <div className="review-table-wrapper">
+
+                                    <table className="review-table">
+
+                                        <thead>
+
+                                            <tr>
+
+                                                <th>
+                                                    Dòng
+                                                </th>
+
+                                                <th>
+                                                    Employee ID
+                                                </th>
+
+                                                <th>
+                                                    Email
+                                                </th>
+
+                                                <th>
+                                                    Tài khoản AD
+                                                </th>
+
+                                                <th>
+                                                    Display Name
+                                                </th>
+
+                                                <th>
+                                                    Effective Time
+                                                </th>
+
+                                                <th>
+                                                    Trạng thái
+                                                </th>
+
+                                                <th>
+                                                    Chi tiết
+                                                </th>
+
+                                            </tr>
+
+                                        </thead>
+
+                                        <tbody>
+
+                                    {
+                                        previewResult.rows
+                                            .filter(
+                                                row =>
+                                                    row.status !== "VALID"
+                                            )
+                                            .map(
+                                                row => (
+
+                                                <tr
+                                                    key={
+                                                        row.row_number
+                                                    }
+                                                >
+
+                                                    <td>
+                                                        {
+                                                            row.row_number
+                                                        }
+                                                    </td>
+
+                                                    <td>
+                                                        {
+                                                            row.employee_id
+                                                            || "-"
+                                                        }
+                                                    </td>
+
+                                                    <td>
+                                                        {
+                                                            row.email
+                                                            || "-"
+                                                        }
+                                                    </td>
+
+                                                    <td>
+                                                        {
+                                                            row
+                                                                .sam_account_name
+                                                            || "-"
+                                                        }
+                                                    </td>
+
+                                                    <td>
+                                                        {
+                                                            row.display_name
+                                                            || "-"
+                                                        }
+                                                    </td>
+
+                                                    <td>
+                                                        {
+                                                            row.effective_time
+                                                            || "-"
+                                                        }
+                                                    </td>
+
+                                                    <td>
+
+                                                        <span
+                                                            className={
+                                                                getStatusClassName(
+                                                                    row.status
+                                                                )
+                                                            }
+                                                        >
+                                                            {
+                                                                getStatusLabel(
+                                                                    row.status
+                                                                )
+                                                            }
+                                                        </span>
+
+                                                    </td>
+
+                                                    <td>
+                                                        {
+                                                            row.message
+                                                            || "-"
+                                                        }
+                                                    </td>
+
+                                                </tr>
+
+                                            )
+                                        )
+                                    }
+
+                                </tbody>
+
+                            </table>
+
+                                </div>
+                            )
+                        }
+
+
+                        {/* ======================================
+                            CONFIRM AREA
+                        ====================================== */}
+
+                        <div className="review-actions">
+
+                            <button
+                                type="button"
+
+                                disabled={
+                                    confirmLoading
+                                    ||
+                                    confirmSuccess
+                                    ||
+                                    !previewResult?.can_confirm
+                                }
+
+                                onClick={
+                                    handleConfirm
+                                }
+                            >
+                                {
+                                    confirmLoading
+                                        ? "Creating Requests..."
+                                        : confirmSuccess
+                                            ? "Requests Created"
+                                            : "Create Offboarding Requests"
+                                }
+                            </button>
+
+                            {
+                                confirmSuccess && (
+
+                                    <div
+                                        className="review-message success"
+                                    >
+
+                                        <h4>
+                                            ✅ Offboarding Requests Created Successfully
+                                        </h4>
+
+                                        <p>
+                                            Hệ thống đã tiếp nhận thành công file yêu cầu của bạn.
+                                            Workflow Engine đã bắt đầu hoạt động.
+                                        </p>
+
+                                        <p>
+                                            Để tạo thêm yêu cầu vui lòng upload thêm file mới.
+                                        </p>
+
+                                    </div>
+
+                                )
+                            }
+
                         </div>
+
                     </div>
-                </div>
 
-                {/ BUTTONS /}
-
-                <div
-                    style={{
-                        marginTop: "24px",
-                        display: "flex",
-                        gap: "10px"
-                    }}
-                >
-                    <button
-                        onClick={handleApprove}
-                        style={{
-                            background: "#D4AF37",
-                            color: "#222",
-                            border: "none",
-                            padding: "12px 24px",
-                            borderRadius: "8px",
-                            cursor: "pointer",
-                            fontWeight: "700"
-                        }}
-                    >
-                        Approve
-                    </button>
-
-                    <button
-                        onClick={handleReject}
-                        style={{
-                            background: "#B22222",
-                            color: "white",
-                            border: "none",
-                            padding: "12px 24px",
-                            borderRadius: "8px",
-                            cursor: "pointer"
-                        }}
-                    >
-                        Reject
-                    </button>
-
-                    <button
-                        onClick={() => {
-                            setSelectedRequest(null);
-                            setRequestDetail(null);
-                        }}
-                        style={{
-                            background: "#666",
-                            color: "white",
-                            border: "none",
-                            padding: "12px 24px",
-                            borderRadius: "8px",
-                            cursor: "pointer"
-                        }}
-                    >
-                        Back
-                    </button>
-                </div>
-            </div>
-        );
-    }
-
-
-                if (result.state === "CONFIRM_READY") {
-
-                setMessages(prev => [
-                    ...prev,
-                    {
-                        sender: "assistant",
-                        type: "confirm_ready",
-                        data: result
-                    }
-                ]);
-
-            } else {
-
-                setMessages(prev => [
-                    ...prev,
-                    {
-                        sender: "assistant",
-                        text: result.message || "Đã xử lý."
-                    }
-                ]);
-
+                )
             }
 
-            setMessages(prev => [
-            ...prev,
+        </div>
 
-            {
-                sender: "assistant",
-                text: result.message
-            },
-
-            {
-                sender: "assistant",
-                type: result.state,
-                data: result
-            }
-        ]);
+    );
+}

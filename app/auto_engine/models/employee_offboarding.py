@@ -1,5 +1,5 @@
 from datetime import datetime
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, Field
 from typing import Optional
 
 class TargetObject(
@@ -10,9 +10,15 @@ class TargetObject(
 
     sam_account_name: str
 
+    display_name: str
+
     email: EmailStr
 
     dn: str
+
+    member_of: list[str] = Field(
+        default_factory=list
+        )
 
 
 class EmployeeOffboardingData(BaseModel):

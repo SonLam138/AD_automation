@@ -8,12 +8,14 @@ import LoginPage from "./pages/LoginPage";
 
 import PortalLayout from "./layouts/PortalLayout";
 
-import OnboardingPage from "./pages/OnboardingPage";
+import WorkflowPage from "./pages/WorkflowPage";
+import EmployeeOffboardingPage from "./pages/EmployeeOffboardingPage";
 import AutomationToolsPage from "./pages/AutomationToolsPage";
 import ReportingPage from "./pages/ReportingPage";
 import AiLabPage from "./pages/AiLabPage";
 import ChatPage from "./pages/ChatPage";
 import MonitorDashboard from "./pages/MonitorDashboard";
+import BulkOffboardingPage from "./pages/BulkOffboardingPage";
 
 function App() {
 
@@ -51,10 +53,22 @@ function App() {
                     }
                 />
 
-                {/* New Onboarding */}
+                {/* WorkFlow Engine */}
                 <Route
-                    path="onboarding"
-                    element={<OnboardingPage />}
+                    path="workflow"
+                    element={<WorkflowPage />}
+                />
+                <Route
+                    path="workflow/offboarding"
+                    element={
+                        <EmployeeOffboardingPage />
+                    }
+                />
+                <Route
+                    path="workflow/bulk-offboarding"
+                    element={
+                        <BulkOffboardingPage />
+                    }
                 />
 
                 {/* Automation Tools */}

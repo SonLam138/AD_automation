@@ -27,12 +27,6 @@ class RequestRepository:
 
 class RequestService:
 
-    # def __init__(
-    #     self,
-    #     repository: RequestRepository
-    # ):
-    #     self.repository = repository
-
     def _generate_request_id(self) -> str:
 
         date_part = datetime.now().strftime("%d%m%Y")
@@ -40,19 +34,3 @@ class RequestService:
         random_part = uuid.uuid4().hex[:4].upper()
 
         return f"REQ_{date_part}_{random_part}"
-
-    # def create_request(
-    #     self,
-    #     request: Request
-    # ) -> str:
-
-    #     request_id = self._generate_request_id()
-
-    #     request.request_id = request_id
-
-    #     self.repository.save(
-    #         request_id=request_id,
-    #         request=request
-    #     )
-
-    #     return request_id

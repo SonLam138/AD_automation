@@ -125,3 +125,16 @@ export async function updateUserDescription(
 
     return response.data;
 }
+
+export async function createEmployeeOffboarding(
+    payload
+) {
+
+    const response =
+        await axiosClient.post(
+            "/api/workflow/employee-offboarding",
+            payload
+        );
+
+    return response.data;
+}

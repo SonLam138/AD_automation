@@ -146,9 +146,15 @@ action_registry.register(
 )
 
 action_registry.register(
+    "remove_all_group",
+    RemoveAllGroupsAction(),
+)
+
+action_registry.register(
     "move_disabled_ou",
     MoveToOuAction(),
 )
+
 worker = Worker(
     job_manager=job_manager,
     action_registry=(

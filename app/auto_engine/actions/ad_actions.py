@@ -88,6 +88,61 @@ class DisableUserAction(
         return sam_account_name
 
 
+class RemoveAllGroupsAction(
+    BaseAdAction
+):
+
+    def execute(
+        self,
+        business_data: Dict[str, Any],
+        execution_context:
+            Dict[str, Any] | None = None,
+    ) -> Dict[str, Any]:
+
+        target_object = (
+            business_data[
+                "target_object"
+            ]
+        )
+
+        sam_account_name = (
+            target_object[
+                "sam_account_name"
+            ]
+        )
+
+        groups = (
+            target_object.get(
+                "member_of",
+                []
+            )
+        )
+
+        removed_groups = []
+
+        for group_dn in groups:
+
+            group_name = (
+                group_dn
+                .split(",")[0]
+                .replace("CN=", "")
+            )
+
+            self.ldap_service.remove_group_member(
+                sam_account_name=sam_account_name,
+                group_name=group_name
+            )
+
+            removed_groups.append(
+                group_name
+            )
+
+        return {
+            "success": True,
+            "removed_groups": removed_groups
+        }
+
+
 class MoveToOuAction(
     BaseAdAction
 ):

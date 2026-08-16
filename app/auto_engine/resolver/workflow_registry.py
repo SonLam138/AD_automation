@@ -47,17 +47,31 @@ WORKFLOW_REGISTRY = [
                     "continue_on_error": False
                 }
             },
-
             {
                 "id": "STEP_02",
+            
+                "action_code": "remove_all_group",
+            
+                "display_name": "Remove user from all Groups",
+            
+                "execution": {
+                    "depends_on": ["STEP_01"],
+                    "delay_minutes": 2,
+                    "retry_count": 3,
+                    "continue_on_error": False
+                }
+            },
+
+            {
+                "id": "STEP_03",
 
                 "action_code": "move_disabled_ou",
 
                 "display_name": "Move To Disabled OU",
 
                 "execution": {
-                    "depends_on": ["STEP_01"],
-                    "delay_minutes": 30,
+                    "depends_on": ["STEP_02"],
+                    "delay_minutes": 5,
                     "retry_count": 3,
                     "continue_on_error": False
                 }

@@ -2,8 +2,8 @@ from app.adapters.ldap_container import (
     ldap,
 )
 
-from app.search_tools.user_search import (
-    search_user,
+from app.search_tools.workflow_search_user import (
+    workflow_search_user,
 )
 
 from app.search_tools.computer_search import (
@@ -14,46 +14,87 @@ def resolve_user(
     source_data: dict,
 ) -> dict:
     """
-    Resolve business object USER
-    cho Workflow Engine.
+    Resolve exactly one USER business object
+    for Workflow Engine.
 
-    Input:
-        employee_id / email
+    Resolution priority:
+    1. employee_id
+    2. email
 
-    Output:
-        target_object
+    Fail-closed:
+    - 0 results: STOP
+    - More than 1 result: STOP
+    - Search failure: STOP
     """
 
-    keyword = (
-        source_data.get("email")
-        or source_data.get("employee_id")
+    employee_id = source_data.get(
+        "employee_id"
     )
 
-    if not keyword:
+    email = source_data.get(
+        "email"
+    )
+
+    if not employee_id and not email:
         raise ValueError(
             "Missing employee_id or email"
         )
 
-    result = search_user(
+    result = workflow_search_user(
         connection=ldap.connection,
-        keyword=keyword,
-        limit=1,
+        employee_id=employee_id,
+        email=email,
     )
+
+    # ==============================================
+    # SEARCH FAILURE
+    # ==============================================
 
     if not result["success"]:
         raise ValueError(
-            f"Search failed: {keyword}"
+            "Workflow user lookup failed: "
+            f"{result.get('message', 'Unknown LDAP error')}"
         )
 
-    if result["count"] == 0:
+    count = result["count"]
+
+    identity_field = result.get(
+        "identity_field"
+    )
+
+    identity_value = result.get(
+        "identity_value"
+    )
+
+    # ==============================================
+    # NO MATCH - STOP
+    # ==============================================
+
+    if count == 0:
         raise ValueError(
-            f"User not found: {keyword}"
+            "Workflow user resolution stopped: "
+            f"no user found for "
+            f"{identity_field}={identity_value}"
         )
 
+    # ==============================================
+    # AMBIGUOUS MATCH - STOP IMMEDIATELY
+    # ==============================================
+
+    if count > 1:
+        raise ValueError(
+            "Workflow user resolution stopped: "
+            f"{count} users found for "
+            f"{identity_field}={identity_value}. "
+            "Expected exactly one user."
+        )
+
+    # Đến đây count chắc chắn bằng 1.
     user = result["results"][0]
 
     return {
-        "object_type": "USER",
+        "object_type":
+            "USER",
 
         "display_name":
             user["display_name"],
@@ -66,6 +107,12 @@ def resolve_user(
 
         "dn":
             user["distinguished_name"],
+
+        "member_of":
+            user.get(
+                "member_of",
+                []
+            ),
     }
 
 

@@ -44,7 +44,9 @@ SUPPORTED_DATETIME_FORMATS = [
     "%d/%m/%Y %H:%M",
     "%d-%m-%Y %H:%M",
     "%d/%m/%Y",
-    "%d-%m-%Y"
+    "%d-%m-%Y",
+    "%Y-%m-%dT%H:%M",
+    "%Y-%m-%dT%H:%M:%S"
 ]
 
 def normalize_datetime(
@@ -175,7 +177,7 @@ class EmployeeOffboardingApiAdapter(
                 email=source_data["email"],
                 start_date=normalize_start_date(source_data),
                 reason=reason,
-                target_ou="Disabled Account",
+                target_ou="OU=Disabled Account,DC=automate,DC=com,DC=vn",
 
                 target_object=TargetObject(
                     object_type="user",
@@ -189,6 +191,8 @@ class EmployeeOffboardingApiAdapter(
                         target_object[
                             "email"
                         ],
+
+                    display_name=target_object["display_name"],
 
                     dn=
                         target_object[

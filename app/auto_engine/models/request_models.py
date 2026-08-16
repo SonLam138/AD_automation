@@ -49,3 +49,9 @@ class Request(BaseModel):
     created_at: datetime = Field(
         default_factory=datetime.utcnow
     )
+
+class BulkConfirmRequest(
+    BaseModel
+):
+
+    session_id: str

@@ -134,7 +134,8 @@ def search_user(
             "distinguishedName",
             "userAccountControl",
             "department",
-            "title"
+            "title",
+            "memberOf"
         ],
         size_limit=limit
     )
@@ -195,7 +196,15 @@ def search_user(
             "is_disabled":
                 _is_disabled(
                     uac
-                )
+                ),
+
+            "member_of":
+                (
+                    list(entry.memberOf.values)
+                    if hasattr(entry, "memberOf")
+                    else []
+                ),
+
         }
 
         # ==========================================
