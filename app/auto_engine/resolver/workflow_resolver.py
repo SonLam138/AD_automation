@@ -7,6 +7,8 @@ from app.auto_engine.resolver.workflow_registry import (
 )
 
 
+
+
 class WorkflowResolver:
 
     def resolve(
@@ -22,6 +24,27 @@ class WorkflowResolver:
         for workflow_data in WORKFLOW_REGISTRY:
 
             match = workflow_data["match"]
+            print(
+                "MATCH TYPE:",
+                match["request_type"],
+                type(match["request_type"])
+            )
+
+            print(
+                "REQUEST TYPE:",
+                request.request_type,
+                type(request.request_type)
+            )
+
+            print(
+                "MATCH CONTEXT:",
+                match["contexts"]
+            )
+
+            print(
+                "REQUEST CONTEXT:",
+                request.context
+            )
 
             if (
                 match["request_type"]

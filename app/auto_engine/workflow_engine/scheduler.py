@@ -17,6 +17,10 @@ from app.auto_engine.services.job_repository import (
     JobRepository,
 )
 
+from datetime import (
+    datetime,
+    timedelta
+)
 
 class Scheduler:
 
@@ -134,14 +138,22 @@ class Scheduler:
         active_execution: ActiveExecution,
         action,
     ) -> Job:
-        job_execute_at = (
-            active_execution.execute_at
-            + timedelta(
-                minutes=(
-                    action.execution.delay_minutes
+        if action.execution.execute_time:
+
+            job_execute_at = datetime.fromisoformat(
+                action.execution.execute_time
+            )
+
+        else:
+
+            job_execute_at = (
+                active_execution.execute_at
+                + timedelta(
+                    minutes=(
+                        action.execution.delay_minutes
+                    )
                 )
             )
-        )
 
         job_id = (
             f"{active_execution.request_id}"

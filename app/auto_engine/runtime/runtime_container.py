@@ -136,24 +136,70 @@ workflow_engine = WorkflowEngine(
 # start_workflow_engine()
 #     Scheduler scan liên tục
 # ==================================================
+
+# REGISTRY ACTION FOR WOKER - MAPING WITH AD_ACTION.PY
+
 action_registry = (
     AdActionRegistry()
 )
 
+# ==================================================
+# USER ACTIONS
+# ==================================================
 action_registry.register(
     "disable_user",
     DisableUserAction(),
 )
 
 action_registry.register(
-    "remove_all_group",
-    RemoveAllGroupsAction(),
+    "enable_user",
+    EnableUserAction(),
 )
 
 action_registry.register(
-    "move_disabled_ou",
-    MoveToOuAction(),
+    "add_group",
+    AddGroupAction(),
 )
+
+action_registry.register(
+    "remove_group",
+    RemoveGroupAction(),
+)
+
+action_registry.register(
+    "move_user_to_ou",
+    MoveUserToOuAction(),
+)
+
+action_registry.register(
+    "remove_all_groups",
+    RemoveAllGroupsAction(),
+    )
+# ==================================================
+# COMPUTER ACTIONS
+# ==================================================
+
+action_registry.register(
+    "disable_computer",
+    DisableComputerAction(),
+)
+
+action_registry.register(
+    "move_computer_to_ou",
+    MoveComputerToOuAction(),
+)
+
+# ==================================================
+# GROUP ACTIONS
+# ==================================================
+
+action_registry.register(
+    "move_group_to_ou",
+    MoveGroupToOuAction(),
+)
+
+
+
 
 worker = Worker(
     job_manager=job_manager,

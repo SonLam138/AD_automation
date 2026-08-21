@@ -16,6 +16,8 @@ import AiLabPage from "./pages/AiLabPage";
 import ChatPage from "./pages/ChatPage";
 import MonitorDashboard from "./pages/MonitorDashboard";
 import BulkOffboardingPage from "./pages/BulkOffboardingPage";
+import CustomWorkflowPage from "./pages/CustomWorkflowPage";
+import WorkflowDesignerPage from "./pages/WorkflowDesignerPage"
 
 function App() {
 
@@ -65,10 +67,18 @@ function App() {
                     }
                 />
                 <Route
+                    path="workflow/custom"
+                    element={<CustomWorkflowPage />}
+                />
+                <Route
                     path="workflow/bulk-offboarding"
                     element={
                         <BulkOffboardingPage />
                     }
+                />
+                <Route
+                    path="workflow/custom/designer"
+                    element={<WorkflowDesignerPage />}
                 />
 
                 {/* Automation Tools */}

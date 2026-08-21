@@ -11,6 +11,9 @@ from datetime import (
     timezone,
 )
 
+import json
+from pathlib import Path
+
 from app.auto_engine.services.review_session_container import (
     review_session_repository
 )
@@ -19,11 +22,13 @@ from app.auto_engine.resolver.workflow_excel_preview import (
     create_review_session_id,
     review_offboarding_rows,
 )
-
+from app.auth.rbac import require_group
+from fastapi import Depends
+from app.auto_engine.resolver.workflow_registry import reload_workflow_registry
 
 from app.auto_engine.resolver.workflow_excel_normalizer import normalize_columns
 from app.auto_engine.resolver.workflow_excel_preview import review_offboarding_rows
-
+from app.auto_engine.models.workflow_runtime_adapter import WorkflowRuntimeAdapter
 import pandas as pd
 from io import BytesIO
 from app.auto_engine.models.employee_offboarding_adapter import (
@@ -35,6 +40,8 @@ from app.auto_engine.models.employee_offboarding import (
 )
 
 from app.auto_engine.models.request_models import BulkConfirmRequest
+from app.auto_engine.models.custom_workflow_request import CustomWorkflowSaveRequest
+from app.auto_engine.models.custom_workflow_adapter import CustomWorkflowAdapter
 
 from app.auto_engine.resolver.workflow_resolver import (
     WorkflowResolver
@@ -57,9 +64,19 @@ from app.auto_engine.resolver.workflow_plan_engine import (
 )
 
 from app.auto_engine.runtime.runtime_container import workflow_runtime
+from app.auto_engine.resolver.custom_workflow_validation_service import (
+    CustomWorkflowValidationService
+)
 
-
-router = APIRouter()
+router = APIRouter(
+    dependencies=[
+        Depends(
+            require_group([
+                "workflow_admin"
+            ])
+        )
+    ]
+)
 
 
 employee_offboarding_api_adapter = (
@@ -332,3 +349,199 @@ def confirm_offboarding(
     review_session_repository.save(
         session
     )
+
+
+
+@router.post("/validate")
+async def validate_custom_workflow(
+    payload: dict
+):
+
+    workflow_info = payload.get(
+        "workflowInfo",
+        {}
+    )
+
+    objects = payload.get(
+        "objects",
+        []
+    )
+
+    return (
+        CustomWorkflowValidationService()
+        .validate(
+            workflow_info,
+            objects
+        )
+    )
+
+
+@router.post(
+    "/custom-workflow/save"
+)
+def save_custom_workflow(
+    request: CustomWorkflowSaveRequest
+):
+
+    adapter = (
+        CustomWorkflowAdapter()
+    )
+
+    workflow_context = (
+        adapter.build_workflow_context(
+            request.workflowInfo,
+            request.objects,
+            request.steps
+        )
+    )
+
+    templates = (
+        adapter.build_registry_templates(
+            workflow_context
+        )
+    )
+
+    registry_file = (
+        Path(__file__).parent.parent
+        / "auto_engine"
+        / "resolver"
+        / "workflow_registry.json"
+    )
+    print(registry_file)
+
+    with open(
+        registry_file,
+        "r",
+        encoding="utf-8"
+    ) as f:
+
+        registry = json.load(f)
+
+    registry.extend(
+        templates
+    )
+
+    with open(
+        registry_file,
+        "w",
+        encoding="utf-8"
+    ) as f:
+
+        json.dump(
+            registry,
+            f,
+            indent=2,
+            ensure_ascii=False
+        )
+    reload_workflow_registry()
+
+    return {
+        "success": True,
+        "templateCount": len(templates)
+    }
+
+@router.post(
+    "/custom-workflow/run"
+)
+def run_custom_workflow(
+    request: CustomWorkflowSaveRequest
+):
+    adapter = (
+        CustomWorkflowAdapter()
+    )
+
+    workflow_context = (
+        adapter.build_workflow_context(
+            request.workflowInfo,
+            request.objects,
+            request.steps
+        )
+    )
+    registry_file = (
+            Path(__file__).parent.parent
+            / "auto_engine"
+            / "resolver"
+            / "workflow_registry.json"
+        )
+    
+    with open(
+        registry_file,
+        "r",
+        encoding="utf-8"
+    ) as f:
+
+        registry = json.load(f)
+
+    requests = (
+        adapter.build_requests(
+            workflow_context,
+            registry
+        )
+    )
+  
+    runtime_adapter = (
+        WorkflowRuntimeAdapter()
+    )
+
+    created_plans = []
+
+    completed_contexts = set()
+
+    for request_item in requests:
+
+        print("=" * 80)
+        print("REQUEST CONTEXT")
+        print(request_item.context)
+        print("=" * 80)
+
+        plan = (
+            workflow_runtime.run_plan_engine(
+                adapter=runtime_adapter,
+                source_data=request_item
+            )
+        )
+
+        completed_contexts.add(request_item.context)
+
+        created_plans.append(
+            plan.request_id
+        )
+
+
+    for template in registry:
+
+        contexts = (
+            template
+            .get("match", {})
+            .get("contexts", [])
+        )
+
+        if any(
+            context in completed_contexts
+            for context in contexts
+        ):
+            template[
+                "workflow_complete"
+            ] = True
+
+    with open(
+        registry_file,
+        "w",
+        encoding="utf-8"
+    ) as f:
+
+        json.dump(
+            registry,
+            f,
+            indent=2,
+            ensure_ascii=False
+        )
+    reload_workflow_registry()
+    return {
+            "success": True,
+            "requestCount": len(requests),
+            "planCount": len(created_plans),
+            "plans": created_plans
+        }
+
+        

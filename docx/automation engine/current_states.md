@@ -226,3 +226,209 @@ Action Registry
 Capability Action
  ↓
 Target System
+
+
+
+17/08 : sau khi hoàn thành UI của custom workflow
+
+Một Source mới
++
+Một CustomAdapter mới
+
+Luồng bắt buộc:
+UI Source
+    ↓
+CustomAdapter
+    ↓
+Request chuẩn + Registry Template
+    ↓
+WorkflowResolver
+    ↓
+WorkflowDefinition
+    ↓
+WorkflowPlanEngine
+    ↓
+PlanGenerator
+    ↓
+ExecutionPlanRepository
+    ↓
+ActiveExecution
+    ↓
+Scheduler
+    ↓
+Worker
+
+
+Các lớp phía sau Resolver phải được reuse nguyên trạng. Không sửa:
+    WorkflowPlanEngine
+    PlanGenerator
+    ExecutionPlanRepository
+    ActiveExecution
+    Scheduler
+    Worker
+    Job runtime
+
+2. Dependency cốt lõi đã được nhận diện
+với Custom Workflow: Registry chưa tồn tại
+trong khi Resolver lại hoạt động như sau:
+        key = (
+            request.request_type,
+            request.context
+        )
+
+        for workflow_data in WORKFLOW_REGISTRY:
+            ...
+Vì vậy, trước khi gọi Resolver, CustomAdapter bắt buộc phải hoàn thành ba sản phẩm đồng thời: 
+    Request chuẩn
+    Custom Registry Template
+    Business_data
+
+                UI Source
+                ↓
+            CustomAdapter parse dữ liệu
+                ↓
+            Build Request
+                +
+            Build Registry Template
+                ↓
+            Register template thành công
+                ↓
+            Build business_data dựa trên các object_resolver()
+                ↓
+            WorkflowResolver.resolve(request)
+                ↓
+            WorkflowDefinition
+
+Source Model của Step đã chốt
+Mỗi step hiện có :
+    {
+    id: Date.now(),
+
+    objectRef: "",
+
+    action: "",
+
+    executeTime: "",
+
+    dependsOn: "",
+
+    delayMinutes: 0,
+
+    parameters: {},
+
+    parameterStatus: "EDITING"
+}
+Ý nghĩa :
+    objectRef
+    → Alias của object từ Object Catalog
+
+    action
+    → Business action do admin chọn
+
+    executeTime
+    → Thời điểm cụ thể do admin nhập
+
+    dependsOn
+    → Step dependency
+
+    delayMinutes
+    → Khoảng trễ sau dependency
+
+    parameters
+    → Business data riêng của action
+
+    parameterStatus
+    → EDITING hoặc CONFIRMED
+
+UI không sinh action_code trực tiếp
+
+Action Parameters : bổ sung dữ liệu với các action CREATE, MOVE OU
+Nguyên tắc mapping :
+Tên field trong UI parameters
+=
+Tên field schema backend cần
+
+Final Validation tập trung
+Năm tầng validation V1
+    Tầng 1: Workflow
+        Workflow Name bắt buộc
+        Có ít nhất một Object
+        Có ít nhất một Step
+    Tầng 2: Step
+        Mỗi Step phải có Object
+        Mỗi Step phải có Action
+    Tầng 3: Parameters
+        parameterStatus phải là CONFIRMED
+    Tầng 4: Dependency
+        dependsOn phải tham chiếu đến step còn tồn tại
+    Tầng 5: Time
+        Step 1 → Step 2 → Step 3
+    
+Multi-object policy bắt buộc phải nhớ : create nhiều single request
+            Many source candidates
+            ↓
+        Normalize
+            ↓
+        For each candidate / single unit
+            ↓
+        Reuse luồng Single hiện hữu
+
+Mục tiêu Registry Template ở giai đoạn tiếp theo
+CustomAdapter phải compile UI Source Model thành một registry entry hợp lệ kiểu:
+        {
+        "match": {
+            "request_type":
+                RequestType.CUSTOM_WORKFLOW,
+
+            "contexts": [
+                "<UNIQUE_CONTEXT_FROM_UI>"
+            ]
+        },
+
+        "workflow_id":
+            "<WORKFLOW_ID_FROM_UI>",
+
+        "workflow_name":
+            "<WORKFLOW_NAME_FROM_UI>",
+
+        "object_resolver":
+            "<RESOLVER_RULE>",
+
+        "metadata": {
+            "target_object_type": "MIXED",
+            "schedule_mode": "CUSTOM",
+            "priority": "NORMAL",
+            "allow_retry": True,
+            "max_retry": 3
+        },
+
+        "actions": [
+            {
+                "id": "STEP_01",
+
+                "action_code":
+                    "<COMPILED_FROM_OBJECT_TYPE_AND_ACTION>",
+
+                "display_name":
+                    "<DERIVED_FROM_ACTION_CATALOG>",
+
+                "execution": {
+                    "depends_on": [],
+                    "delay_minutes": 0,
+                    "retry_count": 3,
+                    "continue_on_error": False
+                }
+            }
+        ]
+    }
+
+
+WorkflowDefinition vẫn thuộc về Resolver : CustomAdapter không trả WorkflowDefinition trực tiếp. Adapter tạo và đăng ký registry template
+
+Câu nói hôm nay :
+
+UI vừa hoàn thành không phải một form tạo workflow để trưng bày. Nó là Source Authoring Layer, tạo đủ dữ liệu để CustomAdapter build Request, business_data và custom registry template trước khi gọi WorkflowResolver.
+
+Và:
+
+Resolver vẫn là nơi duy nhất sinh WorkflowDefinition. Runtime phía sau tuyệt đối không biết workflow đến từ template hard-code hay UI custom.

@@ -36,7 +36,7 @@ class Request(BaseModel):
 
     request_type: RequestType
 
-    context: RequestContext
+    context: str
 
     source: RequestSource
 

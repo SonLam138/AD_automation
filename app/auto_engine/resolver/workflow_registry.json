@@ -1,0 +1,126 @@
+[
+  {
+    "match": {
+      "request_type": "employee_offboarding",
+      "contexts": [
+        "RESIGNED"
+      ]
+    },
+    "workflow_id": "OFFBOARDING_RESIGNED",
+    "workflow_name": "Employee Offboarding - Resigned",
+    "object_resolver": "resolve_user",
+    "metadata": {
+      "target_object_type": "USER",
+      "schedule_mode": "AT_EFFECTIVE_TIME",
+      "trigger_field": "start_date",
+      "priority": "NORMAL",
+      "allow_retry": true,
+      "max_retry": 3
+    },
+    "actions": [
+      {
+        "id": "STEP_01",
+        "action_code": "disable_user",
+        "display_name": "Disable User",
+        "execution": {
+          "depends_on": [],
+          "delay_minutes": 0,
+          "retry_count": 3,
+          "continue_on_error": false
+        }
+      },
+      {
+        "id": "STEP_02",
+        "action_code": "remove_all_group",
+        "display_name": "Remove user from all Groups",
+        "execution": {
+          "depends_on": [
+            "STEP_01"
+          ],
+          "delay_minutes": 2,
+          "retry_count": 3,
+          "continue_on_error": false
+        }
+      },
+      {
+        "id": "STEP_03",
+        "action_code": "move_disabled_ou",
+        "display_name": "Move To Disabled OU",
+        "execution": {
+          "depends_on": [
+            "STEP_02"
+          ],
+          "delay_minutes": 5,
+          "retry_count": 3,
+          "continue_on_error": false
+        }
+      }
+    ]
+  },
+  {
+    "match": {
+      "request_type": "custom_workflow",
+      "contexts": [
+        "CUSTOM_WF_1787332616338_Vender_C"
+      ]
+    },
+    "workflow_id": "WF_1787332616338",
+    "workflow_name": "New",
+    "object_resolver": "resolve_user",
+    "workflow_complete": true,
+    "metadata": {
+      "target_object_type": "USER",
+      "schedule_mode": "AT_EFFECTIVE_TIME",
+      "trigger_field": "start_date",
+      "priority": "NORMAL",
+      "allow_retry": true,
+      "max_retry": 3
+    },
+    "actions": [
+      {
+        "id": "STEP_01",
+        "action_code": "disable_user",
+        "display_name": "DISABLE",
+        "execution": {
+          "execute_time": "2026-08-25T00:17",
+          "depends_on": [],
+          "retry_count": 3,
+          "continue_on_error": false
+        }
+      }
+    ]
+  },
+  {
+    "match": {
+      "request_type": "custom_workflow",
+      "contexts": [
+        "CUSTOM_WF_1787333810569_Vender_D"
+      ]
+    },
+    "workflow_id": "WF_1787333810569",
+    "workflow_name": "New test",
+    "object_resolver": "resolve_user",
+    "workflow_complete": true,
+    "metadata": {
+      "target_object_type": "USER",
+      "schedule_mode": "AT_EFFECTIVE_TIME",
+      "trigger_field": "start_date",
+      "priority": "NORMAL",
+      "allow_retry": true,
+      "max_retry": 3
+    },
+    "actions": [
+      {
+        "id": "STEP_01",
+        "action_code": "disable_user",
+        "display_name": "DISABLE",
+        "execution": {
+          "execute_time": "2026-08-26T00:37",
+          "depends_on": [],
+          "retry_count": 3,
+          "continue_on_error": false
+        }
+      }
+    ]
+  }
+]

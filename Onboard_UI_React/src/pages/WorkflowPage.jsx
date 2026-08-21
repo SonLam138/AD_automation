@@ -46,6 +46,21 @@ export default function WorkflowPage() {
                     >
                         📄 Bulk Offboarding Import
                     </div>
+                    
+                    <div
+                        className="workflow-box workflow-box-custom"
+                        onClick={() =>
+                            navigate(
+                                "/portal/workflow/custom"
+                            )
+                        }
+                    >
+                        ⚙️ Custom Workflow
+                        <br />
+                        <span>
+                            Build your own workflow
+                        </span>
+                    </div>
 
                     <div
                         className="workflow-box disabled"

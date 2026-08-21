@@ -1,111 +1,245 @@
-from app.auto_engine.services.plan_runner import (
-    PlanRunner
+from pprint import pprint
+
+from app.auto_engine.models.custom_workflow_adapter import (
+    CustomWorkflowAdapter
+)
+import json
+from app.auto_engine.models.request_type import (
+    RequestType
+)
+from app.auto_engine.models.workflow_definition import (
+    WorkflowDefinition
 )
 
-from app.auto_engine.services.active_execution_repository import (
-    ActiveExecutionRepository
+workflow_info = {
+    "workflowId":
+        "WF_1787159331321",
+
+    "workflowName":
+        "Disable User And Computer",
+
+    "context":
+        "CUSTOM_WF_1787159331321"
+}
+
+
+objects = [
+    {
+        "alias": "VENDER_A",
+
+        "objectType": "USER",
+
+        "employee_id":
+            "",
+
+        "email":
+            "ad.auto1@automate.com.vn"
+    },
+
+    {
+        "alias": "MAY TINH_A",
+
+        "objectType": "COMPUTER",
+
+        "computer_name":
+            "Client-01"
+    }
+]
+
+
+steps = [
+
+    {
+        "objectRef":
+            "VENDER_A",
+
+        "action":
+            "DISABLE",
+
+        "executeTime":"2026-08-20T11:05",
+
+        "dependsOn":
+            "",
+
+        "parameters":
+            {}
+    },
+
+    {
+        "objectRef":
+            "MAY TINH_A",
+
+        "action":
+            "DISABLE",
+
+        "executeTime":
+            "2026-08-20T12:05",
+
+        "dependsOn":
+            "",
+
+        "parameters":
+            {}
+    },
+    {
+            "objectRef":
+                "VENDER_A",
+    
+            "action":
+                "MOVE",
+    
+            "executeTime":"2026-08-29T11:05",
+    
+            "dependsOn":
+                "",
+    
+            "parameters":
+                {}
+    },
+    {
+        "objectRef":
+            "MAY TINH_A",
+    
+        "action":
+            "MOVE",
+    
+        "executeTime":
+            "2026-08-28T12:05",
+    
+        "dependsOn":
+            "",
+    
+        "parameters":
+            {}
+    }
+
+]
+
+
+adapter = (
+    CustomWorkflowAdapter()
 )
 
 
-REQUEST_ID = "REQ_10082026_E2B9"
+workflow_context = (
+    adapter.build_workflow_context(
+        workflow_info,
+        objects,
+        steps
+    )
+)
+
+print("\n=== WORKFLOW CONTEXT ===\n")
+
+pprint(
+    workflow_context,
+    width=120
+)
+
+grouped = (
+    adapter.group_steps_by_object(
+        workflow_context
+    )
+)
 
 
-repo = ActiveExecutionRepository()
-runner = PlanRunner()
+print(
+    json.dumps(
+        grouped,
+        indent=2
+    )
+)
+
+templates = (
+    adapter.build_registry_templates(
+        workflow_context
+    )
+)
+print(
+    f"Templates Count: {len(templates)}"
+)
+import json
+
+print(
+    json.dumps(
+        templates,
+        indent=2
+    )
+)
 
 
-def print_ready_actions(
-    title: str,
-    active_execution
-):
-    actions = runner.get_ready_actions(
-        active_execution
+template = templates[0]
+
+workflow_definition = (
+    WorkflowDefinition(
+        **{
+            k: v
+            for k, v in template.items()
+            if k != "match"
+        }
+    )
+)
+
+print("\n=== WORKFLOW DEFINITION ===")
+print(workflow_definition)
+
+print("\n=== ACTIONS ===")
+
+for action in workflow_definition.actions:
+
+    print(
+        f"Action Code: "
+        f"{action.action_code}"
     )
 
-    print(f"\n{title}")
+    print(
+        f"Execute Time: "
+        f"{action.execution.execute_time}"
+    )
 
-    if not actions:
-        print("NO READY ACTION")
+    print(
+        f"Depends On: "
+        f"{action.execution.depends_on}"
+    )
 
-    for action in actions:
-        print(
-            action.id,
-            action.action_code
-        )
-
-    return actions
+    print("-----")
 
 
-# ==================================================
-# CASE 1
-# ==================================================
 
-active_execution = repo.get(
-    REQUEST_ID
+
+templates = (
+    adapter.build_registry_templates(
+        workflow_context
+    )
 )
 
-active_execution.completed_action_ids = []
-
-actions = print_ready_actions(
-    "CASE 1 - NOTHING COMPLETED",
-    active_execution
+requests = (
+    adapter.build_requests(
+        workflow_context,
+        templates
+    )
 )
 
-assert len(actions) == 1
-assert actions[0].id == "STEP_01"
+print("\n=== REQUESTS ===")
 
+for request in requests:
 
-# ==================================================
-# CASE 2
-# ==================================================
+    print("=" * 80)
 
-active_execution.completed_action_ids = [
-    "STEP_01"
-]
+    print(
+        "CONTEXT:"
+    )
 
-actions = print_ready_actions(
-    "CASE 2 - STEP_01 COMPLETED",
-    active_execution
-)
+    print(
+        request.context
+    )
 
-assert len(actions) == 1
-assert actions[0].id == "STEP_02"
+    print()
 
+    print(
+        "BUSINESS DATA:"
+    )
 
-# ==================================================
-# CASE 3
-# ==================================================
-
-active_execution.completed_action_ids = [
-    "STEP_01",
-    "STEP_02"
-]
-
-actions = print_ready_actions(
-    "CASE 3 - STEP_01 STEP_02 COMPLETED",
-    active_execution
-)
-
-assert len(actions) == 1
-assert actions[0].id == "STEP_03"
-
-
-# ==================================================
-# CASE 4
-# ==================================================
-
-active_execution.completed_action_ids = [
-    "STEP_01",
-    "STEP_02",
-    "STEP_03"
-]
-
-actions = print_ready_actions(
-    "CASE 4 - ALL COMPLETED",
-    active_execution
-)
-
-assert len(actions) == 0
-
-
-print("\nPLAN RUNNER TEST PASSED")
+    print(
+        request.business_data
+    )

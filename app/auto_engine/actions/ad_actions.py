@@ -17,6 +17,246 @@ class BaseAdAction(ABC):
     ) -> Dict[str, Any]:
         raise NotImplementedError
 
+    @staticmethod
+    def _get_target_business_data(
+        business_data: Dict[str, Any],
+    ) -> Dict[str, Any]:
+
+        target_object = (
+            business_data.get(
+                "target_object"
+            )
+            or {}
+        )
+
+        target_business_data = (
+            target_object.get(
+                "business_data"
+            )
+            or {}
+        )
+
+        if not target_business_data:
+            raise ValueError(
+                "Thiếu "
+                "target_object.business_data"
+            )
+
+        return target_business_data
+
+    @classmethod
+    def _get_sam_account_name(
+        cls,
+        business_data: Dict[str, Any],
+    ) -> str:
+
+        target_business_data = (
+            cls._get_target_business_data(
+                business_data
+            )
+        )
+
+        sam_account_name = (
+            target_business_data.get(
+                "sam_account_name"
+            )
+            or business_data.get(
+                "sam_account_name"
+            )
+        )
+
+        if not sam_account_name:
+            raise ValueError(
+                "Thiếu "
+                "target_object.business_data."
+                "sam_account_name"
+            )
+
+        return sam_account_name
+
+    @staticmethod
+    def _get_action_parameters(
+        business_data: Dict[str, Any],
+        execution_context:
+            Dict[str, Any] | None = None,
+    ) -> Dict[str, Any]:
+
+        action_data = (
+            business_data.get(
+                "action_data"
+            )
+            or {}
+        )
+
+        if not action_data:
+            raise ValueError(
+                "Thiếu business_data.action_data"
+            )
+
+        execution_context = (
+            execution_context
+            or {}
+        )
+
+        action_id = (
+            execution_context.get(
+                "action_id"
+            )
+            or execution_context.get(
+                "current_action_id"
+            )
+        )
+
+        if action_id:
+
+            parameters = (
+                action_data.get(
+                    action_id
+                )
+            )
+
+            if parameters is None:
+                raise ValueError(
+                    "Không tìm thấy action_data "
+                    f"cho action_id: {action_id}"
+                )
+
+            return parameters
+
+        if len(action_data) == 1:
+
+            return next(
+                iter(
+                    action_data.values()
+                )
+            )
+
+        raise ValueError(
+            "Không xác định được action_id "
+            "trong execution_context"
+        )
+
+    @classmethod
+    def _get_group_name(
+        cls,
+        business_data: Dict[str, Any],
+        execution_context:
+            Dict[str, Any] | None = None,
+    ) -> str:
+
+        parameters = (
+            cls._get_action_parameters(
+                business_data,
+                execution_context,
+            )
+        )
+
+        group_name = (
+            parameters.get(
+                "group_name"
+            )
+            or parameters.get(
+                "target_group"
+            )
+            or parameters.get(
+                "target_group_name"
+            )
+        )
+
+        if not group_name:
+            raise ValueError(
+                "Thiếu group_name trong "
+                "business_data.action_data"
+            )
+
+        return group_name
+
+    @classmethod
+    def _get_computer_name(
+        cls,
+        business_data: Dict[str, Any],
+    ) -> str:
+
+        target_business_data = (
+            cls._get_target_business_data(
+                business_data
+            )
+        )
+
+        computer_name = (
+            target_business_data.get(
+                "computer_name"
+            )
+            or target_business_data.get(
+                "sam_account_name"
+            )
+            or business_data.get(
+                "computer_name"
+            )
+        )
+
+        if not computer_name:
+            raise ValueError(
+                "Thiếu "
+                "target_object.business_data."
+                "computer_name"
+            )
+
+        computer_name = (
+            computer_name.strip()
+        )
+
+        if computer_name.endswith(
+            "$"
+        ):
+            computer_name = (
+                computer_name[:-1]
+            )
+
+        return computer_name
+
+
+    @classmethod
+    def _get_target_ou(
+        cls,
+        business_data: Dict[str, Any],
+        execution_context:
+            Dict[str, Any] | None = None,
+    ) -> str:
+
+        parameters = (
+            cls._get_action_parameters(
+                business_data,
+                execution_context,
+            )
+        )
+
+        target_ou_dn = (
+            parameters.get(
+                "target_ou_dn"
+            )
+            or parameters.get(
+                "target_ou"
+            )
+            or business_data.get(
+                "target_ou_dn"
+            )
+            or business_data.get(
+                "target_ou"
+            )
+        )
+
+        if not target_ou_dn:
+            raise ValueError(
+                "Thiếu target_ou_dn trong "
+                "business_data.action_data"
+            )
+
+        return target_ou_dn
+
+# ==================================================
+# USER ACTIONS
+# ==================================================
 
 class DisableUserAction(
     BaseAdAction
@@ -50,42 +290,148 @@ class DisableUserAction(
             "execution_result": result,
         }
 
-    @staticmethod
-    def _get_sam_account_name(
+
+class EnableUserAction(
+    BaseAdAction
+):
+
+    def execute(
+        self,
         business_data: Dict[str, Any],
-    ) -> str:
-        """
-        Ưu tiên target_object theo nguyên tắc
-        Object First.
-
-        Tạm hỗ trợ sam_account_name ở root để
-        tương thích dữ liệu cũ.
-        """
-
-        target_object = (
-            business_data.get(
-                "target_object"
-            )
-            or {}
-        )
+        execution_context:
+            Dict[str, Any] | None = None,
+    ) -> Dict[str, Any]:
 
         sam_account_name = (
-            target_object.get(
-                "sam_account_name"
-            )
-            or business_data.get(
-                "sam_account_name"
+            self._get_sam_account_name(
+                business_data
             )
         )
 
-        if not sam_account_name:
-            raise ValueError(
-                "Thiếu "
-                "target_object.sam_account_name "
-                "trong business_data"
-            )
+        result = ldap.enable_user(
+            sam_account_name
+        )
 
-        return sam_account_name
+        if isinstance(
+            result,
+            dict
+        ):
+            return result
+
+        return {
+            "success": True,
+            "action": "enable_user",
+            "sam_account_name":
+                sam_account_name,
+            "execution_result":
+                result,
+        }
+
+class AddGroupAction(
+    BaseAdAction
+):
+
+    def execute(
+        self,
+        business_data: Dict[str, Any],
+        execution_context:
+            Dict[str, Any] | None = None,
+    ) -> Dict[str, Any]:
+
+        sam_account_name = (
+            self._get_sam_account_name(
+                business_data
+            )
+        )
+
+        group_name = (
+            self._get_group_name(
+                business_data,
+                execution_context,
+            )
+        )
+
+        result = (
+            ldap.add_group_member(
+                sam_account_name=
+                    sam_account_name,
+                group_name=
+                    group_name,
+            )
+        )
+
+        if isinstance(
+            result,
+            dict
+        ):
+            return result
+
+        return {
+            "success": True,
+            "action": "add_group_member",
+            "sam_account_name":
+                sam_account_name,
+            "group_name":
+                group_name,
+            "execution_result":
+                result,
+        }
+
+class RemoveGroupAction(
+    BaseAdAction
+):
+
+    def execute(
+        self,
+        business_data: Dict[str, Any],
+        execution_context:
+            Dict[str, Any] | None = None,
+    ) -> Dict[str, Any]:
+
+        sam_account_name = (
+            self._get_sam_account_name(
+                business_data
+            )
+        )
+
+        group_name = (
+            self._get_group_name(
+                business_data,
+                execution_context,
+            )
+        )
+
+        result = (
+            ldap.remove_group_member(
+                sam_account_name=
+                    sam_account_name,
+                group_name=
+                    group_name,
+            )
+        )
+
+        if isinstance(
+            result,
+            dict
+        ):
+            return result
+
+        return {
+            "success": True,
+            "action": "remove_group_member",
+            "sam_account_name":
+                sam_account_name,
+            "group_name":
+                group_name,
+            "execution_result":
+                result,
+        }
+
+
+
+
+
+
 
 
 class RemoveAllGroupsAction(
@@ -143,7 +489,7 @@ class RemoveAllGroupsAction(
         }
 
 
-class MoveToOuAction(
+class MoveUserToOuAction(
     BaseAdAction
 ):
 
@@ -245,6 +591,161 @@ class MoveToOuAction(
             )
 
         return target_ou
+
+# ==================================================
+# COMPUTER ACTIONS
+# ==================================================
+
+class DisableComputerAction(
+    BaseAdAction
+):
+
+    def execute(
+        self,
+        business_data: Dict[str, Any],
+        execution_context:
+            Dict[str, Any] | None = None,
+    ) -> Dict[str, Any]:
+
+        computer_name = (
+            self._get_computer_name(
+                business_data
+            )
+        )
+
+        result = (
+            ldap.disable_computer(
+                computer_name
+            )
+        )
+
+        if isinstance(
+            result,
+            dict
+        ):
+            return result
+
+        return {
+            "success": True,
+            "action":
+                "disable_computer",
+            "computer_name":
+                computer_name,
+            "execution_result":
+                result,
+        }
+
+class MoveComputerToOuAction(
+    BaseAdAction
+):
+
+    def execute(
+        self,
+        business_data: Dict[str, Any],
+        execution_context:
+            Dict[str, Any] | None = None,
+    ) -> Dict[str, Any]:
+
+        computer_name = (
+            self._get_computer_name(
+                business_data
+            )
+        )
+
+        target_ou_dn = (
+            self._get_target_ou(
+                business_data,
+                execution_context,
+            )
+        )
+
+        result = (
+            ldap.move_computer_to_ou(
+                computer_name=
+                    computer_name,
+                target_ou_dn=
+                    target_ou_dn,
+            )
+        )
+
+        if isinstance(
+            result,
+            dict
+        ):
+            return result
+
+        return {
+            "success": True,
+            "action":
+                "move_computer_to_ou",
+            "computer_name":
+                computer_name,
+            "target_ou":
+                target_ou_dn,
+            "execution_result":
+                result,
+        }
+
+# ==================================================
+# GROUP ACTIONS
+# ==================================================
+
+class MoveGroupToOuAction(
+    BaseAdAction
+):
+
+    def execute(
+        self,
+        business_data: Dict[str, Any],
+        execution_context:
+            Dict[str, Any] | None = None,
+    ) -> Dict[str, Any]:
+
+        group_name = (
+            self._get_group_name(
+                business_data
+            )
+        )
+
+        target_ou_dn = (
+            self._get_target_ou(
+                business_data,
+                execution_context,
+            )
+        )
+
+        result = (
+            ldap.move_group_to_ou(
+                group_name=
+                    group_name,
+                target_ou_dn=
+                    target_ou_dn,
+            )
+        )
+
+        if isinstance(
+            result,
+            dict
+        ):
+            return result
+
+        return {
+            "success": True,
+            "action":
+                "move_group_to_ou",
+            "group_name":
+                group_name,
+            "target_ou":
+                target_ou_dn,
+            "execution_result":
+                result,
+        }
+
+
+
+
+
+
 
 
 class AdActionRegistry:

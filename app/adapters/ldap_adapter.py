@@ -918,7 +918,7 @@ class LDAPAdapter:
             f"CN={full_name},"
             f"{target_ou_dn}"
         )
-    
+
     
     def find_available_sam(
         self,
@@ -1923,3 +1923,251 @@ class LDAPAdapter:
             "computer_name": computer_name,
             "computer_dn": computer_dn
         }
+
+    #================================
+    # AD TOOL - CREATE GROUP
+    #================================
+    def create_group(
+            self,
+            group_name: str,
+            target_ou_dn: str,
+            description: str | None = None
+        ):
+    
+            group_dn = (
+                f"CN={group_name},"
+                f"{target_ou_dn}"
+            )
+    
+            attributes = {
+                "cn": group_name,
+                "name": group_name,
+                "sAMAccountName": group_name,
+                "groupType": -2147483646
+            }
+    
+            if description is not None:
+                attributes["description"] = description
+    
+            success = self.connection.add(
+                dn=group_dn,
+                object_class=[
+                    "top",
+                    "group"
+                ],
+                attributes=attributes
+            )
+    
+            if not success:
+                raise Exception(
+                    self.connection.result
+                )
+    
+            return {
+                "success": True,
+                "action": "create_group",
+                "group_name": group_name,
+                "group_dn": group_dn
+            }
+
+
+    #================================
+    # AD TOOL - MOVE GROUP TO OU
+    #================================
+    def move_group_to_ou(
+        self,
+        group_name: str,
+        target_ou_dn: str
+    ):
+
+        self.connection.search(
+            search_base=LDAP_BASE_DN,
+            search_filter=(
+                f"(cn={group_name})"
+            ),
+            attributes=[
+                "distinguishedName"
+            ]
+        )
+
+        if not self.connection.entries:
+            raise Exception(
+                f"Group not found: {group_name}"
+            )
+
+        old_dn = str(
+            self.connection.entries[0]
+            .distinguishedName.value
+        )
+
+        rdn = old_dn.split(",")[0]
+
+        success = self.connection.modify_dn(
+            old_dn,
+            relative_dn=rdn,
+            new_superior=target_ou_dn
+        )
+
+        if not success:
+            raise Exception(
+                self.connection.result
+            )
+
+        group_dn = (
+            f"{rdn},"
+            f"{target_ou_dn}"
+        )
+
+        return {
+            "success": True,
+            "action": "move_group_to_ou",
+            "group": group_name,
+            "group_dn": group_dn,
+            "target_ou": target_ou_dn
+        }
+
+
+    #================================
+    # AD TOOL - ADD COMPUTER TO GROUP
+    #================================
+    def add_computer_to_group(
+        self,
+        computer_name: str,
+        group_name: str
+    ):
+
+        computer_sam_account_name = (
+            computer_name
+            if computer_name.endswith("$")
+            else f"{computer_name}$"
+        )
+
+        self.connection.search(
+            search_base=LDAP_BASE_DN,
+            search_filter=(
+                f"(sAMAccountName={computer_sam_account_name})"
+            ),
+            attributes=[
+                "distinguishedName"
+            ]
+        )
+
+        if not self.connection.entries:
+            raise Exception(
+                f"Computer not found: {computer_name}"
+            )
+
+        computer_dn = str(
+            self.connection.entries[0]
+            .distinguishedName.value
+        )
+
+        self.connection.search(
+            search_base=LDAP_BASE_DN,
+            search_filter=(
+                f"(cn={group_name})"
+            ),
+            attributes=[
+                "distinguishedName"
+            ]
+        )
+
+        if not self.connection.entries:
+            raise Exception(
+                f"Group not found: {group_name}"
+            )
+
+        group_dn = str(
+            self.connection.entries[0]
+            .distinguishedName.value
+        )
+
+        success = self.connection.modify(
+            group_dn,
+            {
+                "member": [
+                    (
+                        MODIFY_ADD,
+                        [computer_dn]
+                    )
+                ]
+            }
+        )
+
+        if not success:
+            raise Exception(
+                self.connection.result
+            )
+
+        return {
+            "success": True,
+            "action": "move_computer_to_group",
+            "computer": computer_name,
+            "computer_dn": computer_dn,
+            "group": group_name,
+            "group_dn": group_dn
+        }
+
+    #================================
+    # AD TOOL - MOVE COMPUTER TO OU
+    #================================
+    def move_computer_to_ou(
+        self,
+        computer_name: str,
+        target_ou_dn: str
+    ):
+
+        computer_sam_account_name = (
+            computer_name
+            if computer_name.endswith("$")
+            else f"{computer_name}$"
+        )
+
+        self.connection.search(
+            search_base=LDAP_BASE_DN,
+            search_filter=(
+                f"(sAMAccountName={computer_sam_account_name})"
+            ),
+            attributes=[
+                "distinguishedName"
+            ]
+        )
+
+        if not self.connection.entries:
+            raise Exception(
+                f"Computer not found: {computer_name}"
+            )
+
+        old_dn = str(
+            self.connection.entries[0]
+            .distinguishedName.value
+        )
+
+        rdn = old_dn.split(",")[0]
+
+        success = self.connection.modify_dn(
+            old_dn,
+            relative_dn=rdn,
+            new_superior=target_ou_dn
+        )
+
+        if not success:
+            raise Exception(
+                self.connection.result
+            )
+
+        computer_dn = (
+            f"{rdn},"
+            f"{target_ou_dn}"
+        )
+
+        return {
+            "success": True,
+            "action": "move_computer_to_ou",
+            "computer_name": computer_name,
+            "computer_dn": computer_dn,
+            "target_ou": target_ou_dn
+        }
+
+
+        

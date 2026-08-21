@@ -1,82 +1,34 @@
-from app.auto_engine.models.request_type import (
-    RequestType
+import json
+from pathlib import Path
+
+WORKFLOW_REGISTRY = []
+registry_file = (
+    Path(__file__).parent
+    / "workflow_registry.json"
 )
 
-WORKFLOW_REGISTRY = [
-    {
-        "match": {
-            "request_type": RequestType.EMPLOYEE_OFFBOARDING,
-            "contexts": [
-                "RESIGNED"
-            ]
-        },
+with open(
+    registry_file,
+    "r",
+    encoding="utf-8"
+) as f:
 
-        "workflow_id": "OFFBOARDING_RESIGNED",
+    WORKFLOW_REGISTRY.extend(json.load(f))
 
-        "workflow_name": "Employee Offboarding - Resigned",
-        "object_resolver": "resolve_user",
+def reload_workflow_registry():
 
-        "metadata": {
+    with open(
+        registry_file,
+        "r",
+        encoding="utf-8"
+    ) as f:
 
-            "target_object_type": "USER",
+        data = json.load(f)
 
-            "schedule_mode": "AT_EFFECTIVE_TIME",
+    WORKFLOW_REGISTRY.clear()
 
-            "trigger_field": "start_date",
+    WORKFLOW_REGISTRY.extend(data)
 
-            "priority": "NORMAL",
+    return WORKFLOW_REGISTRY
 
-            "allow_retry": True,
 
-            "max_retry": 3
-        },
-
-        "actions": [
-
-            {
-                "id": "STEP_01",
-
-                "action_code": "disable_user",
-
-                "display_name": "Disable User",
-
-                "execution": {
-                    "depends_on": [],
-                    "delay_minutes": 0,
-                    "retry_count": 3,
-                    "continue_on_error": False
-                }
-            },
-            {
-                "id": "STEP_02",
-            
-                "action_code": "remove_all_group",
-            
-                "display_name": "Remove user from all Groups",
-            
-                "execution": {
-                    "depends_on": ["STEP_01"],
-                    "delay_minutes": 2,
-                    "retry_count": 3,
-                    "continue_on_error": False
-                }
-            },
-
-            {
-                "id": "STEP_03",
-
-                "action_code": "move_disabled_ou",
-
-                "display_name": "Move To Disabled OU",
-
-                "execution": {
-                    "depends_on": ["STEP_02"],
-                    "delay_minutes": 5,
-                    "retry_count": 3,
-                    "continue_on_error": False
-                }
-            }
-        
-        ]
-    }
-]
