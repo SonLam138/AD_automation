@@ -1,0 +1,38 @@
+{
+  "request_id": "REQ_25082026_D9B0",
+  "workflow_id": "WF_1787645959654",
+  "execute_at": "2026-08-25T15:25:00",
+  "actions": [
+    {
+      "id": "STEP_03",
+      "action_code": "move_computer_to_ou",
+      "display_name": "MOVE",
+      "execution": {
+        "depends_on": [],
+        "delay_minutes": 0,
+        "execute_time": "2026-08-25T15:26",
+        "retry_count": 3,
+        "continue_on_error": false
+      }
+    }
+  ],
+  "business_data": {
+    "start_date": "2026-08-25T15:25:00",
+    "target_object": {
+      "object_type": "COMPUTER",
+      "dn": "CN=Client-01,OU=HO,DC=automate,DC=com,DC=vn",
+      "business_data": {
+        "computer_name": "Client-01",
+        "sam_account_name": "CLIENT-01$",
+        "dns_host_name": "Client-01",
+        "description": "",
+        "operating_system": ""
+      }
+    },
+    "action_data": {
+      "STEP_03": {
+        "targetOu": "OU=Disabled Account,DC=automate,DC=com,DC=vn"
+      }
+    }
+  }
+}

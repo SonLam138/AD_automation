@@ -6,6 +6,7 @@ import "./MonitorDashboard.css";
 export default function MonitorDashboard() {
     console.log("MONITOR DASHBOARD RENDER");
     const [dashboard, setDashboard] = useState(null);
+    const [jobDashboard,setJobDashboard] = useState(null);
     const [objectType, setObjectType] =
     useState("ALL");
 
@@ -22,6 +23,7 @@ export default function MonitorDashboard() {
     const [toDate, setToDate] =
         useState("");
 
+
     const loadDashboard = async () => {
         const response = await axiosClient.get(
             "/api/ad/monitor/dashboard"
@@ -30,6 +32,31 @@ export default function MonitorDashboard() {
         setDashboard(
             response.data
         );
+    };
+
+    const loadJobDashboard = async () => {
+
+        const response =
+            await axiosClient.get(
+                "/api/ad/monitor/job-dashboard"
+            );
+
+        console.log(
+            "JOB DASHBOARD",
+            response.data
+        );
+
+        setJobDashboard(
+            response.data
+        );
+    };
+
+    const loadRuntimeDashboard = async () => {
+
+        await Promise.all([
+            loadDashboard(),
+            loadJobDashboard()
+        ]);
     };
 
     const resetSearch = () => {
@@ -95,9 +122,10 @@ export default function MonitorDashboard() {
 
 
     useEffect(() => {
-        loadDashboard();
-    }, []);
 
+        loadRuntimeDashboard();
+
+    }, []);
 
     useEffect(() => {
 
@@ -109,10 +137,12 @@ export default function MonitorDashboard() {
         eventSource.addEventListener(
             "monitor_refresh",
             () => {
+
                 console.log(
                     "MONITOR REFRESH RECEIVED"
-                    );
-                loadDashboard();
+                );
+
+                loadRuntimeDashboard();
             }
         );
 
@@ -122,13 +152,28 @@ export default function MonitorDashboard() {
 
     }, []);
 
-    if (!dashboard) {
-    return (
-        <div>
-            Loading...
-        </div>
+    if (
+        !dashboard
+        ||
+        !jobDashboard
+    ) {
+
+        return (
+            <div>
+                Loading...
+            </div>
+        );
+    }
+
+    console.log(
+        "AD DASHBOARD DATA",
+        dashboard
     );
-}
+
+    console.log(
+        "JOB DASHBOARD DATA",
+        jobDashboard
+    );
 
 return (
     <div>
@@ -167,7 +212,11 @@ return (
 
             </div>
 
-            <div className="monitor-cards">
+           <div className="monitor-section-title">
+                AD Runtime Overview
+            </div>  
+
+            <div className="monitor-cards monitor-cards">
 
                 <div className="monitor-card card-requests">
                     <div className="monitor-card-title">
@@ -177,6 +226,7 @@ return (
                         {dashboard.total_requests}
                     </div>
                 </div>
+
                 <div className="monitor-card build-failed">
                     <div className="monitor-card-title">
                         Build Failed
@@ -206,204 +256,207 @@ return (
 
             </div>
 
-            <div className="monitor-search-panel">
+           <div className="monitor-section-title">
+                Workflow Runtime Overview
+            </div>                 
+            <div className="monitor-cards monitor-cards-job">
+                <div className="monitor-card card-requests">
 
-                <div className="monitor-search-title">
-                    Search Monitor
-                </div>
-
-                <div className="monitor-filter-grid">
-
-                    <div>
-                        <label>
-                            Object Type
-                        </label>
-
-                        <select
-                            value={objectType}
-                            onChange={(e) =>
-                                setObjectType(
-                                    e.target.value
-                                )
-                            }
-                        >
-                            <option value="ALL">
-                                All Objects
-                            </option>
-
-                            <option value="USER">
-                                USER
-                            </option>
-
-                            <option value="COMPUTER">
-                                COMPUTER
-                            </option>
-
-                            <option value="GROUP">
-                                GROUP
-                            </option>
-
-                            <option value="OU">
-                                OU
-                            </option>
-                        </select>
-
+                    <div className="monitor-card-title">
+                        Total Jobs
                     </div>
 
-                    <div>
+                    <div className="monitor-card-value">
+                        {jobDashboard.total_jobs_created}
+                    </div>
+                </div>
 
-                        <label>
-                            Action User
-                        </label>
+                <div className="monitor-card card-failed">
 
-                        <input
-                            value={actionUser}
-                            onChange={(e) =>
-                                setActionUser(
-                                    e.target.value
-                                )
-                            }
-                            placeholder="sonnm"
-                        />
+                    <div className="monitor-card-title">
+                        Failed Jobs
+                    </div>
 
+                    <div className="monitor-card-value">
+                        {jobDashboard.failed_jobs_count}
                     </div>
 
                 </div>
 
-                <div className="monitor-text-filter">
+                <div className="monitor-card">
 
-                    <label>
-                        Object Name
-                    </label>
+                    <div className="monitor-card-title">
+                        Queue Jobs
+                    </div>
 
-                    <input
-                        value={objectName}
-                        onChange={(e) =>
-                            setObjectName(
-                                e.target.value
-                            )
+                    <div className="monitor-card-value">
+                        {
+                            jobDashboard.next_jobs
+                                ?.length || 0
                         }
-                        placeholder="ad.auto2"
-                    />
-
-                </div>
-
-                <div className="monitor-filter-grid">
-
-                    <div>
-
-                        <label>
-                            From Date
-                        </label>
-
-                        <input
-                            type="date"
-                            value={fromDate}
-                            onChange={(e) =>
-                                setFromDate(
-                                    e.target.value
-                                )
-                            }
-                        />
-
-                    </div>
-
-                    <div>
-
-                        <label>
-                            To Date
-                        </label>
-
-                        <input
-                            type="date"
-                            value={toDate}
-                            onChange={(e) =>
-                                setToDate(
-                                    e.target.value
-                                )
-                            }
-                        />
-
                     </div>
 
                 </div>
 
-                <div className="monitor-search-actions">
+                <div className="monitor-card">
 
-                    <button
-                        onClick={searchMonitor}
-                    >
-                        Search
-                    </button>
+                    <div className="monitor-card-title">
+                        Last Executed
+                    </div>
 
-                    <button
-                        onClick={resetSearch}
+                    <div className="runtime-job-name">
+                        {
+                            jobDashboard
+                                ?.last_executed_job
+                                ?.display_name
+                            || "-"
+                        }
+                    </div>
+
+                    <div className="runtime-job-meta">
+                        {
+                            jobDashboard
+                                ?.last_executed_job
+                                ?.object_name
+                            || "-"
+                        }
+                    </div>
+
+                    <div className="runtime-job-target">
+                        {
+                            jobDashboard
+                                ?.last_executed_job
+                                ?.target
+                            || "-"
+                        }
+                    </div>
+
+                    <div className="runtime-job-meta">
+                        {
+                            jobDashboard
+                                ?.last_executed_job
+                                ?.execute_at
+                            || "-"
+                        }
+                    </div>
+
+                    <div
+                        className={
+                            jobDashboard
+                                ?.last_executed_job
+                                ?.error_message
+                                ? "runtime-job-status-failed"
+                                : "runtime-job-status-success"
+                        }
                     >
-                        Reset
-                    </button>
+                        {
+                            jobDashboard
+                                ?.last_executed_job
+                                ?.error_message
+                                ? "FAILED"
+                                : "SUCCESS"
+                        }
+                    </div>
 
                 </div>
 
             </div>
 
-            <div className="monitor-search-results">
 
-                <div className="monitor-search-title">
-                    Search Results
+
+
+        <div className="runtime-monitor-panels">    
+
+            <div className="runtime-panel">
+
+                <div className="runtime-panel-title">
+                    Next Jobs
                 </div>
 
                 {
-                    searchResults.map(
-                        (item) => (
-                            <div
-                                key={item.search_id}
-                                className="search-result-card"
-                            >
-                                <div>
-                                    <strong>
-                                        {item.action}
-                                    </strong>
-                                </div>
+                    jobDashboard?.next_jobs?.length
+                        ? (
+                            jobDashboard.next_jobs.map(
+                                (job) => (
+                                    <div
+                                        key={job.job_id}
+                                        className="runtime-job-item"
+                                    >
+                                        <div className="runtime-job-name">
+                                                {job.display_name}
+                                            </div>
 
-                                <div>
-                                    Target Object:
-                                    {" "}
-                                    {item.object_name}
-                                </div>
+                                            <div className="runtime-job-meta">
+                                                {job.object_name || "-"}
+                                            </div>
 
-                                <div>
-                                    Type:
-                                    {" "}
-                                    {item.object_type}
-                                </div>
+                                            <div className="runtime-job-meta">
+                                                {job.target || "-"}
+                                            </div>
 
-                                <div>
-                                    Action by:
-                                    {" "}
-                                    {item.username}
-                                </div>
-
-                                <div>
-                                    Time:
-                                    {" "}
-                                    {
-                                        new Date(
-                                            item.time
-                                        ).toLocaleString(
-                                            "vi-VN"
-                                        )
-                                    }
-                                </div>
-
+                                            <div className="runtime-job-meta">
+                                                {job.execute_at || job.timestamp}
+                                            </div>
+                                    </div>
+                                )
+                            )
+                        )
+                        : (
+                            <div>
+                                No queued jobs
                             </div>
                         )
-                    )
                 }
+            </div>
+            <div className="runtime-panel">
+                <div className="runtime-panel-title">
+                    Recent Failed Jobs
+                </div>
+
+                {
+                    jobDashboard?.recent_failed_jobs?.length
+                        ? (
+                            jobDashboard.recent_failed_jobs.map(
+                                (job) => (
+                                    <div
+                                        key={job.job_id}
+                                        className="runtime-job-item"
+                                    >
+                                        
+
+                                            <div className="runtime-job-name">
+                                                {job.display_name}
+                                            </div>
+
+                                            <div className="runtime-job-meta">
+                                                {job.object_name || "-"}
+                                            </div>
+
+                                            <div className="runtime-job-error">
+                                                {job.error_message || "-"}
+                                            </div>
+
+                                            <div className="runtime-job-meta">
+                                                {job.execute_at || job.timestamp}
+                                            </div>
+
+                                        
+                                    </div>
+                                )
+                            )
+                        )
+                        : (
+                            <div>
+                                No failed jobs
+                            </div>
+                        )
+                }
+                
 
             </div>
 
         </div>
-
+    </div>            
     </div>
 );
 }

@@ -1,0 +1,38 @@
+{
+  "job_id": "REQ_25082026_E39C:STEP_01",
+  "request_id": "REQ_25082026_E39C",
+  "workflow_id": "WF_1787624632359",
+  "action_id": "STEP_01",
+  "action_code": "add_group",
+  "display_name": "ADD_GROUP",
+  "execute_at": "2026-08-25T09:30:00",
+  "depends_on": [],
+  "max_retry": 3,
+  "continue_on_error": false,
+  "business_data": {
+    "start_date": "2026-08-25T09:30:00",
+    "target_object": {
+      "object_type": "USER",
+      "dn": "CN=AD Automation 2,OU=HO,DC=automate,DC=com,DC=vn",
+      "business_data": {
+        "display_name": "AD Automation 2",
+        "sam_account_name": "ad.auto2",
+        "email": "ad.auto2@automate.com.vn",
+        "member_of": []
+      }
+    },
+    "action_data": {
+      "STEP_01": {
+        "targetGroup": "TestGroup"
+      }
+    }
+  },
+  "status": "FAILED",
+  "retry_count": 0,
+  "created_at": "2026-08-25T09:29:46.857684",
+  "updated_at": "2026-08-25T09:30:07.228352",
+  "started_at": "2026-08-25T09:30:07.224982",
+  "completed_at": "2026-08-25T09:30:07.228352",
+  "result_message": null,
+  "error_message": "Thiếu group_name trong business_data.action_data"
+}

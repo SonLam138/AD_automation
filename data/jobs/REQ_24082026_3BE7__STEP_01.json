@@ -1,0 +1,52 @@
+{
+  "job_id": "REQ_24082026_3BE7:STEP_01",
+  "request_id": "REQ_24082026_3BE7",
+  "workflow_id": "TEMP_ACCESS_COMPUTER",
+  "action_id": "STEP_01",
+  "action_code": "move_computer_to_ou",
+  "display_name": "Move computer to OU to grant permission",
+  "execute_at": "2026-08-24T22:20:00",
+  "depends_on": [],
+  "max_retry": 3,
+  "continue_on_error": false,
+  "business_data": {
+    "start_date": "2026-08-24T22:20:00",
+    "step_execute_times": [
+      {
+        "step_id": "STEP_02",
+        "execute_at": "2026-08-24T22:21:00"
+      }
+    ],
+    "step_new_values": [
+      {
+        "step_id": "STEP_01",
+        "parameter_name": "target_ou",
+        "new_value": "Khanh Hoa"
+      },
+      {
+        "step_id": "STEP_02",
+        "parameter_name": "target_ou",
+        "new_value": "HO"
+      }
+    ],
+    "target_object": {
+      "object_type": "COMPUTER",
+      "sam_account_name": "CLIENT-01$",
+      "computer_name": "Client-01",
+      "dn": "CN=Client-01,OU=Disabled Account,DC=automate,DC=com,DC=vn"
+    },
+    "action_data": {
+      "STEP_01": {
+        "target_ou": "Khanh Hoa"
+      }
+    }
+  },
+  "status": "FAILED",
+  "retry_count": 0,
+  "created_at": "2026-08-24T22:18:29.404897",
+  "updated_at": "2026-08-24T22:20:09.863445",
+  "started_at": "2026-08-24T22:20:09.851034",
+  "completed_at": "2026-08-24T22:20:09.863445",
+  "result_message": null,
+  "error_message": "{'result': 80, 'description': 'other', 'dn': '', 'message': '00002089: UpdErr: DSID-031B0ED7, problem 5012 (DIR_ERROR), data 2\\n\\x00', 'referrals': None, 'type': 'modDNResponse'}"
+}

@@ -1,0 +1,46 @@
+{
+  "request_id": "REQ_25082026_64FE",
+  "workflow_id": "WF_1787626328239",
+  "execute_at": "2026-08-25T09:54:00",
+  "actions": [
+    {
+      "id": "STEP_01",
+      "action_code": "move_user_to_ou",
+      "display_name": "MOVE",
+      "execution": {
+        "depends_on": [],
+        "delay_minutes": 0,
+        "execute_time": "2026-08-25T09:54",
+        "retry_count": 3,
+        "continue_on_error": false
+      }
+    }
+  ],
+  "status": "FAILED",
+  "current_action_id": null,
+  "completed_action_ids": [],
+  "failed_action_ids": [
+    "STEP_01"
+  ],
+  "created_at": "2026-08-25T09:52:58.601588",
+  "updated_at": "2026-08-27T02:46:10.725349",
+  "is_scheduled": false,
+  "business_data": {
+    "start_date": "2026-08-25T09:54:00",
+    "target_object": {
+      "object_type": "USER",
+      "dn": "CN=AD Automation 1,OU=HO,DC=automate,DC=com,DC=vn",
+      "business_data": {
+        "display_name": "AD Automation(Test)",
+        "sam_account_name": "ad.auto1",
+        "email": "ad.auto1@automate.com.vn",
+        "member_of": []
+      }
+    },
+    "action_data": {
+      "STEP_01": {
+        "targetOu": "Khanh Hoa"
+      }
+    }
+  }
+}

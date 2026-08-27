@@ -6,16 +6,24 @@ from fastapi import (
     UploadFile,
     File
 )
+from typing import Any, Dict
 from datetime import (
     datetime,
     timezone,
 )
-
+from app.adapters.ldap_container import (
+    ldap,
+)
+from app.search_tools.ou_search import search_ou
+from app.search_tools.group_search import search_group
 import json
 from pathlib import Path
 
 from app.auto_engine.services.review_session_container import (
     review_session_repository
+)
+from app.auto_engine.services.workflow_journal_repository import (
+    WorkflowJournalRepository,
 )
 
 from app.auto_engine.resolver.workflow_excel_preview import (
@@ -42,7 +50,8 @@ from app.auto_engine.models.employee_offboarding import (
 from app.auto_engine.models.request_models import BulkConfirmRequest
 from app.auto_engine.models.custom_workflow_request import CustomWorkflowSaveRequest
 from app.auto_engine.models.custom_workflow_adapter import CustomWorkflowAdapter
-
+from app.auto_engine.models.wf_with_newvalue_adapter import TargetObjectWithNewValueAdapter
+from app.auto_engine.models.wf_with_newvalue import TempResolveObjectRequest
 from app.auto_engine.resolver.workflow_resolver import (
     WorkflowResolver
 )
@@ -82,6 +91,8 @@ router = APIRouter(
 employee_offboarding_api_adapter = (
     EmployeeOffboardingApiAdapter()
 )
+
+wf_with_newvalue_adapter = (TargetObjectWithNewValueAdapter())
 
 
 workflow_plan_engine = WorkflowPlanEngine(
@@ -382,6 +393,10 @@ async def validate_custom_workflow(
 def save_custom_workflow(
     request: CustomWorkflowSaveRequest
 ):
+    
+    journal_repository = (
+        WorkflowJournalRepository()
+    )
 
     adapter = (
         CustomWorkflowAdapter()
@@ -433,6 +448,17 @@ def save_custom_workflow(
             indent=2,
             ensure_ascii=False
         )
+
+    journal_repository.save(
+        workflow_name=(
+            request.workflowInfo.get(
+                "workflowName",
+                "Untitled Workflow"
+            )
+        ),
+        created_by="sonnm",
+        snapshot=request.model_dump()
+    )
     reload_workflow_registry()
 
     return {
@@ -448,6 +474,14 @@ def run_custom_workflow(
 ):
     adapter = (
         CustomWorkflowAdapter()
+    )
+    journal_repository = (
+            WorkflowJournalRepository()
+        )
+    workflow_id = (
+        request.workflowInfo.get(
+            "workflowId"
+        )
     )
 
     workflow_context = (
@@ -537,6 +571,21 @@ def run_custom_workflow(
             ensure_ascii=False
         )
     reload_workflow_registry()
+
+    
+    journal_updated = journal_repository.mark_executed(workflow_id)
+
+    if not journal_updated:
+        raise HTTPException(
+            status_code=500,
+            detail=(
+                "Workflow plans were created, "
+                "but journal status could not "
+                "be updated to executed."
+            )
+        )
+
+
     return {
             "success": True,
             "requestCount": len(requests),
@@ -544,4 +593,241 @@ def run_custom_workflow(
             "plans": created_plans
         }
 
+    
+
+
+
+@router.get(
+    "/custom-workflow/journal"
+)
+def get_workflow_journal():
+
+    journal_repository = (
+        WorkflowJournalRepository()
+    )
+
+    entries = (
+        journal_repository.list_by_user(
+            "sonnm"   # tạm thời
+        )
+    )
+
+    return {
+        "success": True,
+        "items": entries
+    }
         
+@router.get(
+    "/custom-workflow/journal/{journal_id}"
+)
+def get_workflow_journalid(
+    journal_id: str,
+
+):
+    repository = WorkflowJournalRepository()
+
+    entry = repository.get_by_id(
+        journal_id
+    )
+
+    if not entry:
+        raise HTTPException(
+            status_code=404,
+            detail="Workflow journal not found"
+        )
+
+    return {
+        "success": True,
+        "item": entry
+    }
+
+@router.delete(
+    "/custom-workflow/journal/{journal_id}"
+)
+def delete_workflow_journal(
+    journal_id: str,
+):
+    repository = WorkflowJournalRepository()
+
+    entry = repository.get_by_id(
+        journal_id
+    )
+
+    if not entry:
+        raise HTTPException(
+            status_code=404,
+            detail="Workflow journal not found"
+        )
+
+    if entry.get("status") == "executed":
+        raise HTTPException(
+            status_code=400,
+            detail=(
+                "Workflow này đã được thực thi. "
+                "Workflow sẽ được tự động dọn dẹp "
+                "theo chính sách cleanup của hệ thống."
+            )
+        )
+
+    workflow_id = entry.get(
+        "workflow_id"
+    )
+
+    repository.delete_registry_workflow(
+        workflow_id
+    )
+
+    deleted = repository.delete(
+        journal_id
+    )
+
+    return {
+        "success": True,
+        "deleted": deleted
+    }
+
+@router.post(
+    "/temp-access"
+)
+def execute_temp_access(
+    payload: Dict[str, Any]
+):
+
+    adapter = (
+        TargetObjectWithNewValueAdapter()
+    )
+
+    plan = (
+        workflow_runtime.run_plan_engine(
+            adapter=adapter,
+            source_data=payload,
+        )
+    )
+
+    return {
+        "success": True,
+
+        "request_id":
+            plan.request_id,
+
+        "workflow_id":
+            plan.workflow_id,
+
+        "execute_at":
+            plan.execute_at,
+
+        "message":
+            (
+                "Temporary Access "
+                "workflow created"
+            ),
+    }
+
+
+@router.post(
+    "/temp-resolve-object"
+)
+def temp_resolve_object(
+    request: TempResolveObjectRequest
+):
+    def get_display_name(
+        item: dict,
+    ) -> str:
+
+        return (
+            item.get("ou")
+            or item.get("group_name")
+            or item.get("name")
+            or "Unknown"
+        )
+
+    keyword = (
+        request.keyword
+        .strip()
+    )
+
+    if not keyword:
+
+        raise HTTPException(
+            status_code=400,
+            detail="keyword is required"
+        )
+
+    object_type = (
+        request.object_type
+        .upper()
+        .strip()
+    )
+
+    if object_type == "OU":
+
+        result = search_ou(
+            connection=ldap.connection,
+            keyword=keyword,
+        )
+
+    elif object_type == "GROUP":
+
+        result = search_group(
+            connection=ldap.connection,
+            keyword=keyword,
+        )
+
+    else:
+
+        raise HTTPException(
+            status_code=400,
+            detail=(
+                f"Unsupported object type: "
+                f"{object_type}"
+            )
+        )
+
+
+    matches = (
+        result.get(
+            "results",
+            []
+        )
+    )
+
+    if not matches:
+
+        return {
+            "resolved": False,
+
+            "message":
+                "Object not found",
+        }
+
+    if len(matches) == 1:
+
+        return {
+            "resolved": True,
+
+            "distinguished_name":
+                matches[0][
+                    "distinguished_name"
+                ],
+        }
+
+    return {
+        "resolved": False,
+
+        "multiple": True,
+
+        "results": [
+            {
+                "name":
+                    get_display_name(
+                        item
+                    ),
+
+                "distinguished_name":
+                    item[
+                        "distinguished_name"
+                    ],
+            }
+            for item in matches
+        ],
+    }

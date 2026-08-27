@@ -17,7 +17,10 @@ import ChatPage from "./pages/ChatPage";
 import MonitorDashboard from "./pages/MonitorDashboard";
 import BulkOffboardingPage from "./pages/BulkOffboardingPage";
 import CustomWorkflowPage from "./pages/CustomWorkflowPage";
-import WorkflowDesignerPage from "./pages/WorkflowDesignerPage"
+import WorkflowDesignerPage from "./pages/WorkflowDesignerPage";
+import WorkflowJournalPage from "./pages/WorkflowJournalPage";
+import WorkflowJournalDetailPage from "./pages/WorkflowJournalDetailPage";
+import TempAccessPage from "./pages/TempAccessPage";
 
 function App() {
 
@@ -79,6 +82,22 @@ function App() {
                 <Route
                     path="workflow/custom/designer"
                     element={<WorkflowDesignerPage />}
+                />
+                <Route
+                    path="workflow/custom/designer/workflow-journal"
+                    element={<WorkflowJournalPage />}
+                />
+                <Route
+                    path="workflow/custom/designer/workflow-journal/:journalId"
+                    element={
+                        <WorkflowJournalDetailPage />
+                    }
+                />
+                <Route
+                    path="/portal/workflow/temp-access"
+                    element={
+                        <TempAccessPage />
+                    }
                 />
 
                 {/* Automation Tools */}

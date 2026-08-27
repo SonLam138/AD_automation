@@ -31,7 +31,7 @@
       },
       {
         "id": "STEP_02",
-        "action_code": "remove_all_group",
+        "action_code": "remove_all_groups",
         "display_name": "Remove user from all Groups",
         "execution": {
           "depends_on": [
@@ -44,7 +44,7 @@
       },
       {
         "id": "STEP_03",
-        "action_code": "move_disabled_ou",
+        "action_code": "move_user_to_ou",
         "display_name": "Move To Disabled OU",
         "execution": {
           "depends_on": [
@@ -59,13 +59,109 @@
   },
   {
     "match": {
-      "request_type": "custom_workflow",
+      "request_type": "temp_access_computer",
       "contexts": [
-        "CUSTOM_WF_1787332616338_Vender_C"
+        "TEMP_ACCESS_COMPUTER"
       ]
     },
-    "workflow_id": "WF_1787332616338",
-    "workflow_name": "New",
+    "workflow_id": "TEMP_ACCESS_COMPUTER",
+    "workflow_name": "Temporary access for computer",
+    "object_resolver": "resolve_computer",
+    "metadata": {
+      "target_object_type": "COMPUTER",
+      "schedule_mode": "AT_EFFECTIVE_TIME",
+      "trigger_field": "start_date",
+      "priority": "NORMAL",
+      "allow_retry": true,
+      "max_retry": 3
+    },
+    "actions": [
+      {
+        "id": "STEP_01",
+        "action_code": "move_computer_to_ou",
+        "display_name": "Move computer to OU to grant permission",
+        "execution": {
+          "target_ou": "ou_name",
+          "depends_on": [],
+          "delay_minutes": 0,
+          "retry_count": 3,
+          "continue_on_error": false
+        }
+      },
+      {
+        "id": "STEP_02",
+        "action_code": "move_computer_to_ou",
+        "display_name": "Move computer to OU to remove permission",
+        "execution": {
+          "target_ou": "ou_name",
+          "depends_on": [
+            "STEP_01"
+          ],
+          "delay_minutes": 0,
+          "execute_time": "UI_CUSTOM",
+          "retry_count": 3,
+          "continue_on_error": false
+        }
+      }
+    ]
+  },
+  {
+    "match": {
+      "request_type": "temp_access_user",
+      "contexts": [
+        "TEMP_ACCESS_USER"
+      ]
+    },
+    "workflow_id": "TEMP_ACCESS_USER",
+    "workflow_name": "Temporary access for user",
+    "object_resolver": "resolve_user",
+    "metadata": {
+      "target_object_type": "USER",
+      "schedule_mode": "AT_EFFECTIVE_TIME",
+      "trigger_field": "start_date",
+      "priority": "NORMAL",
+      "allow_retry": true,
+      "max_retry": 3
+    },
+    "actions": [
+      {
+        "id": "STEP_01",
+        "action_code": "add_group_by_dn",
+        "display_name": "Add user to group to grant permission",
+        "execution": {
+          "target_group": "group_name",
+          "depends_on": [],
+          "delay_minutes": 0,
+          "retry_count": 3,
+          "continue_on_error": false
+        }
+      },
+      {
+        "id": "STEP_02",
+        "action_code": "remove_group_by_dn",
+        "display_name": "Remove user to group to remove permission",
+        "execution": {
+          "target_group": "group_name",
+          "depends_on": [
+            "STEP_01"
+          ],
+          "delay_minutes": 0,
+          "execute_time": "UI_CUSTOM",
+          "retry_count": 3,
+          "continue_on_error": false
+        }
+      }
+    ]
+  },
+  {
+    "match": {
+      "request_type": "custom_workflow",
+      "contexts": [
+        "CUSTOM_WF_1787624632359_USER1"
+      ]
+    },
+    "workflow_id": "WF_1787624632359",
+    "workflow_name": "Custom Access",
     "object_resolver": "resolve_user",
     "workflow_complete": true,
     "metadata": {
@@ -79,10 +175,21 @@
     "actions": [
       {
         "id": "STEP_01",
-        "action_code": "disable_user",
-        "display_name": "DISABLE",
+        "action_code": "add_group",
+        "display_name": "ADD_GROUP",
         "execution": {
-          "execute_time": "2026-08-25T00:17",
+          "execute_time": "2026-08-25T09:30",
+          "depends_on": [],
+          "retry_count": 3,
+          "continue_on_error": false
+        }
+      },
+      {
+        "id": "STEP_02",
+        "action_code": "move_user_to_ou",
+        "display_name": "MOVE",
+        "execution": {
+          "execute_time": "2026-08-25T09:31",
           "depends_on": [],
           "retry_count": 3,
           "continue_on_error": false
@@ -94,11 +201,44 @@
     "match": {
       "request_type": "custom_workflow",
       "contexts": [
-        "CUSTOM_WF_1787333810569_Vender_D"
+        "CUSTOM_WF_1787626434875_USER1"
       ]
     },
-    "workflow_id": "WF_1787333810569",
-    "workflow_name": "New test",
+    "workflow_id": "WF_1787626434875",
+    "workflow_name": "Test",
+    "object_resolver": "resolve_user",
+    "workflow_complete": true,
+    "metadata": {
+      "target_object_type": "USER",
+      "schedule_mode": "AT_EFFECTIVE_TIME",
+      "trigger_field": "start_date",
+      "priority": "NORMAL",
+      "allow_retry": true,
+      "max_retry": 3
+    },
+    "actions": [
+      {
+        "id": "STEP_01",
+        "action_code": "move_user_to_ou",
+        "display_name": "MOVE",
+        "execution": {
+          "execute_time": "2026-08-25T10:06",
+          "depends_on": [],
+          "retry_count": 3,
+          "continue_on_error": false
+        }
+      }
+    ]
+  },
+  {
+    "match": {
+      "request_type": "custom_workflow",
+      "contexts": [
+        "CUSTOM_WF_1787645959654_USER1"
+      ]
+    },
+    "workflow_id": "WF_1787645959654",
+    "workflow_name": "My Flow",
     "object_resolver": "resolve_user",
     "workflow_complete": true,
     "metadata": {
@@ -115,7 +255,51 @@
         "action_code": "disable_user",
         "display_name": "DISABLE",
         "execution": {
-          "execute_time": "2026-08-26T00:37",
+          "execute_time": "2026-08-25T15:25",
+          "depends_on": [],
+          "retry_count": 3,
+          "continue_on_error": false
+        }
+      },
+      {
+        "id": "STEP_02",
+        "action_code": "move_user_to_ou",
+        "display_name": "MOVE",
+        "execution": {
+          "execute_time": "2026-08-25T15:26",
+          "depends_on": [],
+          "retry_count": 3,
+          "continue_on_error": false
+        }
+      }
+    ]
+  },
+  {
+    "match": {
+      "request_type": "custom_workflow",
+      "contexts": [
+        "CUSTOM_WF_1787645959654_COMP1"
+      ]
+    },
+    "workflow_id": "WF_1787645959654",
+    "workflow_name": "My Flow",
+    "object_resolver": "resolve_computer",
+    "workflow_complete": true,
+    "metadata": {
+      "target_object_type": "COMPUTER",
+      "schedule_mode": "AT_EFFECTIVE_TIME",
+      "trigger_field": "start_date",
+      "priority": "NORMAL",
+      "allow_retry": true,
+      "max_retry": 3
+    },
+    "actions": [
+      {
+        "id": "STEP_03",
+        "action_code": "move_computer_to_ou",
+        "display_name": "MOVE",
+        "execution": {
+          "execute_time": "2026-08-25T15:26",
           "depends_on": [],
           "retry_count": 3,
           "continue_on_error": false

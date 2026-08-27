@@ -1,0 +1,50 @@
+{
+  "request_id": "REQ_24082026_A5A0",
+  "workflow_id": "TEMP_ACCESS_COMPUTER",
+  "execute_at": "2026-08-23T23:00:00",
+  "actions": [
+    {
+      "id": "STEP_01",
+      "action_code": "move_computer_to_ou",
+      "display_name": "Move computer to OU to grant permission",
+      "execution": {
+        "depends_on": [],
+        "delay_minutes": 0,
+        "execute_time": null,
+        "retry_count": 3,
+        "continue_on_error": false
+      }
+    },
+    {
+      "id": "STEP_02",
+      "action_code": "move_computer_to_ou",
+      "display_name": "Move computer to OU to remove permission",
+      "execution": {
+        "depends_on": [
+          "STEP_01"
+        ],
+        "delay_minutes": 0,
+        "execute_time": "2026-08-24T23:00:00",
+        "retry_count": 3,
+        "continue_on_error": false
+      }
+    }
+  ],
+  "business_data": {
+    "start_date": "2026-08-23T23:00:00",
+    "source_value": "OU=Disabled Account,DC=automate,DC=com,DC=vn",
+    "new_value": "OU=HO,DC=automate,DC=com,DC=vn",
+    "step_execute_times": [
+      {
+        "step_id": "STEP_02",
+        "execute_at": "2026-08-24T23:00:00"
+      }
+    ],
+    "target_object": {
+      "object_type": "COMPUTER",
+      "sam_account_name": "CLIENT-01$",
+      "computer_name": "Client-01",
+      "dn": "CN=Client-01,OU=Disabled Account,DC=automate,DC=com,DC=vn"
+    }
+  }
+}

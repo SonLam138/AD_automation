@@ -1,53 +1,355 @@
-.workflow-designer-page {
-    padding: 32px;
-}
-
 .workflow-designer-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
 
-    margin-bottom: 24px;
+    padding: 20px;
+
+    background: #1f2937;
+    border: 1px solid #374151;
+    border-radius: 12px;
+
+    margin-bottom: 20px;
+}
+
+.workflow-designer-header h2 {
+    margin: 0;
+    color: #fbbf24;
+}
+.workflow-designer-subtitle {
+    margin-top: 6px;
+    margin-bottom: 0;
+
+    color: #e7db05;
+
+    font-size: 14px;
+    font-weight: 500;
+
+    letter-spacing: 0.3px;
 }
 
 .workflow-designer-layout {
     display: grid;
-    grid-template-columns: 200px 1fr;
-    gap: 24px;
-}
-.object-count {
-    color: #666;
-    font-size: 0.9rem;
-    margin-bottom: 16px;
-}
-.sidebar-object {
-    border: 1px solid #eee;
-    border-radius: 8px;
-    padding: 10px;
-    margin-bottom: 12px;
-}
-.steps-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    grid-template-columns: 300px 1fr;
+    gap: 20px;
 
+    align-items: start;
+}
+
+.designer-sidebar {
+    background: #1f2937;
+    border: 1px solid #374151;
+    border-radius: 12px;
+    padding: 20px;
+
+}
+.designer-main {
+    background: #1f2937;
+
+    border: 1px solid #374151;
+    border-radius: 12px;
+
+    padding: 20px;
+
+    min-width: 0;
+}
+
+.designer-sidebar h3 {
+    margin-top: 0;
+    margin-bottom: 8px;
+
+    color: #fbbf24;
+}
+
+.object-count {
     margin-bottom: 16px;
+
+    color: #9ca3af;
+    font-size: 13px;
 }
-.step-card {
-    border: 1px solid #eee;
+
+.sidebar-object {
+    background: #111827;
+
+    border: 1px solid #374151;
     border-radius: 10px;
-    padding: 16px;
-    margin-bottom: 12px;
+
+    padding: 12px;
+
+    margin-bottom: 10px;
+
+    transition: all 0.2s ease;
 }
-.action-parameters {
-    margin-top: 16px;
-    padding-top: 16px;
-    border-top: 1px solid #eee;
+
+.sidebar-object:hover {
+    border-color: #fbbf24;
+
+    transform: translateY(-1px);
+}
+
+.sidebar-object strong {
+    display: block;
+
+    color: #fbbf24;
+
+    margin-bottom: 4px;
+}
+
+.sidebar-object div {
+    color: #d1d5db;
+    font-size: 13px;
+}
+
+.step-card {
+    background: #1f2937;
+    border: 1px solid #374151;
+    border-radius: 12px;
+
+    padding: 20px;
+    margin-bottom: 20px;
+
+    box-shadow:
+        0 8px 20px rgba(0,0,0,0.2);
+
+    transition: all 0.2s ease;
+}
+
+.step-card:hover {
+    border-color: #fbbf24;
 }
 .step-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
 
+    margin-bottom: 18px;
+    padding-bottom: 12px;
+
+    border-bottom: 1px solid #374151;
+}
+
+.step-header strong {
+    color: #fbbf24;
+    font-size: 18px;
+    font-weight: 700;
+}
+.step-header button {
+    background: #dc2626;
+    color: white;
+
+    border: none;
+    border-radius: 6px;
+
+    padding: 6px 12px;
+
+    cursor: pointer;
+}
+
+.step-header button:hover {
+    background: #b91c1c;
+}
+.steps-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    margin-bottom: 20px;
+}
+
+.steps-header h3 {
+    margin: 0;
+
+    color: #fbbf24;
+    font-size: 22px;
+}
+
+.steps-header button {
+    background: #fbbf24;
+    color: #111827;
+
+    border: none;
+    border-radius: 8px;
+
+    padding: 10px 16px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+.step-card .form-group {
+    margin-bottom: 18px;
+}
+
+.step-card label {
+    color: #f0cc04;
+    font-size: 13px;
+    font-weight: 600;
+}
+.action-parameters {
+    margin-top: 20px;
+
+    background: #111827;
+    border: 1px solid #374151;
+    border-radius: 10px;
+
+    padding: 16px;
+}
+.parameter-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
     margin-bottom: 16px;
+}
+
+.parameter-header h4 {
+    margin: 0;
+    color: #fbbf24;
+}
+
+.parameter-status {
+    padding: 4px 10px;
+
+    border-radius: 20px;
+
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.parameter-status.confirmed {
+    background: rgba(34,197,94,0.15);
+    color: #22c55e;
+}
+
+.parameter-status.editing {
+    background: rgba(251,191,36,0.15);
+    color: #fbbf24;
+}
+
+.current-action {
+    margin-bottom: 16px;
+
+    color: #d1d5db;
+}
+
+.current-action strong {
+    margin-left: 8px;
+
+    color: #fbbf24;
+}
+.save-btn,
+.execute-btn {
+    min-width: 140px;
+
+    border: none;
+    border-radius: 8px;
+
+    padding: 12px 18px;
+
+    font-size: 14px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: all 0.2s ease;
+}
+.save-btn {
+    background: #fbbf24;
+    color: #111827;
+}
+
+.save-btn:hover:not(:disabled) {
+    background: #f59e0b;
+
+    transform: translateY(-1px);
+}
+.execute-btn {
+    background: #22c55e;
+    color: #ffffff;
+}
+
+.execute-btn:hover:not(:disabled) {
+    background: #16a34a;
+
+    transform: translateY(-1px);
+}
+.save-btn:disabled,
+.execute-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+
+    transform: none;
+}
+.save-btn:disabled {
+    background: #16a34a;
+    color: white;
+}
+.execute-btn:disabled {
+    background: #15803d;
+    color: white;
+}
+.parameter-actions {
+    display: flex;
+    gap: 10px;
+
+    margin-top: 16px;
+}
+.confirm-btn {
+    background: #22c55e;
+    color: white;
+
+    border: none;
+    border-radius: 8px;
+
+    padding: 10px 16px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: all 0.2s ease;
+}
+
+.confirm-btn:hover {
+    background: #16a34a;
+
+    transform: translateY(-1px);
+}
+.reset-btn {
+    background: #374151;
+    color: #f3f4f6;
+
+    border: 1px solid #4b5563;
+    border-radius: 8px;
+
+    padding: 10px 16px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: all 0.2s ease;
+}
+
+.reset-btn:hover {
+    border-color: #fbbf24;
+    color: #fbbf24;
+}
+.confirm-btn:disabled {
+    background: #15803d;
+    opacity: 0.8;
+    cursor: not-allowed;
+}
+.parameter-input-row {
+    display: grid;
+    grid-template-columns:
+        minmax(0, 1fr)
+        auto;
+
+    gap: 10px;
+}
+
+.parameter-input-row button {
+    min-width: 90px;
 }

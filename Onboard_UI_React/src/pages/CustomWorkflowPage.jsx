@@ -1,17 +1,15 @@
 import "./CustomWorkflowPage.css";
 import axiosClient from "../api/axiosClient";
+import { useNavigate } from "react-router-dom";
 
 import {
     useState
 } from "react";
 
-import {
-    useNavigate
-} from "react-router-dom";
-
 export default function CustomWorkflowPage() {
 
     const navigate = useNavigate();
+
     const [workflowInfo, setWorkflowInfo] = useState({
         workflowName: "",
         description: "",
@@ -263,6 +261,12 @@ export default function CustomWorkflowPage() {
                     disabled={!validated}
                 >
                     Create Flow →
+                </button>
+                <button
+                    onClick={() => navigate("/portal/workflow/custom/designer/workflow-journal")}
+                    >
+
+                    My Workflow
                 </button>
 
             </div>

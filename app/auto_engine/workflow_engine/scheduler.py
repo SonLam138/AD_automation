@@ -1,7 +1,13 @@
 from copy import deepcopy
 from datetime import timedelta
 from typing import List
+from app.event.event_emitter import (
+    emit_event,
+)
 
+from app.event.job_monitor_payload import (
+    build_job_monitor_payload,
+)
 from app.auto_engine.models.active_execution import (
     ActiveExecution,
     ActiveExecutionStatus,
@@ -123,12 +129,30 @@ class Scheduler:
                 action=action,
             )
 
-            self.job_repository.save(
-                job
+            saved_job = (
+                self.job_repository.save(
+                    job
+                )
+            )
+
+            job_monitor_payload = (
+                build_job_monitor_payload(
+                    saved_job
+                )
+            )
+
+            emit_event(
+                event_name=
+                    "JOB_CREATED",
+
+                source=
+                    "WORKFLOW_ENGINE",
+
+                **job_monitor_payload,
             )
 
             created_jobs.append(
-                job
+                saved_job
             )
 
         return created_jobs
@@ -161,6 +185,68 @@ class Scheduler:
             f"{action.id}"
         )
 
+
+        
+        job_business_data = deepcopy(
+            active_execution.business_data
+        )
+
+        existing_action_data = (
+            job_business_data.get(
+                "action_data"
+            )
+            or {}
+        )
+
+        # ==========================================
+        # CUSTOM WORKFLOW
+        # action_data đã có sẵn
+        # ==========================================
+
+        if existing_action_data:
+
+            action_data = {
+                action.id:
+                    existing_action_data.get(
+                        action.id,
+                        {}
+                    )
+            }
+
+        # ==========================================
+        # TEMP ACCESS
+        # build từ step_new_values
+        # ==========================================
+
+        else:
+
+            step_new_values = (
+                job_business_data.get(
+                    "step_new_values",
+                    []
+                )
+            )
+
+            action_data = {}
+
+            for item in step_new_values:
+
+                if item["step_id"] != action.id:
+                    continue
+
+                action_data[action.id] = {
+                    item["parameter_name"]:
+                        item["new_value"]
+                }
+
+                break
+
+        job_business_data[
+            "action_data"
+        ] = action_data
+
+
+
         return Job(
             job_id=job_id,
 
@@ -192,9 +278,7 @@ class Scheduler:
                 action.execution.continue_on_error
             ),
 
-            business_data=deepcopy(
-                active_execution.business_data
-            ),
+            business_data= job_business_data,
 
             status=JobStatus.PENDING,
         )

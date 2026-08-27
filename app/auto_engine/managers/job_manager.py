@@ -8,6 +8,9 @@ from app.auto_engine.models.job import (
 from app.auto_engine.services.job_repository import (
     JobRepository,
 )
+from app.event.event_emitter import emit_event
+from app.event.job_monitor_payload import (build_job_monitor_payload)
+
 
 
 class JobManager:
@@ -108,9 +111,25 @@ class JobManager:
         job.result_message = None
         job.error_message = None
 
-        return self.job_repository.save(
-            job
+        saved_job = (
+            self.job_repository.save(
+                job
+            )
         )
+
+        emit_event(
+            event_name=
+                "JOB_STARTED",
+
+            source=
+                "WORKFLOW_ENGINE",
+
+            job_id=
+                saved_job.job_id,
+        )
+
+        return saved_job
+
 
     def mark_completed(
         self,
@@ -131,9 +150,37 @@ class JobManager:
         job.result_message = message
         job.error_message = None
 
-        return self.job_repository.save(
-            job
+        saved_job = (
+            self.job_repository.save(
+                job
+            )
         )
+
+        job_monitor_payload = (
+            build_job_monitor_payload(
+                saved_job
+            )
+        )
+        print(
+            "JOB COMPLETE MONITOR PAYLOAD =",
+            job_monitor_payload
+        )
+
+        emit_event(
+            event_name=
+                "JOB_COMPLETED",
+
+            source=
+                "WORKFLOW_ENGINE",
+
+            status=
+                "COMPLETED",
+
+            **job_monitor_payload,
+        )
+
+        return saved_job
+
 
     def mark_failed(
         self,
@@ -154,9 +201,36 @@ class JobManager:
         job.result_message = None
         job.error_message = error
 
-        return self.job_repository.save(
-            job
+        saved_job = (
+            self.job_repository.save(
+                job
+            )
         )
+
+        job_monitor_payload = (
+            build_job_monitor_payload(
+                saved_job
+            )
+        )
+
+        emit_event(
+            event_name=
+                "JOB_FAILED",
+
+            source=
+                "WORKFLOW_ENGINE",
+
+            status=
+                "FAILED",
+
+            error_message=
+                saved_job.error_message,
+
+            **job_monitor_payload,
+        )
+
+        return saved_job
+
 
     @staticmethod
     def _is_due(

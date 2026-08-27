@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { createEmployeeOffboarding } from "../services/adToolApi";
-
+import "./EmployeeOffboardingPage.css";
 export default function EmployeeOffboardingPage() {
 
     const [formData, setFormData] =
@@ -64,129 +64,172 @@ export default function EmployeeOffboardingPage() {
     };
 
     return (
+        
+        <div className="offboarding-page">
+            <div className="offboarding-card">
 
-        <div>
+                <h2>
+                    Employee Offboarding
+                </h2>
 
-            <h2>
-                Employee Offboarding
-            </h2>
+                <p className="offboarding-subtitle">
+                    Submit employee offboarding requests
+                    for Active Directory automation.
+                </p>
+                <div className="offboarding-form">
+                    <div className="form-group">
 
-            <input
-                name="employee_id"
-                placeholder="Employee ID"
-                value={
-                    formData.employee_id
-                }
-                onChange={
-                    handleChange
-                }
-            />
+                        <label className="offboarding-label">
+                            Employee ID
+                        </label>
 
-            <br /><br />
-
-            <input
-                name="email"
-                placeholder="Email"
-                value={
-                    formData.email
-                }
-                onChange={
-                    handleChange
-                }
-            />
-
-            <br /><br />
-
-            <input
-                name="reason"
-                placeholder="Reason"
-                value={
-                    formData.reason
-                }
-                onChange={
-                    handleChange
-                }
-            />
-
-            <br /><br />
-
-            <input
-                type="datetime-local"
-                name="effective_time"
-                value={
-                    formData.effective_time
-                }
-                onChange={
-                    handleChange
-                }
-            />
-
-            <button
-                onClick={
-                    handleSubmit
-                }
-            >
-                Submit
-            </button>
-            {
-                submitResult&& (
-
-                    <div className="success-card">
-
-                        <h3>
-                            ✅ Request Created Successfully
-                        </h3>
-
-                        <p>
-                            Request ID:
-                            <strong>
-                                {submitResult.request_id}
-                            </strong>
-                        </p>
-
-                        <p>
-                            Workflow:
-                            Employee Offboarding
-                        </p>
-
-                        <p>
-                            Execute At:
-                            {
-                                submitResult.execute_at
-                            }
-                        </p>
-
-                        <p>
-                            Status:
-                            Waiting For Execution
-                        </p>
+                        <input
+                            name="employee_id"
+                            placeholder="Enter Employee ID"
+                            value={formData.employee_id}
+                            onChange={handleChange}
+                        />
 
                     </div>
 
-                )
-            }
-            {
-                error && (
+                    <div className="form-group">
 
-                    <div
-                        style={{
-                            marginTop: "20px",
-                            padding: "15px",
-                            background: "#fef2f2",
-                            border: "1px solid #dc2626",
-                            borderRadius: "8px"
-                        }}
+                        <label className="offboarding-label">
+                            Email
+                        </label>
+
+                        <input
+                            name="email"
+                            placeholder="Enter Email"
+                            value={formData.email}
+                            onChange={handleChange}
+                        />
+
+                    </div>
+
+                    <div className="form-group">
+
+                        <label className="offboarding-label">
+                            Offboarding Reason
+                        </label>
+
+                        <input
+                            name="reason"
+                            placeholder="Enter Reason"
+                            value={formData.reason}
+                            onChange={handleChange}
+                        />
+
+                    </div>
+
+                    <div className="form-group">
+
+                        <label className="offboarding-label">
+                            Effective Time
+                        </label>
+
+                        <input
+                            type="datetime-local"
+                            name="effective_time"
+                            value={formData.effective_time}
+                            onChange={handleChange}
+                        />
+
+                    </div>
+                
+                    <button
+                        className="submit-request-btn"
+                        onClick={
+                            handleSubmit
+                        }
                     >
+                        Submit
+                    </button>
+                </div>
+                {
+                    submitResult&& (
 
-                        ❌ {error}
+                        <div className="success-card">
 
-                    </div>
+                            <h3>
+                                ✅ Request Created Successfully
+                            </h3>
 
-                )
-            }
+                            <div className="success-row">
 
+                                <span className="success-label">
+                                    Request ID
+                                </span>
+
+                                <span className="success-value">
+                                    {submitResult.request_id}
+                                </span>
+
+                            </div>
+
+                            <div className="success-row">
+
+                                <span className="success-label">
+                                    Workflow
+                                </span>
+
+                                <span className="success-value">
+                                    Employee Offboarding
+                                </span>
+
+                            </div>
+
+                            <div className="success-row">
+
+                                <span className="success-label">
+                                    Execute At
+                                </span>
+
+                                <span className="success-value">
+                                    {submitResult.execute_at}
+                                </span>
+
+                            </div>
+
+                            <div className="success-row">
+
+                                <span className="success-label">
+                                    Status
+                                </span>
+
+                                <span className="success-value">
+                                    Waiting For Execution
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    )
+                }
+                {
+                    error && (
+
+                        <div className="error-card"
+                            style={{
+                                marginTop: "20px",
+                                padding: "15px",
+                                background: "#fef2f2",
+                                border: "1px solid #dc2626",
+                                borderRadius: "8px"
+                            }}
+                        >
+
+                            ❌ {error}
+
+                        </div>
+
+                    )
+                }
+
+      
+            </div>
         </div>
-
     );
 }
 

@@ -200,7 +200,7 @@ class CustomWorkflowValidationService:
             "object_type": "GROUP",
 
             "group_name":
-                (obj.get("username") or "").strip()
+                (obj.get("group_name") or "").strip()
         }
 
     def validate_computer(
@@ -242,7 +242,7 @@ class CustomWorkflowValidationService:
             "object_type": "COMPUTER",
 
             "computer_name":
-                (obj.get("computerName") or "").strip()
+                (obj.get("computer_name") or "").strip()
         }
 
 

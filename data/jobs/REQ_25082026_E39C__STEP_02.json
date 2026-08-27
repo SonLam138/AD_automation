@@ -1,0 +1,38 @@
+{
+  "job_id": "REQ_25082026_E39C:STEP_02",
+  "request_id": "REQ_25082026_E39C",
+  "workflow_id": "WF_1787624632359",
+  "action_id": "STEP_02",
+  "action_code": "move_user_to_ou",
+  "display_name": "MOVE",
+  "execute_at": "2026-08-25T09:31:00",
+  "depends_on": [],
+  "max_retry": 3,
+  "continue_on_error": false,
+  "business_data": {
+    "start_date": "2026-08-25T09:30:00",
+    "target_object": {
+      "object_type": "USER",
+      "dn": "CN=AD Automation 2,OU=HO,DC=automate,DC=com,DC=vn",
+      "business_data": {
+        "display_name": "AD Automation 2",
+        "sam_account_name": "ad.auto2",
+        "email": "ad.auto2@automate.com.vn",
+        "member_of": []
+      }
+    },
+    "action_data": {
+      "STEP_02": {
+        "targetOu": "Khanh Hoa"
+      }
+    }
+  },
+  "status": "FAILED",
+  "retry_count": 0,
+  "created_at": "2026-08-25T09:29:46.898224",
+  "updated_at": "2026-08-25T09:31:07.943127",
+  "started_at": "2026-08-25T09:31:07.941328",
+  "completed_at": "2026-08-25T09:31:07.943127",
+  "result_message": null,
+  "error_message": "Thiếu target_object.sam_account_name trong business_data"
+}

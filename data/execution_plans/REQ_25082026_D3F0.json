@@ -1,0 +1,60 @@
+{
+  "request_id": "REQ_25082026_D3F0",
+  "workflow_id": "TEMP_ACCESS_USER",
+  "execute_at": "2026-08-25T01:30:00",
+  "actions": [
+    {
+      "id": "STEP_01",
+      "action_code": "add_group_by_dn",
+      "display_name": "Add user to group to grant permission",
+      "execution": {
+        "depends_on": [],
+        "delay_minutes": 0,
+        "execute_time": null,
+        "retry_count": 3,
+        "continue_on_error": false
+      }
+    },
+    {
+      "id": "STEP_02",
+      "action_code": "remove_group_by_dn",
+      "display_name": "Remove user to group to remove permission",
+      "execution": {
+        "depends_on": [
+          "STEP_01"
+        ],
+        "delay_minutes": 0,
+        "execute_time": "2026-08-25T01:31:00",
+        "retry_count": 3,
+        "continue_on_error": false
+      }
+    }
+  ],
+  "business_data": {
+    "start_date": "2026-08-25T01:30:00",
+    "step_execute_times": [
+      {
+        "step_id": "STEP_02",
+        "execute_at": "2026-08-25T01:31:00"
+      }
+    ],
+    "step_new_values": [
+      {
+        "step_id": "STEP_01",
+        "parameter_name": "target_group",
+        "new_value": "CN=TestGroup,OU=HO,DC=automate,DC=com,DC=vn"
+      },
+      {
+        "step_id": "STEP_02",
+        "parameter_name": "target_group",
+        "new_value": "CN=TestGroup,OU=HO,DC=automate,DC=com,DC=vn"
+      }
+    ],
+    "target_object": {
+      "object_type": "USER",
+      "sam_account_name": "sonnm",
+      "computer_name": null,
+      "dn": "CN=Nguyen Minh Son,OU=HO,DC=automate,DC=com,DC=vn"
+    }
+  }
+}

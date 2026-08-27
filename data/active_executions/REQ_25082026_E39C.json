@@ -1,0 +1,62 @@
+{
+  "request_id": "REQ_25082026_E39C",
+  "workflow_id": "WF_1787624632359",
+  "execute_at": "2026-08-25T09:30:00",
+  "actions": [
+    {
+      "id": "STEP_01",
+      "action_code": "add_group",
+      "display_name": "ADD_GROUP",
+      "execution": {
+        "depends_on": [],
+        "delay_minutes": 0,
+        "execute_time": "2026-08-25T09:30",
+        "retry_count": 3,
+        "continue_on_error": false
+      }
+    },
+    {
+      "id": "STEP_02",
+      "action_code": "move_user_to_ou",
+      "display_name": "MOVE",
+      "execution": {
+        "depends_on": [],
+        "delay_minutes": 0,
+        "execute_time": "2026-08-25T09:31",
+        "retry_count": 3,
+        "continue_on_error": false
+      }
+    }
+  ],
+  "status": "FAILED",
+  "current_action_id": null,
+  "completed_action_ids": [],
+  "failed_action_ids": [
+    "STEP_01",
+    "STEP_02"
+  ],
+  "created_at": "2026-08-25T09:29:36.875154",
+  "updated_at": "2026-08-27T02:46:10.729003",
+  "is_scheduled": false,
+  "business_data": {
+    "start_date": "2026-08-25T09:30:00",
+    "target_object": {
+      "object_type": "USER",
+      "dn": "CN=AD Automation 2,OU=HO,DC=automate,DC=com,DC=vn",
+      "business_data": {
+        "display_name": "AD Automation 2",
+        "sam_account_name": "ad.auto2",
+        "email": "ad.auto2@automate.com.vn",
+        "member_of": []
+      }
+    },
+    "action_data": {
+      "STEP_01": {
+        "targetGroup": "TestGroup"
+      },
+      "STEP_02": {
+        "targetOu": "Khanh Hoa"
+      }
+    }
+  }
+}

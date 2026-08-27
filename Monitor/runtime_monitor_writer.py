@@ -66,31 +66,8 @@ def load_runtime_monitor():
         return build_empty_runtime_monitor()
 
     return data
-    # return {
-    #    "date": datetime.now().strftime("%d/%m/%Y"),
 
-    #     "total_requests": int(
-    #         data.get(
-    #             "total_requests",
-    #             0
-    #         )
-    #     ),
-    #     "success_count": int(
-    #         data.get(
-    #             "success_count",
-    #             0
-    #         )
-    #     ),
-    #     "failed_count": int(
-    #         data.get(
-    #             "failed_count",
-    #             0
-    #         )
-    #     ),
-    #     "last_updated": datetime.now().strftime("%H:%M")
-    # }
-
-
+    
 def write_runtime_monitor(
     data: dict
 ):

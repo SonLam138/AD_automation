@@ -1,44 +1,161 @@
+.custom-workflow-page {
+    min-height: 100vh;
+    padding: 24px;
+    background:
+        radial-gradient(
+            circle at top right,
+            rgba(251, 191, 36, 0.08),
+            transparent 30%
+        ),
+        #111827;
+
+    color: #f3f4f6;
+}
+
+.custom-workflow-header {
+    margin-bottom: 24px;
+    padding: 24px;
+    background: #1f2937;
+    border: 1px solid #374151;
+    border-radius: 12px;
+}
+
+.custom-workflow-header h2 {
+    margin: 0;
+    color: #fbbf24;
+    font-size: 28px;
+    font-weight: 700;
+}
+
+.custom-workflow-header p {
+    margin-top: 8px;
+    color: #d1d5db;
+}
+
 .custom-workflow-registration-layout {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 24px;
+    grid-template-columns: 420px 1fr;
+    gap: 20px;
+    align-items: start;
 }
 
 .custom-card {
-    background: white;
-    border-radius: 16px;
-    padding: 24px;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+    background: #1f2937;
+    border: 1px solid #374151;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow:
+        0 8px 20px rgba(0, 0, 0, 0.25);
 }
+
+.custom-card h3 {
+    margin-top: 0;
+    color: #fbbf24;
+}
+
 .form-group {
-    display: flex;
-    flex-direction: column;
     margin-bottom: 16px;
 }
+
+.form-group label {
+    display: block;
+    margin-bottom: 6px;
+    color: #d1d5db;
+    font-weight: 600;
+    font-size: 13px;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #4b5563;
+    border-radius: 8px;
+    background: #111827;
+    color: #f3f4f6;
+    box-sizing: border-box;
+}
+
+.form-group input:disabled,
+.form-group textarea:disabled {
+    background: #0f172a;
+    color: #9ca3af;
+}
+
+.required {
+    color: #ef4444;
+    margin-left: 4px;
+}
+
 .card-header {
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    gap: 12px;
     margin-bottom: 16px;
 }
+
+.card-header h3 {
+    margin: 0;
+}
+
+.card-header small {
+    color: #9ca3af;
+}
+
+.object-item {
+    margin-bottom: 16px;
+    padding: 16px;
+    background: #111827;
+    border: 1px solid #374151;
+    border-radius: 10px;
+}
+
 .object-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-
-    margin-bottom: 16px;
-    padding-bottom: 8px;
-
-    border-bottom: 1px solid #eee;
+    margin-bottom: 12px;
 }
-.create-flow-btn {
-    margin-top: 16px;
-    background: #1a1500;
-    color: rgb(231, 216, 3);
+
+.object-header strong {
+    color: #fbbf24;
+}
+
+.validate-btn,
+.create-flow-btn,
+.card-header button,
+.custom-workflow-header button {
     border: none;
     border-radius: 8px;
-    padding: 10px 20px;
     cursor: pointer;
+    padding: 10px 16px;
     font-weight: 600;
 }
 
+.validate-btn {
+    background: #374151;
+    color: #f3f4f6;
+    margin-right: 10px;
+}
+
+.create-flow-btn {
+    background: #fbbf24;
+    color: #111827;
+    margin-right: 10px;
+}
+
+.create-flow-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.object-header button {
+    background: #dc2626;
+    color: white;
+}
+
+.card-header button {
+    background: #fbbf24;
+    color: #111827;
+}

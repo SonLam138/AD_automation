@@ -1,0 +1,63 @@
+{
+  "request_id": "REQ_22082026_F7C5",
+  "workflow_id": "OFFBOARDING_RESIGNED",
+  "execute_at": "2026-08-22T00:00:00",
+  "actions": [
+    {
+      "id": "STEP_01",
+      "action_code": "disable_user",
+      "display_name": "Disable User",
+      "execution": {
+        "depends_on": [],
+        "delay_minutes": 0,
+        "execute_time": null,
+        "retry_count": 3,
+        "continue_on_error": false
+      }
+    },
+    {
+      "id": "STEP_02",
+      "action_code": "remove_all_group",
+      "display_name": "Remove user from all Groups",
+      "execution": {
+        "depends_on": [
+          "STEP_01"
+        ],
+        "delay_minutes": 2,
+        "execute_time": null,
+        "retry_count": 3,
+        "continue_on_error": false
+      }
+    },
+    {
+      "id": "STEP_03",
+      "action_code": "move_user_to_ou",
+      "display_name": "Move To Disabled OU",
+      "execution": {
+        "depends_on": [
+          "STEP_02"
+        ],
+        "delay_minutes": 5,
+        "execute_time": null,
+        "retry_count": 3,
+        "continue_on_error": false
+      }
+    }
+  ],
+  "business_data": {
+    "employee_id": "",
+    "email": "ad.auto2@automate.com.vn",
+    "reason": "nghỉ việc",
+    "effective_time": null,
+    "start_date": "2026-08-22T00:00:00",
+    "target_ou": "OU=Disabled Account,DC=automate,DC=com,DC=vn",
+    "target_object": {
+      "object_type": "user",
+      "sam_account_name": "ad.auto2",
+      "display_name": "AD Automation 2",
+      "email": "ad.auto2@automate.com.vn",
+      "dn": "CN=AD Automation 2,OU=HO,DC=automate,DC=com,DC=vn",
+      "member_of": []
+    }
+  }
+}

@@ -7,27 +7,45 @@
 
 .workflow-card {
     width: 100%;
-    max-width: 900px;
+    max-width: 1200px;
 
-    background: white;
+    background: #1f2937;
 
-    border-radius: 12px;
+    border: 1px solid #374151;
+
+    border-radius: 16px;
 
     padding: 30px;
 
-    box-shadow: 0 2px 12px rgba(
-        0,
-        0,
-        0,
-        0.08
-    );
+    box-shadow:
+        0 12px 32px rgba(
+            0,
+            0,
+            0,
+            0.3
+        );
+}
+.workflow-card h2 {
+    margin-top: 0;
+
+    color: #fbbf24;
+
+    font-size: 34px;
+
+    font-weight: 700;
 }
 
 .workflow-description {
-    margin-top: 10px;
-    margin-bottom: 20px;
+    max-width: 700px;
 
-    color: #666;
+    margin-top: 12px;
+    margin-bottom: 28px;
+
+    color: #d1d5db;
+
+    line-height: 1.6;
+
+    font-size: 15px;
 }
 
 .workflow-features {
@@ -43,51 +61,88 @@
 }
 
 .workflow-box {
-    padding: 20px;
+    background: #111827;
 
-    border-radius: 10px;
+    border: 1px solid #374151;
 
-    background: #f4f7fa;
+    border-radius: 14px;
+
+    padding: 24px;
+
+    min-height: 50px;
+
+    color: #f3f4f6;
 
     cursor: pointer;
 
-    transition: all 0.2s ease;
+    transition:
+        transform 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
 }
 
 .workflow-box:hover {
-    background: #e9f2ff;
-    transform: translateY(-2px);
-}
+    transform: translateY(-4px);
 
+    border-color: #fbbf24;
+
+    box-shadow:
+        0 10px 24px rgba(
+            251,
+            191,
+            36,
+            0.15
+        );
+}
 .workflow-box.disabled {
     cursor: not-allowed;
     opacity: 0.6;
 }
 .workflow-box-custom {
-    border: 2px solid #f4b400;
-    background: linear-gradient(
-        135deg,
-        #fffbea,
-        #fff3cd
-    );
-    color: #5c4200;
-    font-weight: 600;
+    border: 2px solid #fbbf24;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(251,191,36,0.12),
+            rgba(251,191,36,0.03)
+        );
+
+    color: #fbbf24;
+
+    font-weight: 700;
 }
 
 .workflow-box-custom:hover {
-    border-color: #d89c00;
-    box-shadow:
-        0 8px 24px rgba(244, 180, 0, 0.25);
-}
+    border-color: #fcd34d;
 
+    box-shadow:
+        0 12px 28px rgba(
+            251,
+            191,
+            36,
+            0.25
+        );
+}
 .workflow-box-custom span {
     display: block;
-    margin-top: 6px;
+
+    margin-top: 8px;
+
+    color: #fde68a;
+
     font-size: 12px;
-    color: #8b6b00;
 }
+
 .required {
     color: #dc2626;
     margin-left: 4px;
     font-weight: 600;
+}
+.workflow-box.disabled {
+    opacity: 0.5;
+
+    cursor: not-allowed;
+
+    border-style: dashed;
 }

@@ -2,13 +2,25 @@ import "./WorkflowDesignerPage.css";
 import {ACTION_CATALOG} from "./actionCatalog";
 
 import {useState} from "react";
+import {tempResolveObject} from "../services/adToolApi";
 
 import {useLocation} from "react-router-dom";
 import axiosClient from "../api/axiosClient";
+import { useNavigate } from "react-router-dom";
 
 export default function WorkflowDesignerPage() {
 
     const location = useLocation();
+    const navigate = useNavigate();
+    const [
+        resolveOptions,
+        setResolveOptions
+    ] = useState([]);
+
+    const [
+        resolveContext,
+        setResolveContext
+    ] = useState(null);
 
     const [steps, setSteps] = useState([]);
     const [saved, setSaved] =
@@ -22,7 +34,6 @@ export default function WorkflowDesignerPage() {
 
     const objects =
         location.state?.objects || [];
-
 
     const handleAddStep = () => {
 
@@ -242,6 +253,19 @@ export default function WorkflowDesignerPage() {
                 return;
             }
         }
+        if (
+            step.action === "REMOVE_GROUP"
+        )
+        {
+            if (
+                !step.parameters.targetGroup?.trim()
+            ) {
+                alert(
+                    "Target Group is required"
+                );
+                return;
+            }
+        }
 
         setSteps(prev =>
             prev.map(step =>
@@ -433,7 +457,8 @@ export default function WorkflowDesignerPage() {
         const actionsRequireConfirmation = [
             "CREATE",
             "MOVE",
-            "ADD_GROUP"
+            "ADD_GROUP",
+            "REMOVE_GROUP"
         ];
 
         if (
@@ -592,6 +617,96 @@ export default function WorkflowDesignerPage() {
         }
     };
 
+    function getResolveObjectType(
+        parameterName
+    ) {
+
+        switch (
+            parameterName
+        ) {
+
+            case "targetOu":
+                return "OU";
+
+            case "targetGroup":
+                return "GROUP";
+
+            default:
+                return null;
+        }
+    }
+
+    async function handleResolveParameter(
+        stepId,
+        parameterName,
+        currentValue
+    ) {
+
+        const objectType =
+            getResolveObjectType(
+                parameterName
+            );
+
+        if (
+            !objectType
+        ) {
+            return;
+        }
+
+        try {
+
+            const result =
+                await tempResolveObject(
+                    objectType,
+                    currentValue
+                );
+
+            if (
+                result.resolved
+                &&
+                result.distinguished_name
+            ) {
+
+                handleParameterChange(
+                    stepId,
+                    parameterName,
+                    result.distinguished_name
+                );
+
+                return;
+            }
+
+            if (
+                result.multiple
+            ) {
+
+                setResolveOptions(
+                    result.results || []
+                );
+
+                setResolveContext({
+                    stepId,
+                    parameterName
+                });
+
+                return;
+            }
+
+            alert(
+                result.message
+                || "Object not found"
+            );
+
+        }
+        catch (error) {
+
+            alert(
+                error?.response?.data?.detail
+                || error.message
+            );
+        }
+    }
+
 
 
 
@@ -601,26 +716,41 @@ export default function WorkflowDesignerPage() {
 
             <div className="workflow-designer-header">
 
-                <h2>
-                    Workflow Designer
-                </h2>
+                <div>
 
-                <button
-                    onClick={handleReviewAndSave}
-                    disabled={saved}
-                >
-                    {saved
-                        ? "Saved ✓"
-                        : "Review & Save"}
-                </button>
-                <button
-                    onClick={handleExecute}
-                    disabled={!saved || executed}
-                >
-                    {executed
-                        ? "Executed ✓"
-                        : "Execute"}
-                </button>
+                    <h2>
+                        Workflow Designer
+                    </h2>
+
+                    <p className="workflow-designer-subtitle">
+                        Design and execute workflow steps.
+                    </p>
+
+                </div>
+
+                <div className="designer-actions">
+
+                    <button
+                        className="save-btn"
+                        onClick={handleReviewAndSave}
+                        disabled={saved}
+                    >
+                        {saved
+                            ? "Saved ✓"
+                            : "Review & Save"}
+                    </button>
+
+                    <button
+                        className="execute-btn"
+                        onClick={handleExecute}
+                        disabled={!saved || executed}
+                    >
+                        {executed
+                            ? "Executed ✓"
+                            : "Execute"}
+                    </button>
+
+                </div>
 
             </div>
             <div className="workflow-designer-layout">
@@ -660,17 +790,6 @@ export default function WorkflowDesignerPage() {
                 <div className="designer-main">
 
                     <div className="steps-header">
-                        <pre>
-
-                            {
-                                JSON.stringify(
-                                    steps,
-                                    null,
-                                    2
-                                )
-                            }
-
-                        </pre>
 
                         <h3>
                             Workflow Steps
@@ -832,91 +951,33 @@ export default function WorkflowDesignerPage() {
 
                                 </div>
 
-                                {/* <div className="form-group">
-
-                                    <label>
-                                        Depends On
-                                    </label>
-
-                                    <select
-                                        value={step.dependsOn}
-                                        onChange={(e) =>
-                                            handleStepChange(
-                                                step.id,
-                                                "dependsOn",
-                                                e.target.value
-                                            )
-                                        }
-                                    >
-
-                                        <option value="">
-                                            None
-                                        </option>
-
-                                        {
-                                            steps
-                                                .filter(s => s.id !== step.id)
-                                                .map((s, idx) => (
-
-                                                    <option
-                                                        key={s.id}
-                                                        value={`STEP_${idx + 1}`}
-                                                    >
-                                                        STEP_{idx + 1}
-                                                    </option>
-
-                                                ))
-                                        }
-
-                                    </select>
-
-                                </div>
-
-                                <div className="form-group">
-
-                                    <label>
-                                        Delay Minutes
-                                    </label>
-
-                                    <input
-                                        type="number"
-                                        min="0"
-                                        value={step.delayMinutes}
-                                        onChange={(e) =>
-                                            handleStepChange(
-                                                step.id,
-                                                "delayMinutes",
-                                                Number(e.target.value)
-                                            )
-                                        }
-                                    />
-
-                                </div> */}
-
                                 <div className="action-parameters">
 
-                                    <h4>
-                                        Action Parameters
-                                    </h4>
-                                    <div>
+                                    <div className="parameter-header">
 
-                                        Status:
+                                        <h4>
+                                            Action Parameters
+                                        </h4>
 
-                                        {
-                                            step.parameterStatus ===
-                                            "CONFIRMED"
-
-                                                ? "✅ Confirmed"
-
-                                                : "🟡 Editing"
-                                        }
+                                        <span
+                                            className={
+                                                step.parameterStatus === "CONFIRMED"
+                                                    ? "parameter-status confirmed"
+                                                    : "parameter-status editing"
+                                            }
+                                        >
+                                            {
+                                                step.parameterStatus === "CONFIRMED"
+                                                    ? "CONFIRMED"
+                                                    : "EDITING"
+                                            }
+                                        </span>
 
                                     </div>
 
-                                    <div>
+                                    <div className="current-action">
 
                                         Current Action:
-
                                         <strong>
                                             {step.action || "NONE"}
                                         </strong>
@@ -1016,24 +1077,45 @@ export default function WorkflowDesignerPage() {
                                                         Target OU
                                                     </label>
 
-                                                    <input
-                                                        type="text"
-                                                        value={
-                                                            step.parameters.targetOu
-                                                            || ""
-                                                        }
-                                                        readOnly={
-                                                            step.parameterStatus ===
-                                                            "CONFIRMED"
-                                                        }
-                                                        onChange={(e) =>
-                                                            handleParameterChange(
-                                                                step.id,
-                                                                "targetOu",
-                                                                e.target.value
-                                                            )
-                                                        }
-                                                    />
+                                                    <div className="parameter-input-row">
+
+                                                        <input
+                                                            type="text"
+                                                            value={
+                                                                step.parameters.targetOu
+                                                                || ""
+                                                            }
+                                                            readOnly={
+                                                                step.parameterStatus ===
+                                                                "CONFIRMED"
+                                                            }
+                                                            onChange={(e) =>
+                                                                handleParameterChange(
+                                                                    step.id,
+                                                                    "targetOu",
+                                                                    e.target.value
+                                                                )
+                                                            }
+                                                        />
+
+                                                        <button
+                                                            type="button"
+                                                            disabled={
+                                                                step.parameterStatus ===
+                                                                "CONFIRMED"
+                                                            }
+                                                            onClick={() =>
+                                                                handleResolveParameter(
+                                                                    step.id,
+                                                                    "targetOu",
+                                                                    step.parameters.targetOu
+                                                                )
+                                                            }
+                                                        >
+                                                            Get DN
+                                                        </button>
+
+                                                    </div>
 
                                                 </div>
 
@@ -1140,24 +1222,45 @@ export default function WorkflowDesignerPage() {
                                                         Target OU
                                                     </label>
 
-                                                    <input
-                                                        type="text"
-                                                        value={
-                                                            step.parameters.targetOu
-                                                            || ""
-                                                        }
-                                                        readOnly={
-                                                            step.parameterStatus ===
-                                                            "CONFIRMED"
-                                                        }
-                                                        onChange={(e) =>
-                                                            handleParameterChange(
-                                                                step.id,
-                                                                "targetOu",
-                                                                e.target.value
-                                                            )
-                                                        }
-                                                    />
+                                                    <div className="parameter-input-row">
+
+                                                        <input
+                                                            type="text"
+                                                            value={
+                                                                step.parameters.targetOu
+                                                                || ""
+                                                            }
+                                                            readOnly={
+                                                                step.parameterStatus ===
+                                                                "CONFIRMED"
+                                                            }
+                                                            onChange={(e) =>
+                                                                handleParameterChange(
+                                                                    step.id,
+                                                                    "targetOu",
+                                                                    e.target.value
+                                                                )
+                                                            }
+                                                        />
+
+                                                        <button
+                                                            type="button"
+                                                            disabled={
+                                                                step.parameterStatus ===
+                                                                "CONFIRMED"
+                                                            }
+                                                            onClick={() =>
+                                                                handleResolveParameter(
+                                                                    step.id,
+                                                                    "targetOu",
+                                                                    step.parameters.targetOu
+                                                                )
+                                                            }
+                                                        >
+                                                            Get DN
+                                                        </button>
+
+                                                    </div>
 
                                                 </div>
 
@@ -1236,13 +1339,13 @@ export default function WorkflowDesignerPage() {
                                         step.action === "MOVE"
                                         &&
                                         (
-                                            <div className="parameter-group">
+                                            <div className="form-group">
 
-                                                <div className="form-group">
+                                                <label>
+                                                    Target OU
+                                                </label>
 
-                                                    <label>
-                                                        Target OU
-                                                    </label>
+                                                <div className="parameter-input-row">
 
                                                     <input
                                                         type="text"
@@ -1263,6 +1366,23 @@ export default function WorkflowDesignerPage() {
                                                         }
                                                     />
 
+                                                    <button
+                                                        type="button"
+                                                        disabled={
+                                                            step.parameterStatus ===
+                                                            "CONFIRMED"
+                                                        }
+                                                        onClick={() =>
+                                                            handleResolveParameter(
+                                                                step.id,
+                                                                "targetOu",
+                                                                step.parameters.targetOu
+                                                            )
+                                                        }
+                                                    >
+                                                        Get DN
+                                                    </button>
+
                                                 </div>
 
                                             </div>
@@ -1280,24 +1400,102 @@ export default function WorkflowDesignerPage() {
                                                         Target Group
                                                     </label>
 
-                                                    <input
-                                                        type="text"
-                                                        value={
-                                                            step.parameters.targetGroup
-                                                            || ""
-                                                        }
-                                                        readOnly={
-                                                            step.parameterStatus ===
-                                                            "CONFIRMED"
-                                                        }
-                                                        onChange={(e) =>
-                                                            handleParameterChange(
-                                                                step.id,
-                                                                "targetGroup",
-                                                                e.target.value
-                                                            )
-                                                        }
-                                                    />
+                                                    <div className="parameter-input-row">
+
+                                                        <input
+                                                            type="text"
+                                                            value={
+                                                                step.parameters.targetGroup
+                                                                || ""
+                                                            }
+                                                            readOnly={
+                                                                step.parameterStatus ===
+                                                                "CONFIRMED"
+                                                            }
+                                                            onChange={(e) =>
+                                                                handleParameterChange(
+                                                                    step.id,
+                                                                    "targetGroup",
+                                                                    e.target.value
+                                                                )
+                                                            }
+                                                        />
+
+                                                        <button
+                                                            type="button"
+                                                            disabled={
+                                                                step.parameterStatus ===
+                                                                "CONFIRMED"
+                                                            }
+                                                            onClick={() =>
+                                                                handleResolveParameter(
+                                                                    step.id,
+                                                                    "targetGroup",
+                                                                    step.parameters.targetGroup
+                                                                )
+                                                            }
+                                                        >
+                                                            Get DN
+                                                        </button>
+
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+                                        )
+                                    }
+                                    {
+                                        step.action === "REMOVE_GROUP"
+                                        &&
+                                        (
+                                            <div className="parameter-group">
+
+                                                <div className="form-group">
+
+                                                    <label>
+                                                        Target Group
+                                                    </label>
+
+                                                    <div className="parameter-input-row">
+
+                                                        <input
+                                                            type="text"
+                                                            value={
+                                                                step.parameters.targetGroup
+                                                                || ""
+                                                            }
+                                                            readOnly={
+                                                                step.parameterStatus ===
+                                                                "CONFIRMED"
+                                                            }
+                                                            onChange={(e) =>
+                                                                handleParameterChange(
+                                                                    step.id,
+                                                                    "targetGroup",
+                                                                    e.target.value
+                                                                )
+                                                            }
+                                                        />
+
+                                                        <button
+                                                            type="button"
+                                                            disabled={
+                                                                step.parameterStatus ===
+                                                                "CONFIRMED"
+                                                            }
+                                                            onClick={() =>
+                                                                handleResolveParameter(
+                                                                    step.id,
+                                                                    "targetGroup",
+                                                                    step.parameters.targetGroup
+                                                                )
+                                                            }
+                                                        >
+                                                            Get DN
+                                                        </button>
+
+                                                    </div>
 
                                                 </div>
 
@@ -1305,14 +1503,11 @@ export default function WorkflowDesignerPage() {
                                         )
                                     }
 
-                                    <div
-                                        style={{
-                                            marginTop: "12px"
-                                        }}
-                                    >
+                                    <div className="parameter-actions">
 
                                         <button
                                             type="button"
+                                            className="confirm-btn"
                                             onClick={() =>
                                                 handleConfirmParameters(
                                                     step.id
@@ -1324,29 +1519,19 @@ export default function WorkflowDesignerPage() {
 
                                         <button
                                             type="button"
+                                            className="reset-btn"
                                             onClick={() =>
                                                 handleResetParameters(
                                                     step.id
                                                 )
                                             }
-                                            style={{
-                                                marginLeft: "8px"
-                                            }}
                                         >
                                             Reset
                                         </button>
 
                                     </div>
                                     
-
-
-
-
                                 </div>
-
-
-
-
 
                             </div>
 
@@ -1355,32 +1540,11 @@ export default function WorkflowDesignerPage() {
                         })
                     }
 
-
-
-
-
-
                 </div>
-
-
-
-
 
             </div>
 
-
-
-
-
-
-
-
-
-
-
         </div>
-
-
 
     );
 

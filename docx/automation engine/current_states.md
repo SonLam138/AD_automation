@@ -432,3 +432,232 @@ UI vừa hoàn thành không phải một form tạo workflow để trưng bày.
 Và:
 
 Resolver vẫn là nơi duy nhất sinh WorkflowDefinition. Runtime phía sau tuyệt đối không biết workflow đến từ template hard-code hay UI custom.
+
+25/08/20226
+Chiến thắng lớn cho temp access
+CP_TEMP_ACCESS_E2E_V1
+Status: COMPLETED ✅
+
+========================================================
+MỤC TIÊU
+========================================================
+
+Xây dựng và xác thực E2E cho Temporary Access Workflow
+cho cả Computer và User trên AD Automation Engine.
+
+Workflow phải chạy xuyên suốt:
+
+UI
+→ API
+→ Adapter
+→ Object Resolver
+→ Workflow Resolver
+→ Plan
+→ Active Execution
+→ Job
+→ Worker
+→ LDAP
+→ COMPLETED
+→ Cleanup
+
+không sử dụng mock.
+
+========================================================
+PHẠM VI THỰC HIỆN
+========================================================
+
+1. TEMP ACCESS COMPUTER
+
+Workflow:
+
+STEP_01
+Move computer tới OU cấp quyền.
+
+STEP_02
+Move computer trở lại OU ban đầu.
+
+Yêu cầu:
+
+- hỗ trợ execute_time động từ UI
+- hỗ trợ target_ou động từ UI
+- target_ou resolve thành DN trước execute
+
+Kết quả:
+
+✅ UI tạo request thành công
+✅ Adapter parse thành công
+✅ Resolver build plan thành công
+✅ Sinh đủ 2 Job
+✅ LDAP move computer thành công
+✅ Workflow COMPLETED
+✅ ActiveExecution cleanup thành công
+
+--------------------------------------------------------
+
+2. TEMP ACCESS USER
+
+Workflow:
+
+STEP_01
+Add user vào group cấp quyền.
+
+STEP_02
+Remove user khỏi group.
+
+Yêu cầu:
+
+- hỗ trợ execute_time động từ UI
+- hỗ trợ target_group động từ UI
+- target_group resolve thành DN trước execute
+
+Kết quả:
+
+✅ UI tạo request thành công
+✅ Adapter parse thành công
+✅ Resolver build plan thành công
+✅ Sinh đủ 2 Job
+✅ LDAP add group thành công
+✅ LDAP remove group thành công
+✅ Workflow COMPLETED
+✅ ActiveExecution cleanup thành công
+
+========================================================
+THAY ĐỔI KIẾN TRÚC
+========================================================
+
+1. Generic Workflow Input
+
+Bổ sung contract:
+
+step_execute_times
+step_new_values
+
+Cho phép UI truyền:
+
+- thời gian thực thi động
+- target object động
+
+mà không cần hard-code theo workflow.
+
+--------------------------------------------------------
+
+2. Generic Adapter
+
+WFWithNewValueAdapter
+
+Hỗ trợ:
+
+- TEMP_ACCESS_COMPUTER
+- TEMP_ACCESS_USER
+
+Theo cùng một contract chuẩn.
+
+--------------------------------------------------------
+
+3. DN Resolution Flow
+
+Bổ sung API:
+
+temp_resolve_object
+
+Mục tiêu:
+
+Business Value
+→ Resolve DN
+→ Payload
+→ Execute
+
+Ví dụ:
+
+"Khanh Hoa"
+→ OU=Khanh Hoa,...
+
+"TestGroup"
+→ CN=TestGroup,...
+
+Loại bỏ việc Worker phải tự search object.
+
+--------------------------------------------------------
+
+4. DN Native Group Capability
+
+Giữ nguyên toàn bộ capability cũ:
+
+add_group_member()
+remove_group_member()
+
+(kỳ vọng group name)
+
+Bổ sung capability mới:
+
+add_group_member_by_dn()
+remove_group_member_by_dn()
+
+Bổ sung Worker Action:
+
+AddGroupByDnAction
+RemoveGroupByDnAction
+
+Mục tiêu:
+
+Custom Workflow
+Temp Access
+và các workflow tương lai
+
+có thể làm việc trực tiếp với DN.
+
+========================================================
+E2E ĐÃ XÁC THỰC
+========================================================
+
+TEMP_ACCESS_COMPUTER
+
+UI
+→ Resolve DN
+→ Request
+→ Plan
+→ Job
+→ MoveComputerToOu
+→ LDAP
+→ COMPLETED
+
+PASS ✅
+
+--------------------------------------------------------
+
+TEMP_ACCESS_USER
+
+UI
+→ Resolve DN
+→ Request
+→ Plan
+→ Job
+→ AddGroupByDn
+→ RemoveGroupByDn
+→ LDAP
+→ COMPLETED
+
+PASS ✅
+
+========================================================
+KẾT QUẢ CUỐI
+========================================================
+
+Workflow Engine hiện đã chứng minh được khả năng:
+
+- Dynamic Execute Time
+- Dynamic New Values
+- DN Resolution
+- Multi-step Delayed Workflow
+- Computer Target Object
+- User Target Object
+- LDAP Execution
+- Runtime Cleanup
+
+hoạt động E2E trên môi trường thực.
+
+TEMP ACCESS COMPUTER: PASS ✅
+
+TEMP ACCESS USER: PASS ✅
+
+TEMP ACCESS E2E V1: PASS ✅

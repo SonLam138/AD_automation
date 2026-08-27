@@ -28,7 +28,13 @@ ACTION_MAPPING = {
         "USER",
         "ADD_GROUP"
     ):
-        "add_group",
+        "add_group_by_dn",
+
+    (
+        "USER",
+        "REMOVE_GROUP"
+    ):
+        "remove_group_by_dn",
 
     (
         "GROUP",

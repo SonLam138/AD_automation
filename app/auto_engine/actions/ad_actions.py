@@ -29,6 +29,7 @@ class BaseAdAction(ABC):
             or {}
         )
 
+        # Schema mới
         target_business_data = (
             target_object.get(
                 "business_data"
@@ -36,13 +37,11 @@ class BaseAdAction(ABC):
             or {}
         )
 
-        if not target_business_data:
-            raise ValueError(
-                "Thiếu "
-                "target_object.business_data"
-            )
+        if target_business_data:
+            return target_business_data
 
-        return target_business_data
+        # Backward compatibility
+        return target_object
 
     @classmethod
     def _get_sam_account_name(
@@ -90,7 +89,7 @@ class BaseAdAction(ABC):
 
         if not action_data:
             raise ValueError(
-                "Thiếu business_data.action_data"
+                f"DEBUG ==> {business_data}"
             )
 
         execution_context = (
@@ -160,6 +159,9 @@ class BaseAdAction(ABC):
             )
             or parameters.get(
                 "target_group_name"
+            )
+            or parameters.get(
+            "targetGroup"
             )
         )
 
@@ -235,12 +237,20 @@ class BaseAdAction(ABC):
             parameters.get(
                 "target_ou_dn"
             )
+
             or parameters.get(
                 "target_ou"
             )
+
+            # Custom Workflow
+            or parameters.get(
+                "targetOu"
+            )
+
             or business_data.get(
                 "target_ou_dn"
             )
+
             or business_data.get(
                 "target_ou"
             )
@@ -377,6 +387,65 @@ class AddGroupAction(
                 result,
         }
 
+class AddGroupByDnAction(
+    BaseAdAction
+):
+
+    def execute(
+        self,
+        business_data:
+            Dict[str, Any],
+
+        execution_context:
+            Dict[str, Any] | None = None,
+    ) -> Dict[str, Any]:
+
+        sam_account_name = (
+            self._get_sam_account_name(
+                business_data
+            )
+        )
+
+        group_dn = (
+            self._get_group_name(
+                business_data,
+                execution_context,
+            )
+        )
+
+        result = (
+            ldap.add_group_member_by_dn(
+                sam_account_name=
+                    sam_account_name,
+
+                group_dn=
+                    group_dn,
+            )
+        )
+
+        if isinstance(
+            result,
+            dict
+        ):
+            return result
+
+        return {
+            "success": True,
+
+            "action":
+                "add_group_member_by_dn",
+
+            "sam_account_name":
+                sam_account_name,
+
+            "group_dn":
+                group_dn,
+
+            "execution_result":
+                result,
+        }
+
+
 class RemoveGroupAction(
     BaseAdAction
 ):
@@ -427,10 +496,63 @@ class RemoveGroupAction(
                 result,
         }
 
+class RemoveGroupByDnAction(
+    BaseAdAction
+):
 
+    def execute(
+        self,
+        business_data:
+            Dict[str, Any],
 
+        execution_context:
+            Dict[str, Any] | None = None,
+    ) -> Dict[str, Any]:
 
+        sam_account_name = (
+            self._get_sam_account_name(
+                business_data
+            )
+        )
 
+        group_dn = (
+            self._get_group_name(
+                business_data,
+                execution_context,
+            )
+        )
+
+        result = (
+            ldap.remove_group_member_by_dn(
+                sam_account_name=
+                    sam_account_name,
+
+                group_dn=
+                    group_dn,
+            )
+        )
+
+        if isinstance(
+            result,
+            dict
+        ):
+            return result
+
+        return {
+            "success": True,
+
+            "action":
+                "remove_group_member_by_dn",
+
+            "sam_account_name":
+                sam_account_name,
+
+            "group_dn":
+                group_dn,
+
+            "execution_result":
+                result,
+        }
 
 
 
@@ -527,70 +649,70 @@ class MoveUserToOuAction(
             "execution_result": result,
         }
 
-    @staticmethod
-    def _get_sam_account_name(
-        business_data: Dict[str, Any],
-    ) -> str:
+    # @staticmethod
+    # def _get_sam_account_name(
+    #     business_data: Dict[str, Any],
+    # ) -> str:
 
-        target_object = (
-            business_data.get(
-                "target_object"
-            )
-            or {}
-        )
+    #     target_object = (
+    #         business_data.get(
+    #             "target_object"
+    #         )
+    #         or {}
+    #     )
 
-        sam_account_name = (
-            target_object.get(
-                "sam_account_name"
-            )
-            or business_data.get(
-                "sam_account_name"
-            )
-        )
+    #     sam_account_name = (
+    #         target_object.get(
+    #             "sam_account_name"
+    #         )
+    #         or business_data.get(
+    #             "sam_account_name"
+    #         )
+    #     )
 
-        if not sam_account_name:
-            raise ValueError(
-                "Thiếu "
-                "target_object.sam_account_name "
-                "trong business_data"
-            )
+    #     if not sam_account_name:
+    #         raise ValueError(
+    #             "Thiếu "
+    #             "target_object.sam_account_name "
+    #             "trong business_data"
+    #         )
 
-        return sam_account_name
+    #     return sam_account_name
 
-    @staticmethod
-    def _get_target_ou(
-        business_data: Dict[str, Any],
-    ) -> str:
+    # @staticmethod
+    # def _get_target_ou(
+    #     business_data: Dict[str, Any],
+    # ) -> str:
 
-        action_data = (
-            business_data.get(
-                "action_data"
-            )
-            or {}
-        )
+    #     action_data = (
+    #         business_data.get(
+    #             "action_data"
+    #         )
+    #         or {}
+    #     )
 
-        target_ou = (
-            action_data.get(
-                "target_ou"
-            )
-            or action_data.get(
-                "target_ou_dn"
-            )
-            or business_data.get(
-                "target_ou"
-            )
-            or business_data.get(
-                "target_ou_dn"
-            )
-        )
+    #     target_ou = (
+    #         action_data.get(
+    #             "target_ou"
+    #         )
+    #         or action_data.get(
+    #             "target_ou_dn"
+    #         )
+    #         or business_data.get(
+    #             "target_ou"
+    #         )
+    #         or business_data.get(
+    #             "target_ou_dn"
+    #         )
+    #     )
 
-        if not target_ou:
-            raise ValueError(
-                "Thiếu target OU trong "
-                "business_data.action_data"
-            )
+    #     if not target_ou:
+    #         raise ValueError(
+    #             "Thiếu target OU trong "
+    #             "business_data.action_data"
+    #         )
 
-        return target_ou
+    #     return target_ou
 
 # ==================================================
 # COMPUTER ACTIONS

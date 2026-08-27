@@ -5,12 +5,66 @@ from app.auto_engine.models.workflow_definition import (
 from app.auto_engine.resolver.workflow_registry import (
     WORKFLOW_REGISTRY
 )
-
-
-
+from copy import deepcopy
 
 class WorkflowResolver:
+    @staticmethod
+    def _materialize_actions(
+        actions: list,
+        business_data: dict
+    ):
+        actions = deepcopy(
+            actions
+        )
 
+        step_execute_times = {}
+
+        for item in business_data.get(
+            "step_execute_times",
+            []
+        ):
+            print(type(item))
+            print(item)
+
+            step_execute_times[
+                item["step_id"]
+            ] = item["execute_at"]
+
+        for action in actions:
+
+            execute_time = (
+                action.execution.execute_time
+            )
+
+            if execute_time != "UI_CUSTOM":
+                continue
+
+            execute_at = (
+                step_execute_times.get(
+                    action.id
+                )
+            )
+
+            if execute_at is None:
+                raise ValueError(
+                    f"Missing execute time "
+                    f"for step {action.id}"
+                )
+
+            action.execution.execute_time = (
+                execute_at.isoformat()
+                if hasattr(
+                    execute_at,
+                    "isoformat"
+                )
+                else str(
+                    execute_at
+                )
+            )
+
+        return actions
+
+    
     def resolve(
         self,
         request
@@ -53,14 +107,25 @@ class WorkflowResolver:
                 in match["contexts"]
             ):
 
-                return WorkflowDefinition(
-                    **{
-                        key: value
-                        for key, value
-                        in workflow_data.items()
-                        if key != "match"
-                    }
+                workflow_definition = (
+                    WorkflowDefinition(
+                        **{
+                            key: value
+                            for key, value
+                            in workflow_data.items()
+                            if key != "match"
+                        }
+                    )
                 )
+
+                workflow_definition.actions = (
+                    self._materialize_actions(
+                        workflow_definition.actions,
+                        request.business_data
+                    )
+                )
+
+                return workflow_definition
 
         raise ValueError(
             f"Workflow not found: {key}"

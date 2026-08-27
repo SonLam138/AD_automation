@@ -165,6 +165,15 @@ action_registry.register(
     "remove_group",
     RemoveGroupAction(),
 )
+action_registry.register(
+    "add_group_by_dn",
+    AddGroupByDnAction(),
+)
+
+action_registry.register(
+    "remove_group_by_dn",
+    RemoveGroupByDnAction(),
+)
 
 action_registry.register(
     "move_user_to_ou",

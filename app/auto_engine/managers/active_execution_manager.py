@@ -42,6 +42,11 @@ class ActiveExecutionManager:
             self._update_execution(
                 active_execution
             )
+            print(
+                "[DEBUG]",
+                active_execution.request_id,
+                active_execution.status
+                )
 
             if self._should_cleanup(
                 active_execution
@@ -187,7 +192,7 @@ class ActiveExecutionManager:
 
         return active_execution.status in [
             ActiveExecutionStatus.COMPLETED,
-            ActiveExecutionStatus.FAILED,
+            #ActiveExecutionStatus.FAILED,
             ActiveExecutionStatus.CANCELLED,
         ]
 

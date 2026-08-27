@@ -38,9 +38,11 @@ from app.models.ad_tool import (
 from app.agent.execution_response import (
     generate_execution_response
 )
-from app.adapters.ldap_adapter import (
-    LDAPAdapter
+
+from Monitor.runtime_job_monitor import (
+    get_runtime_job_snapshot,
 )
+
 from app.event.feedback_builder import (
     get_detection_event_by_id,
     build_detection_feedback_event,
@@ -1110,6 +1112,15 @@ async def stream_monitor(
 )
 def get_monitor_dashboard():
     return get_runtime_monitor_snapshot()
+
+
+
+@router.get(
+    "/monitor/job-dashboard"
+)
+def get_monitor_job_dashboard():
+
+    return get_runtime_job_snapshot()
 
 
 @router.get(

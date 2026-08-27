@@ -4,6 +4,7 @@ from datetime import datetime
 from pathlib import Path
 from app.event.runtime_bus import publish_event
 from Monitor.monitor_consumer import consume_monitor_event
+from Monitor.runtime_job_monitor import update_runtime_job_from_event
 
 EVENT_LOG_FILE = (
     Path("logs") / "events.jsonl"
@@ -47,10 +48,13 @@ def emit_event(**event_data):
         consume_monitor_event(
             event
         )
+        update_runtime_job_from_event(
+            event
+        )
 
     except Exception as ex:
         print(
-            "MONITOR CONSUMER ERROR =",
+            "EMIT EVENT ERROR =",
             ex
         )
 

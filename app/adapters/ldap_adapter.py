@@ -1738,6 +1738,80 @@ class LDAPAdapter:
             "group": group_name
         }
     #================================
+    # AD TOOL - ADD GROUP MEMBER BY DN
+    #================================
+
+    def add_group_member_by_dn(
+        self,
+        sam_account_name: str,
+        group_dn: str,
+    ):
+        
+        self.connection.search(
+            search_base=
+                LDAP_BASE_DN,
+
+            search_filter=(
+                f"(sAMAccountName="
+                f"{sam_account_name})"
+            ),
+
+            attributes=[
+                "distinguishedName"
+            ]
+        )
+
+        if not self.connection.entries:
+            raise Exception(
+                f"User not found: "
+                f"{sam_account_name}"
+            )
+
+        user_dn = str(
+            self.connection
+            .entries[0]
+            .distinguishedName
+            .value
+        )
+
+        success = (
+            self.connection.modify(
+                group_dn,
+                {
+                    "member": [
+                        (
+                            MODIFY_ADD,
+                            [
+                                user_dn
+                            ]
+                        )
+                    ]
+                }
+            )
+        )
+
+        if not success:
+            raise Exception(
+                self.connection.result
+            )
+
+        return {
+            "success": True,
+
+            "action":
+                "add_group_member_by_dn",
+
+            "sam_account_name":
+                sam_account_name,
+
+            "user_dn":
+                user_dn,
+
+            "group_dn":
+                group_dn,
+        }
+
+    #================================
     # AD TOOL - REMOVE GROUP MEMBER #
     #================================
     def remove_group_member(
@@ -1808,6 +1882,79 @@ class LDAPAdapter:
             "action": "remove_group_member",
             "user": sam_account_name,
             "group": group_name
+        }
+
+    # ==========================================
+    # REMOVE USER FROM GROUP BY DN
+    # ==========================================
+    def remove_group_member_by_dn(
+        self,
+        sam_account_name: str,
+        group_dn: str,
+    ):
+    
+        self.connection.search(
+            search_base=
+                LDAP_BASE_DN,
+
+            search_filter=(
+                f"(sAMAccountName="
+                f"{sam_account_name})"
+            ),
+
+            attributes=[
+                "distinguishedName"
+            ]
+        )
+
+        if not self.connection.entries:
+            raise Exception(
+                f"User not found: "
+                f"{sam_account_name}"
+            )
+
+        user_dn = str(
+            self.connection
+            .entries[0]
+            .distinguishedName
+            .value
+        )
+
+        success = (
+            self.connection.modify(
+                group_dn,
+                {
+                    "member": [
+                        (
+                            MODIFY_DELETE,
+                            [
+                                user_dn
+                            ]
+                        )
+                    ]
+                }
+            )
+        )
+
+        if not success:
+            raise Exception(
+                self.connection.result
+            )
+
+        return {
+            "success": True,
+
+            "action":
+                "remove_group_member_by_dn",
+
+            "sam_account_name":
+                sam_account_name,
+
+            "user_dn":
+                user_dn,
+
+            "group_dn":
+                group_dn,
         }
 
     #================================

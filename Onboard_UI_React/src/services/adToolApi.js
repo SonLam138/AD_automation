@@ -138,3 +138,69 @@ export async function createEmployeeOffboarding(
 
     return response.data;
 }
+
+export async function getWorkflowJournalList(
+    payload
+) {
+
+    const response =
+        await axiosClient.get(
+            "/api/workflow/custom-workflow/journal",
+            payload
+        );
+
+    return response.data;
+}
+
+export async function getWorkflowJournalDetail(
+    journalId
+) {
+    const response =
+        await axiosClient.get(
+            `/api/workflow/custom-workflow/journal/${journalId}`
+        );
+
+    return response.data;
+}
+
+export async function deleteWorkflowJournal(
+    journalId
+) {
+    const response =
+        await axiosClient.delete(
+            `/api/workflow/custom-workflow/journal/${journalId}`
+        );
+
+    return response.data;
+}
+
+export async function executeTempAccess(
+    payload
+) {
+    const response =
+        await axiosClient.post(
+            "/api/workflow/temp-access",
+            payload
+        );
+
+    return response.data;
+}
+
+export async function tempResolveObject(
+    objectType,
+    keyword
+) {
+    const response =
+        await axiosClient.post(
+            "/api/workflow/temp-resolve-object",
+            {
+                object_type:
+                    objectType,
+
+                keyword:
+                    keyword,
+            }
+        );
+
+    return response.data;
+}

@@ -9329,5 +9329,42 @@
     "new_value": "ddv",
     "approval_policy": null,
     "action_id": "103583a6-3260-43c2-9cec-ae03ac3b0eb0"
+  },
+  "2cbef537-ef10-4398-9878-dad6be9aba2a": {
+    "status": "READY_TO_CONFIRM",
+    "state": "CONFIRM_READY",
+    "next_step": "CONFIRM_ACTION",
+    "action": "add_group_member",
+    "target_object_type": null,
+    "resolved_objects": {
+      "USER": {
+        "object_type": "USER",
+        "display_name": "AD Automation 2",
+        "sam_account_name": "ad.auto2",
+        "mail": "ad.auto2@automate.com.vn",
+        "department": "Khoi KHCN",
+        "title": "Chuyen vien",
+        "distinguished_name": "CN=AD Automation 2,OU=HO,DC=automate,DC=com,DC=vn",
+        "user_account_control": "544",
+        "is_disabled": false,
+        "member_of": []
+      },
+      "GROUP": {
+        "object_type": "GROUP",
+        "name": "TestGroup",
+        "cn": "TestGroup",
+        "description": "",
+        "mail": "TestGroup@automate.com.vn",
+        "distinguished_name": "CN=TestGroup,OU=HO,DC=automate,DC=com,DC=vn"
+      }
+    },
+    "candidate_objects": {},
+    "proposed_action_payload": {
+      "sam_account_name": "ad.auto2",
+      "group_name": "TestGroup"
+    },
+    "new_value": null,
+    "approval_policy": "normal",
+    "action_id": "2cbef537-ef10-4398-9878-dad6be9aba2a"
   }
 }

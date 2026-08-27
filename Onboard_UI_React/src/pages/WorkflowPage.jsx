@@ -71,11 +71,18 @@ export default function WorkflowPage() {
                     </div>
 
                     <div
-                        className="workflow-box disabled"
+                        className="workflow-box workflow-box-temp"
+                        onClick={() =>
+                            navigate(
+                                "/portal/workflow/temp-access"
+                            )
+                        }
                     >
-                        🚧 Temporary Access
+                        ⏳ Temporary Access
                         <br />
-                        Coming Soon
+                        <span>
+                            User & Computer
+                        </span>
                     </div>
 
                 </div>

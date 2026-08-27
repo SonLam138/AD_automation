@@ -3,7 +3,8 @@ export const ACTION_CATALOG = {
     USER: [
         "DISABLE",
         "MOVE",
-        "ADD_GROUP"
+        "ADD_GROUP",
+        "REMOVE_GROUP"
     ],
 
     GROUP: [
