@@ -1,40 +1,54 @@
 {
   "entries": [
     {
-      "journal_id": "JRN_f46f2f42",
-      "workflow_name": "Test all",
-      "workflow_id": "WF_1787429512329",
+      "journal_id": "JRN_TEST_001",
+      "workflow_id": "WF_TEST",
+      "workflow_name": "Test Workflow",
       "created_by": "sonnm",
-      "status": "executed",
-      "executed_at": "2026-08-23T03:12:28.722969",
-      "saved_at": "2026-08-23T03:12:25.575795",
+      "status": "saved",
+      "saved_at": "2026-09-01T17:28:30.729269",
+      "executed_at": null,
+      "object_count": 2,
+      "step_count": 3,
+      "snapshot": {
+        "hello": "world"
+      }
+    },
+    {
+      "journal_id": "JRN_bd187272",
+      "workflow_id": "WF_1788260853869",
+      "workflow_name": "Test sqlite",
+      "created_by": "sonnm",
+      "status": "saved",
+      "saved_at": "2026-09-01T18:15:35.261113",
+      "executed_at": null,
       "object_count": 1,
       "step_count": 1,
       "snapshot": {
         "workflowInfo": {
-          "workflowName": "Test all",
+          "workflowName": "Test sqlite",
           "description": "",
-          "workflowId": "WF_1787429512329",
-          "context": "CUSTOM_WF_1787429512329"
+          "workflowId": "WF_1788260853869",
+          "context": "CUSTOM_WF_1788260853869"
         },
         "objects": [
           {
-            "id": 1787429521295,
-            "alias": "Journal1",
+            "id": 1788260862715,
+            "alias": "AD3",
             "objectType": "USER",
             "employee_id": "",
-            "username": "ad.auto2",
+            "username": "ad.auto3",
             "group_name": "",
-            "email": "ad.auto2@automate.com.vn",
+            "email": "ad.auto3@automate.com.vn",
             "computer_name": ""
           }
         ],
         "steps": [
           {
-            "id": 1787429528198,
-            "objectRef": "Journal1",
+            "id": 1788260997163,
+            "objectRef": "AD3",
             "action": "DISABLE",
-            "executeTime": "2026-08-23T03:22",
+            "executeTime": "2026-09-01T18:17",
             "parameters": {},
             "parameterStatus": "EDITING"
           }
@@ -42,262 +56,42 @@
       }
     },
     {
-      "journal_id": "JRN_6ec33ab9",
-      "workflow_name": "Move User",
-      "workflow_id": "WF_1787623099790",
+      "journal_id": "JRN_cf3084b1",
+      "workflow_id": "WF_1788261481157",
+      "workflow_name": "WF from Sqlite",
       "created_by": "sonnm",
-      "status": "executed",
-      "executed_at": "2026-08-25T09:01:58.340214",
-      "saved_at": "2026-08-25T09:01:52.752954",
+      "status": "saved",
+      "saved_at": "2026-09-01T18:19:27.688417",
+      "executed_at": null,
       "object_count": 1,
-      "step_count": 2,
+      "step_count": 1,
       "snapshot": {
         "workflowInfo": {
-          "workflowName": "Move User",
+          "workflowName": "WF from Sqlite",
           "description": "",
-          "workflowId": "WF_1787623099790",
-          "context": "CUSTOM_WF_1787623099790"
+          "workflowId": "WF_1788261481157",
+          "context": "CUSTOM_WF_1788261481157"
         },
         "objects": [
           {
-            "id": 1787623128498,
-            "alias": "USER1",
+            "id": 1788261501364,
+            "alias": "AD3",
             "objectType": "USER",
             "employee_id": "",
-            "username": "ad.auto2",
+            "username": "ad.auto3",
             "group_name": "",
-            "email": "ad.auto2@automate.com.vn",
+            "email": "ad.auto3@automate.com.vn",
             "computer_name": ""
           }
         ],
         "steps": [
           {
-            "id": 1787623190977,
-            "objectRef": "USER1",
+            "id": 1788261541644,
+            "objectRef": "AD3",
             "action": "ADD_GROUP",
-            "executeTime": "2026-08-25T09:08",
+            "executeTime": "2026-09-01T18:20",
             "parameters": {
-              "targetGroup": "TestGroup"
-            },
-            "parameterStatus": "CONFIRMED"
-          },
-          {
-            "id": 1787623240897,
-            "objectRef": "USER1",
-            "action": "MOVE",
-            "executeTime": "2026-08-25T09:10",
-            "parameters": {
-              "targetOu": "Khanh Hoa"
-            },
-            "parameterStatus": "CONFIRMED"
-          }
-        ]
-      }
-    },
-    {
-      "journal_id": "JRN_63798908",
-      "workflow_name": "Custom Access",
-      "workflow_id": "WF_1787624632359",
-      "created_by": "sonnm",
-      "status": "executed",
-      "executed_at": "2026-08-25T09:29:36.934732",
-      "saved_at": "2026-08-25T09:27:38.944894",
-      "object_count": 1,
-      "step_count": 2,
-      "snapshot": {
-        "workflowInfo": {
-          "workflowName": "Custom Access",
-          "description": "Test WF new value",
-          "workflowId": "WF_1787624632359",
-          "context": "CUSTOM_WF_1787624632359"
-        },
-        "objects": [
-          {
-            "id": 1787624679363,
-            "alias": "USER1",
-            "objectType": "USER",
-            "employee_id": "",
-            "username": "ad.auto2",
-            "group_name": "",
-            "email": "ad.auto2@automate.com.vn",
-            "computer_name": ""
-          }
-        ],
-        "steps": [
-          {
-            "id": 1787624824619,
-            "objectRef": "USER1",
-            "action": "ADD_GROUP",
-            "executeTime": "2026-08-25T09:30",
-            "parameters": {
-              "targetGroup": "TestGroup"
-            },
-            "parameterStatus": "CONFIRMED"
-          },
-          {
-            "id": 1787624843412,
-            "objectRef": "USER1",
-            "action": "MOVE",
-            "executeTime": "2026-08-25T09:31",
-            "parameters": {
-              "targetOu": "Khanh Hoa"
-            },
-            "parameterStatus": "CONFIRMED"
-          }
-        ]
-      }
-    },
-    {
-      "journal_id": "JRN_40210a3b",
-      "workflow_name": "Test",
-      "workflow_id": "WF_1787626328239",
-      "created_by": "sonnm",
-      "status": "executed",
-      "executed_at": "2026-08-25T09:52:58.625022",
-      "saved_at": "2026-08-25T09:52:56.566677",
-      "object_count": 1,
-      "step_count": 1,
-      "snapshot": {
-        "workflowInfo": {
-          "workflowName": "Test",
-          "description": "Test",
-          "workflowId": "WF_1787626328239",
-          "context": "CUSTOM_WF_1787626328239"
-        },
-        "objects": [
-          {
-            "id": 1787626337957,
-            "alias": "USER1",
-            "objectType": "USER",
-            "employee_id": "",
-            "username": "ad.auto1",
-            "group_name": "",
-            "email": "ad.auto1@automate.com.vn",
-            "computer_name": ""
-          }
-        ],
-        "steps": [
-          {
-            "id": 1787626354843,
-            "objectRef": "USER1",
-            "action": "MOVE",
-            "executeTime": "2026-08-25T09:54",
-            "parameters": {
-              "targetOu": "Khanh Hoa"
-            },
-            "parameterStatus": "CONFIRMED"
-          }
-        ]
-      }
-    },
-    {
-      "journal_id": "JRN_c55b61cf",
-      "workflow_name": "Test",
-      "workflow_id": "WF_1787626434875",
-      "created_by": "sonnm",
-      "status": "executed",
-      "executed_at": "2026-08-25T10:05:11.640435",
-      "saved_at": "2026-08-25T10:05:09.701883",
-      "object_count": 1,
-      "step_count": 1,
-      "snapshot": {
-        "workflowInfo": {
-          "workflowName": "Test",
-          "description": "Test",
-          "workflowId": "WF_1787626434875",
-          "context": "CUSTOM_WF_1787626434875"
-        },
-        "objects": [
-          {
-            "id": 1787627037837,
-            "alias": "USER1",
-            "objectType": "USER",
-            "employee_id": "",
-            "username": "ad.auto1",
-            "group_name": "",
-            "email": "ad.auto1@automate.com.vn",
-            "computer_name": ""
-          }
-        ],
-        "steps": [
-          {
-            "id": 1787627062685,
-            "objectRef": "USER1",
-            "action": "MOVE",
-            "executeTime": "2026-08-25T10:06",
-            "parameters": {
-              "targetOu": "OU=Khanh Hoa,DC=automate,DC=com,DC=vn"
-            },
-            "parameterStatus": "CONFIRMED"
-          }
-        ]
-      }
-    },
-    {
-      "journal_id": "JRN_7389c066",
-      "workflow_name": "My Flow",
-      "workflow_id": "WF_1787645959654",
-      "created_by": "sonnm",
-      "status": "executed",
-      "executed_at": "2026-08-25T15:21:37.991584",
-      "saved_at": "2026-08-25T15:21:35.605693",
-      "object_count": 2,
-      "step_count": 3,
-      "snapshot": {
-        "workflowInfo": {
-          "workflowName": "My Flow",
-          "description": "Test",
-          "workflowId": "WF_1787645959654",
-          "context": "CUSTOM_WF_1787645959654"
-        },
-        "objects": [
-          {
-            "id": 1787645979300,
-            "alias": "USER1",
-            "objectType": "USER",
-            "employee_id": "",
-            "username": "ad.auto2",
-            "group_name": "",
-            "email": "ad.auto2@automate.com.vn",
-            "computer_name": ""
-          },
-          {
-            "id": 1787645998901,
-            "alias": "COMP1",
-            "objectType": "COMPUTER",
-            "employee_id": "",
-            "username": "",
-            "group_name": "",
-            "email": "",
-            "computer_name": "Client-01"
-          }
-        ],
-        "steps": [
-          {
-            "id": 1787646019940,
-            "objectRef": "USER1",
-            "action": "DISABLE",
-            "executeTime": "2026-08-25T15:25",
-            "parameters": {},
-            "parameterStatus": "CONFIRMED"
-          },
-          {
-            "id": 1787646034372,
-            "objectRef": "USER1",
-            "action": "MOVE",
-            "executeTime": "2026-08-25T15:26",
-            "parameters": {
-              "targetOu": "OU=Disabled Account,DC=automate,DC=com,DC=vn"
-            },
-            "parameterStatus": "CONFIRMED"
-          },
-          {
-            "id": 1787646061029,
-            "objectRef": "COMP1",
-            "action": "MOVE",
-            "executeTime": "2026-08-25T15:26",
-            "parameters": {
-              "targetOu": "OU=Disabled Account,DC=automate,DC=com,DC=vn"
+              "targetGroup": "CN=ad_login,OU=Group,DC=automate,DC=com,DC=vn"
             },
             "parameterStatus": "CONFIRMED"
           }

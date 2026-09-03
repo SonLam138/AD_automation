@@ -6,7 +6,8 @@ pydantic==2.13.4
 PyJWT==2.13.0
 python_bcrypt==0.3.2
 Requests==2.34.2
-
+greenlet==3.5.5
+sqlalchemy==2.0.52
 
 onboard-ui-react@0.0.0 D:\AD Automation\Onboard_UI_React
 ├── @types/react-dom@19.2.3

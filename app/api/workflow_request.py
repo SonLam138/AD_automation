@@ -76,6 +76,7 @@ from app.auto_engine.runtime.runtime_container import workflow_runtime
 from app.auto_engine.resolver.custom_workflow_validation_service import (
     CustomWorkflowValidationService
 )
+from app.auto_engine.sqlite.sql_execution_plan_repository import (SqlExecutionPlanRepository,)
 
 router = APIRouter(
     dependencies=[
@@ -100,7 +101,7 @@ workflow_plan_engine = WorkflowPlanEngine(
 
     plan_generator=PlanGenerator(),
 
-    plan_repository=ExecutionPlanRepository()
+    plan_repository=SqlExecutionPlanRepository()
 )
 
 

@@ -1,0 +1,75 @@
+{
+  "request_id": "REQ_01092026_F2DE",
+  "workflow_id": "OFFBOARDING_RESIGNED",
+  "execute_at": "2026-09-01T15:22:00",
+  "actions": [
+    {
+      "id": "STEP_01",
+      "action_code": "disable_user",
+      "display_name": "Disable User",
+      "execution": {
+        "depends_on": [],
+        "delay_minutes": 0,
+        "execute_time": null,
+        "retry_count": 3,
+        "continue_on_error": false
+      }
+    },
+    {
+      "id": "STEP_02",
+      "action_code": "remove_all_groups",
+      "display_name": "Remove user from all Groups",
+      "execution": {
+        "depends_on": [
+          "STEP_01"
+        ],
+        "delay_minutes": 2,
+        "execute_time": null,
+        "retry_count": 3,
+        "continue_on_error": false
+      }
+    },
+    {
+      "id": "STEP_03",
+      "action_code": "move_user_to_ou",
+      "display_name": "Move To Disabled OU",
+      "execution": {
+        "depends_on": [
+          "STEP_02"
+        ],
+        "delay_minutes": 5,
+        "execute_time": null,
+        "retry_count": 3,
+        "continue_on_error": false
+      }
+    }
+  ],
+  "status": "FAILED",
+  "current_action_id": null,
+  "completed_action_ids": [
+    "STEP_01",
+    "STEP_02"
+  ],
+  "failed_action_ids": [
+    "STEP_03"
+  ],
+  "created_at": "2026-09-01T15:20:55.063627",
+  "updated_at": "2026-09-02T01:28:07.073868",
+  "is_scheduled": false,
+  "business_data": {
+    "employee_id": "",
+    "email": "ad.auto3@automate.com.vn",
+    "reason": "Nghỉ việc",
+    "effective_time": null,
+    "start_date": "2026-09-01T15:22:00",
+    "target_ou": "OU=Disabled Account,DC=automate,DC=com,DC=vn",
+    "target_object": {
+      "object_type": "user",
+      "sam_account_name": "ad.auto3",
+      "display_name": "AD Automation 3",
+      "email": "ad.auto3@automate.com.vn",
+      "dn": "CN=AD Automation 3,OU=HO,DC=automate,DC=com,DC=vn",
+      "member_of": []
+    }
+  }
+}

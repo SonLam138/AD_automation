@@ -123,7 +123,7 @@
 
     color: #fca5a5
 }    
-/* .success-card {
+.success-card {
     margin-top: 24px;
 
     background: #111827;
@@ -162,9 +162,9 @@
     border-bottom: none;
 }
 .success-label {
-    color: #9ca3af;
+    color: #afa69c;
 }
 .success-value {
-    color: #f3f4f6;
+    color: #f9c005;
     font-weight: 600;
-} */
+}

@@ -67,16 +67,6 @@ def build_job_monitor_payload(
         or {}
     )
 
-    #
-    # Schema mới
-    #
-    # {
-    #   "STEP_02": {
-    #       "target_ou": "..."
-    #   }
-    # }
-    #
-
     step_data = (
         action_data.get(
             job.action_id,
@@ -91,7 +81,15 @@ def build_job_monitor_payload(
         )
         or
         step_data.get(
+            "targetOu"
+        )
+        or
+        step_data.get(
             "target_group"
+        )
+        or
+        step_data.get(
+            "targetGroup"
         )
         or
         step_data.get(
@@ -99,7 +97,15 @@ def build_job_monitor_payload(
         )
         or
         step_data.get(
+            "targetDn"
+        )
+        or
+        step_data.get(
             "group_name"
+        )
+        or
+        step_data.get(
+            "groupName"
         )
     )
 

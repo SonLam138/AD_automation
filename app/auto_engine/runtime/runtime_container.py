@@ -45,13 +45,21 @@ from app.auto_engine.actions.ad_actions import *
 from app.auto_engine.workflow_engine.worker import (
 Worker,
 )
+from app.auto_engine.sqlite.sql_execution_plan_repository import (
+    SqlExecutionPlanRepository,
+)
+
 # ==================================================
 # REPOSITORIES
 # ==================================================
 
 execution_plan_repository = (
-    ExecutionPlanRepository()
+    SqlExecutionPlanRepository()
 )
+
+# execution_plan_repository = (
+#     ExecutionPlanRepository()
+# )
 
 active_execution_repository = (
     ActiveExecutionRepository()

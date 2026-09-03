@@ -306,5 +306,148 @@
         }
       }
     ]
+  },
+  {
+    "match": {
+      "request_type": "custom_workflow",
+      "contexts": [
+        "CUSTOM_WF_1788262222254_USER3"
+      ]
+    },
+    "workflow_id": "WF_1788262222254",
+    "workflow_name": "Test DB",
+    "object_resolver": "resolve_user",
+    "workflow_complete": true,
+    "metadata": {
+      "target_object_type": "USER",
+      "schedule_mode": "AT_EFFECTIVE_TIME",
+      "trigger_field": "start_date",
+      "priority": "NORMAL",
+      "allow_retry": true,
+      "max_retry": 3
+    },
+    "actions": [
+      {
+        "id": "STEP_01",
+        "action_code": "add_group_by_dn",
+        "display_name": "ADD_GROUP",
+        "execution": {
+          "execute_time": "2026-09-01T18:32",
+          "depends_on": [],
+          "retry_count": 3,
+          "continue_on_error": false
+        }
+      }
+    ]
+  },
+  {
+    "match": {
+      "request_type": "custom_workflow",
+      "contexts": [
+        "CUSTOM_WF_1788281792432_Group_01"
+      ]
+    },
+    "workflow_id": "WF_1788281792432",
+    "workflow_name": "Test move group",
+    "object_resolver": "resolve_group",
+    "workflow_complete": true,
+    "metadata": {
+      "target_object_type": "GROUP",
+      "schedule_mode": "AT_EFFECTIVE_TIME",
+      "trigger_field": "start_date",
+      "priority": "NORMAL",
+      "allow_retry": true,
+      "max_retry": 3
+    },
+    "actions": [
+      {
+        "id": "STEP_01",
+        "action_code": "move_group_to_ou",
+        "display_name": "MOVE",
+        "execution": {
+          "execute_time": "2026-09-01T23:03",
+          "depends_on": [],
+          "retry_count": 3,
+          "continue_on_error": false
+        }
+      },
+      {
+        "id": "STEP_03",
+        "action_code": "move_group_to_ou",
+        "display_name": "MOVE",
+        "execution": {
+          "execute_time": "2026-09-01T23:05",
+          "depends_on": [],
+          "retry_count": 3,
+          "continue_on_error": false
+        }
+      }
+    ]
+  },
+  {
+    "match": {
+      "request_type": "custom_workflow",
+      "contexts": [
+        "CUSTOM_WF_1788281792432_Com-01"
+      ]
+    },
+    "workflow_id": "WF_1788281792432",
+    "workflow_name": "Test move group",
+    "object_resolver": "resolve_computer",
+    "workflow_complete": true,
+    "metadata": {
+      "target_object_type": "COMPUTER",
+      "schedule_mode": "AT_EFFECTIVE_TIME",
+      "trigger_field": "start_date",
+      "priority": "NORMAL",
+      "allow_retry": true,
+      "max_retry": 3
+    },
+    "actions": [
+      {
+        "id": "STEP_02",
+        "action_code": "move_computer_to_ou",
+        "display_name": "MOVE",
+        "execution": {
+          "execute_time": "2026-09-01T23:04",
+          "depends_on": [],
+          "retry_count": 3,
+          "continue_on_error": false
+        }
+      }
+    ]
+  },
+  {
+    "match": {
+      "request_type": "custom_workflow",
+      "contexts": [
+        "CUSTOM_WF_1788284180487_Group_Test_01"
+      ]
+    },
+    "workflow_id": "WF_1788284180487",
+    "workflow_name": "Move group",
+    "object_resolver": "resolve_group",
+    "workflow_complete": true,
+    "metadata": {
+      "target_object_type": "GROUP",
+      "schedule_mode": "AT_EFFECTIVE_TIME",
+      "trigger_field": "start_date",
+      "priority": "NORMAL",
+      "allow_retry": true,
+      "max_retry": 3
+    },
+    "actions": [
+      {
+        "id": "STEP_01",
+        "action_code": "move_group_to_ou",
+        "display_name": "MOVE",
+        "execution": {
+          "execute_time": "2026-09-02T00:38",
+          "depends_on": [],
+          "retry_count": 3,
+          "continue_on_error": false
+        }
+      }
+    ]
   }
 ]

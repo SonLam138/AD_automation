@@ -235,6 +235,8 @@
 
     color: #666;
 
+    overflow-wrap: anywhere;
+
     margin-bottom: 4px;
 }
 .runtime-job-error {

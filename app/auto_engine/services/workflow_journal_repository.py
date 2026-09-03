@@ -2,7 +2,9 @@ import json
 from pathlib import Path
 from datetime import datetime
 import uuid
-
+from app.auto_engine.sqlite.workflow_journal_storage import (
+    SqlWorkflowJournalStorage
+)
 
 class WorkflowJournalRepository:
 
@@ -14,16 +16,25 @@ class WorkflowJournalRepository:
             /"workflow_ui"
             / "workflow_ui_journal.json"
         )
+        self.storage = (
+            SqlWorkflowJournalStorage()
+        )
 
+    # def _load(self):
+
+    #     with open(
+    #         self.file_path,
+    #         "r",
+    #         encoding="utf-8"
+    #     ) as f:
+
+    #         return json.load(f)
     def _load(self):
 
-        with open(
-            self.file_path,
-            "r",
-            encoding="utf-8"
-        ) as f:
-
-            return json.load(f)
+        return {
+            "entries":
+                self.storage.list_entries()
+        }
 
     def _save_file(
         self,
@@ -51,8 +62,6 @@ class WorkflowJournalRepository:
         snapshot: dict,
     ):
 
-        data = self._load()
-
         entry = {
             "journal_id": (
                 f"JRN_{uuid.uuid4().hex[:8]}"
@@ -60,7 +69,10 @@ class WorkflowJournalRepository:
 
             "workflow_name": workflow_name,
 
-            "workflow_id": snapshot["workflowInfo"]["workflowId"],
+            "workflow_id":
+                snapshot["workflowInfo"][
+                    "workflowId"
+                ],
 
             "created_by": created_by,
 
@@ -69,7 +81,7 @@ class WorkflowJournalRepository:
             "executed_at": None,
 
             "saved_at": (
-                datetime.now().isoformat()
+                datetime.now()
             ),
 
             "object_count": len(
@@ -89,12 +101,8 @@ class WorkflowJournalRepository:
             "snapshot": snapshot,
         }
 
-        data["entries"].append(
+        self.storage.save_entry(
             entry
-        )
-
-        self._save_file(
-            data
         )
 
         return entry
@@ -180,29 +188,12 @@ class WorkflowJournalRepository:
 
     def delete(
         self,
-        journal_id: str
+        journal_id: str,
     ):
-        data = self._load()
 
-        original_count = len(
-            data["entries"]
+        return self.storage.delete_entry(
+            journal_id
         )
-
-        data["entries"] = [
-            entry
-            for entry in data["entries"]
-            if entry["journal_id"] != journal_id
-        ]
-
-        deleted = (
-            len(data["entries"])
-            < original_count
-        )
-
-        if deleted:
-            self._save_file(data)
-
-        return deleted
 
     # --------------------------------------------------
     # Registry Cleanup
@@ -272,28 +263,11 @@ class WorkflowJournalRepository:
 
     def mark_executed(
         self,
-        workflow_id: str
+        workflow_id: str,
     ):
-        data = self._load()
 
-        updated = False
-
-        for entry in data["entries"]:
-
-            if (
-                entry.get("workflow_id")
-                == workflow_id
-            ):
-                entry["status"] = "executed"
-                entry["executed_at"] = (
-                    datetime.now()
-                    .isoformat()
-                )
-
-                updated = True
-                break
-
-        if updated:
-            self._save_file(data)
-
-        return updated
+        return self.storage.update_status(
+            workflow_id=workflow_id,
+            status="executed",
+            executed_at=datetime.now(),
+        )

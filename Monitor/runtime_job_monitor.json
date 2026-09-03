@@ -1,18 +1,51 @@
 {
-    "total_jobs_created": 12,
-    "failed_jobs_count": 1,
+    "total_jobs_created": 31,
+    "failed_jobs_count": 4,
     "last_executed_job": {
-        "job_id": "REQ_27082026_9D58:STEP_02",
-        "action_code": "move_computer_to_ou",
-        "display_name": "Move computer to OU to remove permission",
-        "object_name": "Client-02",
-        "target": "OU=HO,DC=automate,DC=com,DC=vn",
-        "execute_at": "2026-08-27T02:22:00",
+        "job_id": "REQ_02092026_BECD:STEP_01",
+        "action_code": "move_group_to_ou",
+        "display_name": "MOVE",
+        "object_name": "CN=TestGroup,OU=HO,DC=automate,DC=com,DC=vn",
+        "target": "OU=PVCB Khanh Hoa,OU=CN-Azure,OU=Chi Nhanh,DC=automate,DC=com,DC=vn",
+        "execute_at": "2026-09-02T00:38:00",
         "status": "COMPLETED",
         "error_message": null,
-        "timestamp": "2026-08-26T19:22:07.395595"
+        "timestamp": "2026-09-01T17:38:01.269380"
     },
     "recent_failed_jobs": [
+        {
+            "job_id": "REQ_02092026_924F:STEP_03",
+            "action_code": "move_group_to_ou",
+            "display_name": "MOVE",
+            "object_name": "CN=TestGroup,OU=HO,DC=automate,DC=com,DC=vn",
+            "target": "OU=PVCB Khanh Hoa,OU=CN-Azure,OU=Chi Nhanh,DC=automate,DC=com,DC=vn",
+            "execute_at": "2026-09-01T23:05:00",
+            "status": "FAILED",
+            "error_message": "Thiếu group_name trong business_data.action_data",
+            "timestamp": "2026-09-01T17:00:56.903783"
+        },
+        {
+            "job_id": "REQ_02092026_924F:STEP_01",
+            "action_code": "move_group_to_ou",
+            "display_name": "MOVE",
+            "object_name": "CN=TestGroup,OU=HO,DC=automate,DC=com,DC=vn",
+            "target": "OU=Disabled Account,DC=automate,DC=com,DC=vn",
+            "execute_at": "2026-09-01T23:03:00",
+            "status": "FAILED",
+            "error_message": "Thiếu group_name trong business_data.action_data",
+            "timestamp": "2026-09-01T17:00:36.198187"
+        },
+        {
+            "job_id": "REQ_01092026_F2DE:STEP_03",
+            "action_code": "move_user_to_ou",
+            "display_name": "Move To Disabled OU",
+            "object_name": "AD Automation 3",
+            "target": null,
+            "execute_at": "2026-09-01T15:27:00",
+            "status": "FAILED",
+            "error_message": "DEBUG ==> {'employee_id': '', 'email': 'ad.auto3@automate.com.vn', 'reason': 'Nghỉ việc', 'effective_time': None, 'start_date': '2026-09-01T15:22:00', 'target_ou': 'OU=Disabled Account,DC=automate,DC=com,DC=vn', 'target_object': {'object_type': 'user', 'sam_account_name': 'ad.auto3', 'display_name': 'AD Automation 3', 'email': 'ad.auto3@automate.com.vn', 'dn': 'CN=AD Automation 3,OU=HO,DC=automate,DC=com,DC=vn', 'member_of': []}, 'action_data': {}}",
+            "timestamp": "2026-09-01T08:27:05.556693"
+        },
         {
             "job_id": "REQ_26082026_E18F:STEP_02",
             "action_code": "move_computer_to_ou",

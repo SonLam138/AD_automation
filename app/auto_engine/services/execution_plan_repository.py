@@ -3,6 +3,9 @@ from pathlib import Path
 from typing import Optional
 
 from app.auto_engine.models.execution_plan import ExecutionPlan
+from app.auto_engine.sqlite.sql_execution_plan_repository import (
+    SqlExecutionPlanRepository,
+)
 
 
 class ExecutionPlanRepository:
@@ -15,6 +18,9 @@ class ExecutionPlanRepository:
             parents=True,
             exist_ok=True
         )
+        self.sql_repository = (
+            SqlExecutionPlanRepository()
+            )
 
     def save(self, plan: ExecutionPlan):
         file_path = self.storage_path / f"{plan.request_id}.json"
@@ -31,6 +37,19 @@ class ExecutionPlanRepository:
                 f,
                 indent=2,
                 ensure_ascii=False
+            )
+
+        try:
+
+            self.sql_repository.save(
+                plan
+            )
+
+        except Exception as ex:
+
+            print(
+                f"[SQLITE SHADOW WRITE ERROR] "
+                f"{ex}"
             )
 
     def get(

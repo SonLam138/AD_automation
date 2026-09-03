@@ -88,9 +88,7 @@ class BaseAdAction(ABC):
         )
 
         if not action_data:
-            raise ValueError(
-                f"DEBUG ==> {business_data}"
-            )
+            return {}
 
         execution_context = (
             execution_context
@@ -143,32 +141,25 @@ class BaseAdAction(ABC):
             Dict[str, Any] | None = None,
     ) -> str:
 
-        parameters = (
-            cls._get_action_parameters(
-                business_data,
-                execution_context,
+        target_business_data = (
+            cls._get_target_business_data(
+                business_data
             )
         )
 
         group_name = (
-            parameters.get(
+            target_business_data.get(
                 "group_name"
             )
-            or parameters.get(
-                "target_group"
-            )
-            or parameters.get(
-                "target_group_name"
-            )
-            or parameters.get(
-            "targetGroup"
+            or business_data.get(
+                "group_name"
             )
         )
 
         if not group_name:
             raise ValueError(
-                "Thiếu group_name trong "
-                "business_data.action_data"
+                "Thiếu group_name "
+                "trong target_object"
             )
 
         return group_name
