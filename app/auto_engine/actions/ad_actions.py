@@ -141,15 +141,22 @@ class BaseAdAction(ABC):
             Dict[str, Any] | None = None,
     ) -> str:
 
-        target_business_data = (
-            cls._get_target_business_data(
-                business_data
+        parameters = (
+            cls._get_action_parameters(
+                business_data,
+                execution_context,
             )
         )
 
         group_name = (
-            target_business_data.get(
+            parameters.get(
+                "target_group"
+            )
+            or parameters.get(
                 "group_name"
+            )
+            or business_data.get(
+                "target_group"
             )
             or business_data.get(
                 "group_name"
@@ -158,8 +165,8 @@ class BaseAdAction(ABC):
 
         if not group_name:
             raise ValueError(
-                "Thiếu group_name "
-                "trong target_object"
+                "Thiếu target_group trong "
+                "business_data.action_data"
             )
 
         return group_name

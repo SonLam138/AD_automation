@@ -11,6 +11,8 @@ const TEMP_ACCESS_TYPE = {
     USER: "user",
 };
 
+const ORIGINAL_VALUE =
+    "__ORIGINAL_VALUE__";
 
 
 const INITIAL_FORM = {
@@ -21,6 +23,8 @@ const INITIAL_FORM = {
     step01Value: "",
 
     step02Value: "",
+
+    step02Mode: "ORIGINAL_VALUE",
 
     step02ExecuteAt: "",
 };
@@ -61,9 +65,9 @@ export default function TempAccessPage() {
     ] = useState(null);
 
     const [
-    resolvingStepId,
-    setResolvingStepId,
-] = useState(null);
+        resolvingStepId,
+        setResolvingStepId,
+    ] = useState(null);
 
 
     const [
@@ -91,7 +95,6 @@ export default function TempAccessPage() {
         selectingStepId,
         setSelectingStepId,
     ] = useState(null);
-
 
     const typeConfiguration = useMemo(
         () => {
@@ -171,13 +174,13 @@ export default function TempAccessPage() {
                         "STEP_01",
 
                     step01Description:
-                        "Apply the first group permission",
+                        "Add user to group to grant permission",
 
                     step02Title:
                         "STEP_02",
 
                     step02Description:
-                        "Apply the second group permission",
+                        "Remove user from the same group",
 
                     valueLabel:
                         "Target Group",
@@ -212,9 +215,11 @@ export default function TempAccessPage() {
 
     function resetForm() {
 
-        setFormData(
-            INITIAL_FORM
-        );
+        setFormData({
+        ...INITIAL_FORM,
+        step02Value:
+        ORIGINAL_VALUE,
+        });
 
         setValidationErrors([]);
 
@@ -633,6 +638,15 @@ export default function TempAccessPage() {
                 "Workflow Start Date là bắt buộc."
             );
         }
+        console.log(
+            "step01Value",
+            formData.step01Value
+        );
+
+        console.log(
+            "resolvedSteps",
+            resolvedSteps
+        );
 
         if (
             !formData
@@ -644,13 +658,20 @@ export default function TempAccessPage() {
             );
         }
 
+        const requiresStep02Value =
+            formData.step02Value
+            !==
+            ORIGINAL_VALUE;
+
         if (
+            requiresStep02Value
+            &&
             !formData
                 .step02Value
                 .trim()
         ) {
             errors.push(
-                "New Value của STEP_02 là bắt buộc."
+                "Target Value của STEP_02 là bắt buộc."
             );
         }
 
@@ -742,12 +763,20 @@ export default function TempAccessPage() {
             }
 
 
+            const requiresResolvedStep02 = (
+                formData.step02Mode
+                ===
+                "REVOKE_OU"
+            );
+
             if (
+                requiresResolvedStep02
+                &&
                 !resolvedSteps.STEP_02
             ) {
                 errors.push(
                     (
-                        "STEP_02 Target OU "
+                        "STEP_02 Revoke OU "
                         + "chưa được Get DN."
                     )
                 );
@@ -1114,22 +1143,18 @@ export default function TempAccessPage() {
                                         }
                                     </span>
 
-
                                     <div className="resolve-input-row">
 
                                         <input
                                             type="text"
-
                                             value={
                                                 formData
                                                     .step01Value
                                             }
-
                                             placeholder={
                                                 typeConfiguration
                                                     .valuePlaceholder
                                             }
-
                                             onChange={
                                                 event =>
                                                     updateField(
@@ -1139,18 +1164,14 @@ export default function TempAccessPage() {
                                             }
                                         />
 
-
                                         <button
                                             type="button"
-
                                             className="get-dn-button"
-
                                             disabled={
                                                 resolvingStepId
                                                 ===
                                                 "STEP_01"
                                             }
-
                                             onClick={() =>
                                                 handleGetDn(
                                                     "STEP_01",
@@ -1162,21 +1183,22 @@ export default function TempAccessPage() {
                                                 resolvingStepId
                                                 ===
                                                 "STEP_01"
-
                                                     ? "Resolving..."
-
                                                     : "Get DN"
                                             }
                                         </button>
 
                                     </div>
 
-
                                     {
                                         resolvedSteps.STEP_01
                                         &&
                                         (
-                                            <small className="resolved-label">
+                                            <small
+                                                className="
+                                                    resolved-label
+                                                "
+                                            >
                                                 ✓ DN resolved
                                             </small>
                                         )
@@ -1220,78 +1242,207 @@ export default function TempAccessPage() {
 
                                     <div className="form-field">
 
-                                        <span>
-                                            {
-                                                typeConfiguration
-                                                    .valueLabel
-                                            }
-                                        </span>
-
-
-                                        <div className="resolve-input-row">
-
-                                            <input
-                                                type="text"
-
-                                                value={
-                                                    formData
-                                                        .step02Value
-                                                }
-
-                                                placeholder={
-                                                    typeConfiguration
-                                                        .valuePlaceholder
-                                                }
-
-                                                onChange={
-                                                    event =>
-                                                        updateField(
-                                                            "step02Value",
-                                                            event.target.value
-                                                        )
-                                                }
-                                            />
-
-
-                                            <button
-                                                type="button"
-
-                                                className="get-dn-button"
-
-                                                disabled={
-                                                    resolvingStepId
-                                                    ===
-                                                    "STEP_02"
-                                                }
-
-                                                onClick={() =>
-                                                    handleGetDn(
-                                                        "STEP_02",
-                                                        "step02Value"
-                                                    )
-                                                }
-                                            >
-                                                {
-                                                    resolvingStepId
-                                                    ===
-                                                    "STEP_02"
-
-                                                        ? "Resolving..."
-
-                                                        : "Get DN"
-                                                }
-                                            </button>
-
-                                        </div>
-
-
                                         {
-                                            resolvedSteps.STEP_02
-                                            &&
-                                            (
-                                                <small className="resolved-label">
-                                                    ✓ DN resolved
-                                                </small>
+                                            selectedType
+                                            ===
+                                            TEMP_ACCESS_TYPE.USER
+                                            ? (
+                                                <div className="same-group-card">
+
+                                                    <span className="same-group-label">
+                                                        Group to be removed
+                                                    </span>
+
+                                                    <strong className="same-group-value">
+                                                        {
+                                                            formData.step01Value
+                                                            ||
+                                                            "Chưa chọn Target Group tại STEP_01"
+                                                        }
+                                                    </strong>
+
+                                                    <small>
+                                                        STEP_02 sẽ tự động remove user
+                                                        khỏi đúng Group đã được add tại
+                                                        STEP_01.
+                                                    </small>
+
+                                                </div>
+                                            )
+                                            : (
+                                                <>
+                                                    <div className="step02-mode-options">
+
+                                                        <label className="mode-option">
+
+                                                            <input
+                                                                type="radio"
+                                                                name="step02Mode"
+                                                                value="ORIGINAL_VALUE"
+                                                                checked={
+                                                                    formData.step02Mode
+                                                                    ===
+                                                                    "ORIGINAL_VALUE"
+                                                                }
+                                                                onChange={() => {
+
+                                                                    updateField(
+                                                                        "step02Mode",
+                                                                        "ORIGINAL_VALUE"
+                                                                    );
+
+                                                                    updateField(
+                                                                        "step02Value",
+                                                                        ORIGINAL_VALUE
+                                                                    );
+
+                                                                    setResolvedSteps(
+                                                                        current => ({
+                                                                            ...current,
+                                                                            STEP_02: true,
+                                                                        })
+                                                                    );
+                                                                }}
+                                                            />
+
+                                                            <div>
+                                                                <strong>
+                                                                    Return to Original OU
+                                                                </strong>
+
+                                                                <small>
+                                                                    Đưa Computer về OU ban đầu
+                                                                    sau khi hết thời hạn.
+                                                                </small>
+                                                            </div>
+
+                                                        </label>
+
+                                                        <label className="mode-option">
+
+                                                            <input
+                                                                type="radio"
+                                                                name="step02Mode"
+                                                                value="REVOKE_OU"
+                                                                checked={
+                                                                    formData.step02Mode
+                                                                    ===
+                                                                    "REVOKE_OU"
+                                                                }
+                                                                onChange={() => {
+
+                                                                    updateField(
+                                                                        "step02Mode",
+                                                                        "REVOKE_OU"
+                                                                    );
+
+                                                                    updateField(
+                                                                        "step02Value",
+                                                                        ""
+                                                                    );
+
+                                                                    setResolvedSteps(
+                                                                        current => ({
+                                                                            ...current,
+                                                                            STEP_02: false,
+                                                                        })
+                                                                    );
+                                                                }}
+                                                            />
+
+                                                            <div>
+                                                                <strong>
+                                                                    Move to Revoke OU
+                                                                </strong>
+
+                                                                <small>
+                                                                    Chuyển Computer sang OU
+                                                                    thu hồi quyền được chỉ định.
+                                                                </small>
+                                                            </div>
+
+                                                        </label>
+
+                                                    </div>
+
+                                                    {
+                                                        formData.step02Mode
+                                                        ===
+                                                        "REVOKE_OU"
+                                                        ? (
+                                                            <>
+                                                                <span>
+                                                                    {
+                                                                        typeConfiguration
+                                                                            .valueLabel
+                                                                    }
+                                                                </span>
+
+                                                                <div className="resolve-input-row">
+
+                                                                    <input
+                                                                        type="text"
+                                                                        value={
+                                                                            formData.step02Value
+                                                                        }
+                                                                        placeholder={
+                                                                            typeConfiguration
+                                                                                .valuePlaceholder
+                                                                        }
+                                                                        onChange={
+                                                                            event =>
+                                                                                updateField(
+                                                                                    "step02Value",
+                                                                                    event.target.value
+                                                                                )
+                                                                        }
+                                                                    />
+
+                                                                    <button
+                                                                        type="button"
+                                                                        className="get-dn-button"
+                                                                        disabled={
+                                                                            resolvingStepId
+                                                                            ===
+                                                                            "STEP_02"
+                                                                        }
+                                                                        onClick={() =>
+                                                                            handleGetDn(
+                                                                                "STEP_02",
+                                                                                "step02Value"
+                                                                            )
+                                                                        }
+                                                                    >
+                                                                        {
+                                                                            resolvingStepId
+                                                                            ===
+                                                                            "STEP_02"
+                                                                                ? "Resolving..."
+                                                                                : "Get DN"
+                                                                        }
+                                                                    </button>
+
+                                                                </div>
+
+                                                                {
+                                                                    resolvedSteps.STEP_02
+                                                                    &&
+                                                                    (
+                                                                        <small className="resolved-label">
+                                                                            ✓ DN resolved
+                                                                        </small>
+                                                                    )
+                                                                }
+                                                            </>
+                                                        )
+                                                        : (
+                                                            <div className="original-ou-message">
+                                                                Original OU sẽ được lấy tự động
+                                                                từ Computer đã resolve trong adapter.
+                                                            </div>
+                                                        )
+                                                    }
+                                                </>
                                             )
                                         }
 

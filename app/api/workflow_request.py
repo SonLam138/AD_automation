@@ -1,5 +1,8 @@
 # app/api/workflow_api.py
 
+import os
+import tempfile
+
 from fastapi import (
     APIRouter,
     HTTPException,
@@ -11,6 +14,9 @@ from datetime import (
     datetime,
     timezone,
 )
+
+from app.ra_soat.account_discovery import discover_users_and_build_requests
+from app.ra_soat.file_loader import *
 from app.adapters.ldap_container import (
     ldap,
 )
@@ -154,6 +160,234 @@ def employee_offboarding(
             detail=str(ex),
         )
 
+@router.post(
+    "/ra_soat/analyze"
+)
+async def analyze_offboarding_file(
+    file: UploadFile = File(...),
+):
+    temp_file_path = None
+
+    try:
+        file_extension = os.path.splitext(
+            file.filename or ""
+        )[1].lower()
+
+        if file_extension not in [
+            ".xlsx",
+            ".xls",
+        ]:
+            raise HTTPException(
+                status_code=400,
+                detail=(
+                    "Chỉ chấp nhận file Excel "
+                    "định dạng .xlsx hoặc .xls"
+                ),
+            )
+
+        file_content = await file.read()
+
+        with tempfile.NamedTemporaryFile(
+            delete=False,
+            suffix=file_extension,
+        ) as temp_file:
+            temp_file.write(
+                file_content
+            )
+
+            temp_file_path = (
+                temp_file.name
+            )
+
+        df = load_excel(
+            temp_file_path
+        )
+
+        validate_headers(df)
+
+        df["Mail nội bộ"] = (
+            df["Mail nội bộ"]
+            .apply(normalize_email)
+        )
+
+        df["Username"] = (
+            df["Mail nội bộ"]
+            .apply(extract_username)
+        )
+
+        users = map_dataframe_to_source_users(
+            df
+        )
+        requests, discovery_results = (
+            discover_users_and_build_requests(
+                users
+            )
+        )
+
+        found_accounts = [
+            result
+            for result in discovery_results
+            if result.found
+        ]
+
+        already_disabled = [
+            result
+            for result in discovery_results
+            if (
+                result.found
+                and result.is_disabled is True
+            )
+        ]
+
+        active_missing_email = [
+            result
+            for result in discovery_results
+            if (
+                result.found
+                and result.is_disabled is False
+                and not result.email
+            )
+        ]
+
+        no_related_accounts = len(
+            [
+                x
+                for x in discovery_results
+                if not x.found
+            ]
+        )
+
+        unknown_status = [
+            result
+            for result in discovery_results
+            if (
+                result.found
+                and result.is_disabled is None
+            )
+        ]
+        created_at = (
+            datetime
+            .now(
+                timezone.utc
+            )
+            .isoformat()
+        )
+
+        session_id = None
+
+        if requests:
+
+            session_id = (
+                create_review_session_id()
+            )
+
+            request_candidates = [
+                request.model_dump()
+                for request in requests
+            ]
+
+            review_session = {
+
+                "session_id":
+                    session_id,
+
+                "file_name":
+                    file.filename,
+
+                "source":
+                    "RA_SOAT_OFFBOARDING",
+
+                "status":
+                    "READY_FOR_CONFIRM",
+
+                "created_at":
+                    created_at,
+
+                "request_candidates":
+                    request_candidates,
+
+                "confirmation": {
+                    "confirmed_at": None,
+                    "created_requests": [],
+                },
+            }
+
+            review_session_repository.save(
+                review_session
+            )
+
+        return {
+            "success": True,
+            "file_name": file.filename,
+            "session_id":
+                session_id,
+
+            "totalUsers":
+                len(users),
+
+            "totalSearchKeys":
+                len(discovery_results),
+
+            "foundAccounts":
+                len(found_accounts),
+
+            "alreadyDisabled":
+                len(already_disabled),
+
+            "missingEmail":
+                len(active_missing_email),
+
+            "unknownStatus":
+                len(unknown_status),
+
+            "noRelatedAccounts": no_related_accounts,
+
+            "requestsReady":
+                len(requests),
+
+            "results": [
+                {
+                    "searchKey":
+                        result.search_key,
+
+                    "found":
+                        result.found,
+
+                    "samAccountName":
+                        result.sam_account_name,
+
+                    "email":
+                        result.email,
+
+                    "isDisabled":
+                        result.is_disabled,
+                }
+                for result in discovery_results
+            ],
+        }
+
+    except HTTPException:
+        raise
+
+    except Exception as exc:
+        raise HTTPException(
+            status_code=400,
+            detail=(
+                "Không thể đọc file Excel: "
+                f"{str(exc)}"
+            ),
+        )
+
+    finally:
+        if (
+            temp_file_path
+            and os.path.exists(
+                temp_file_path
+            )
+        ):
+            os.remove(
+                temp_file_path
+            )
 
 @router.post(
     "/employee-offboarding/preview"

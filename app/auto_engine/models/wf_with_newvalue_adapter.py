@@ -21,6 +21,12 @@ SUPPORTED_DATETIME_FORMATS = [
     # React datetime + toISOString()
     "%Y-%m-%dT%H:%M:%S.%fZ",
 ]
+
+ORIGINAL_VALUE = (
+    "__ORIGINAL_VALUE__"
+)
+
+
 def normalize_datetime(
     value: str,
 ) -> datetime:
@@ -248,7 +254,50 @@ class TargetObjectWithNewValueAdapter(
                         )
                 )
             )
-         
+
+        step01_original_value = None
+
+        for item in source_data.get(
+            "step_new_values",
+            []
+        ):
+            if (
+                item["step_id"]
+                ==
+                "STEP_01"
+            ):
+                step01_original_value = (
+                    item["new_value"]
+                )
+                break
+
+        original_ou = None
+
+        if (
+            request_type
+            ==
+            RequestType
+            .TEMP_ACCESS_COMPUTER
+        ):
+            target_dn = (
+                target_object.get("dn")
+                or target_object.get(
+                    "distinguished_name"
+                )
+                or ""
+            )
+
+            original_ou = (
+                extract_ou_from_dn(
+                    target_dn
+                )
+            )
+
+            if not original_ou:
+                raise ValueError(
+                    "Cannot determine original OU "
+                    "from computer DN"
+                )
 
         step_new_values = []
 
@@ -256,12 +305,44 @@ class TargetObjectWithNewValueAdapter(
             "step_new_values",
             []
         ):
+            new_value = item[
+                "new_value"
+            ]
+
+            if (
+                request_type
+                ==
+                RequestType
+                .TEMP_ACCESS_COMPUTER
+                and item["step_id"]
+                ==
+                "STEP_02"
+                and new_value
+                ==
+                ORIGINAL_VALUE
+            ):
+                new_value = original_ou
+
+            if (
+                request_type
+                ==
+                RequestType
+                .TEMP_ACCESS_USER
+                and item["step_id"]
+                ==
+                "STEP_02"
+                and new_value
+                ==
+                ORIGINAL_VALUE
+            ):
+                new_value = (
+                    step01_original_value
+                )
+
             step_new_values.append(
                 StepNewValue(
                     step_id=
-                        item[
-                            "step_id"
-                        ],
+                        item["step_id"],
 
                     parameter_name=
                         item[
@@ -269,9 +350,7 @@ class TargetObjectWithNewValueAdapter(
                         ],
 
                     new_value=
-                        item[
-                            "new_value"
-                        ],
+                        new_value,
                 )
             )
 

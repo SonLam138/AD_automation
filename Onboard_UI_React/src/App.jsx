@@ -21,6 +21,7 @@ import WorkflowDesignerPage from "./pages/WorkflowDesignerPage";
 import WorkflowJournalPage from "./pages/WorkflowJournalPage";
 import WorkflowJournalDetailPage from "./pages/WorkflowJournalDetailPage";
 import TempAccessPage from "./pages/TempAccessPage";
+import OffboardingReviewPage from "./pages/OffboardingReviewPage";
 
 function App() {
 
@@ -67,6 +68,12 @@ function App() {
                     path="workflow/offboarding"
                     element={
                         <EmployeeOffboardingPage />
+                    }
+                />
+                <Route
+                    path="workflow/offboarding-review"
+                    element={
+                        <OffboardingReviewPage />
                     }
                 />
                 <Route

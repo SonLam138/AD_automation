@@ -1,11 +1,11 @@
 {
-  "request_id": "REQ_25082026_263C",
+  "request_id": "REQ_07092026_7D73",
   "workflow_id": "TEMP_ACCESS_USER",
-  "execute_at": "2026-08-25T01:08:00",
+  "execute_at": "2026-09-07T03:06:00",
   "actions": [
     {
       "id": "STEP_01",
-      "action_code": "add_group",
+      "action_code": "add_group_by_dn",
       "display_name": "Add user to group to grant permission",
       "execution": {
         "depends_on": [],
@@ -17,14 +17,14 @@
     },
     {
       "id": "STEP_02",
-      "action_code": "remove_group",
+      "action_code": "remove_group_by_dn",
       "display_name": "Remove user to group to remove permission",
       "execution": {
         "depends_on": [
           "STEP_01"
         ],
         "delay_minutes": 0,
-        "execute_time": "2026-08-25T01:09:00",
+        "execute_time": "2026-09-07T03:07:00",
         "retry_count": 3,
         "continue_on_error": false
       }
@@ -36,27 +36,27 @@
   "failed_action_ids": [
     "STEP_01"
   ],
-  "created_at": "2026-08-25T01:05:10.721479",
-  "updated_at": "2026-09-02T01:28:07.083595",
+  "created_at": "2026-09-07T03:05:03.712067",
+  "updated_at": "2026-09-07T03:29:14.036102",
   "is_scheduled": false,
   "business_data": {
-    "start_date": "2026-08-25T01:08:00",
+    "start_date": "2026-09-07T03:06:00",
     "step_execute_times": [
       {
         "step_id": "STEP_02",
-        "execute_at": "2026-08-25T01:09:00"
+        "execute_at": "2026-09-07T03:07:00"
       }
     ],
     "step_new_values": [
       {
         "step_id": "STEP_01",
         "parameter_name": "target_group",
-        "new_value": "CN=TestGroup,OU=HO,DC=automate,DC=com,DC=vn"
+        "new_value": "CN=Test_grp,OU=HO,DC=automate,DC=com,DC=vn"
       },
       {
         "step_id": "STEP_02",
         "parameter_name": "target_group",
-        "new_value": "CN=TestGroup,OU=HO,DC=automate,DC=com,DC=vn"
+        "new_value": "CN=Test_grp,OU=HO,DC=automate,DC=com,DC=vn"
       }
     ],
     "target_object": {

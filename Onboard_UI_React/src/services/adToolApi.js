@@ -139,6 +139,35 @@ export async function createEmployeeOffboarding(
     return response.data;
 }
 
+export async function analyzeOffboardingFile(
+    file
+) {
+
+    const formData =
+        new FormData();
+
+    formData.append(
+        "file",
+        file
+    );
+
+    const response =
+        await axiosClient.post(
+            "/api/workflow/ra_soat/analyze",
+            formData,
+            {
+                headers: {
+                    "Content-Type":
+                        "multipart/form-data"
+                }
+            }
+        );
+
+    return response.data;
+}
+
+
+
 export async function getWorkflowJournalList(
     payload
 ) {
@@ -204,3 +233,18 @@ export async function tempResolveObject(
 
     return response.data;
 }
+
+export async function confirmOffboardingReview(
+    sessionId
+) {
+    const response =
+        await axiosClient.post(
+            "/api/workflow/employee-offboarding/confirm",
+            {
+                session_id: sessionId
+            }
+        );
+
+    return response.data;
+}
+

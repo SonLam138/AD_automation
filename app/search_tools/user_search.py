@@ -79,7 +79,8 @@ def _is_disabled(
 def search_user(
     connection,
     keyword: str,
-    limit: int = 10
+    limit: int = 10,
+    include_excluded_ou: bool = False,
 ):
     """
     Internal search tool for Agent.
@@ -211,8 +212,11 @@ def search_user(
         # EXCLUDED OU
         # ==========================================
 
-        if _is_excluded_ou(
-            item["distinguished_name"]
+        if (
+            not include_excluded_ou
+            and _is_excluded_ou(
+                item["distinguished_name"]
+            )
         ):
             continue
 

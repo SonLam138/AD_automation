@@ -54,5 +54,5 @@ class EmployeeOffboardingApiRequest(
 
     start_date: Optional[str] = None
 
-    end_date: Optional[str] = None
+    #end_date: Optional[str] = None
     target_ou : Optional[str] = None

@@ -63,11 +63,18 @@ export default function WorkflowPage() {
                     </div>
 
                     <div
-                        className="workflow-box disabled"
+                        className="workflow-box workflow-box-review"
+                        onClick={() =>
+                            navigate(
+                                "/portal/workflow/offboarding-review"
+                            )
+                        }
                     >
-                        🚧 Employee Onboarding
+                        🔍 Offboarding Review
                         <br />
-                        Coming Soon
+                        <span>
+                            (AD/PAD Account Discovery)
+                        </span>
                     </div>
 
                     <div
@@ -81,7 +88,7 @@ export default function WorkflowPage() {
                         ⏳ Temporary Access
                         <br />
                         <span>
-                            User & Computer
+                           (Grant permission to User & Computer)
                         </span>
                     </div>
 

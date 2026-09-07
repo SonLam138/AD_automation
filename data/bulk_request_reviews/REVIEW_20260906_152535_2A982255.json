@@ -1,0 +1,53 @@
+{
+  "session_id": "REVIEW_20260906_152535_2A982255",
+  "file_name": "HR_Offboard.xlsx",
+  "source": "RA_SOAT_OFFBOARDING",
+  "status": "READY_FOR_CONFIRM",
+  "created_at": "2026-09-06T15:25:35.086742+00:00",
+  "request_candidates": [
+    {
+      "employee_id": "",
+      "email": "ad.auto1@automate.com.vn",
+      "reason": "resigned",
+      "effective_time": "2026-09-06 22:55:34",
+      "start_date": null,
+      "target_ou": null
+    },
+    {
+      "employee_id": "",
+      "email": "ad.auto2@automate.com.vn",
+      "reason": "resigned",
+      "effective_time": "2026-09-06 22:55:34",
+      "start_date": null,
+      "target_ou": null
+    },
+    {
+      "employee_id": "",
+      "email": "ad.auto3@automate.com.vn",
+      "reason": "resigned",
+      "effective_time": "2026-09-06 22:55:34",
+      "start_date": null,
+      "target_ou": null
+    },
+    {
+      "employee_id": "",
+      "email": "ad.auto10@automate.com.vn",
+      "reason": "resigned",
+      "effective_time": "2026-09-06 22:55:34",
+      "start_date": null,
+      "target_ou": null
+    },
+    {
+      "employee_id": "",
+      "email": "ad.auto12@automate.com.vn",
+      "reason": "resigned",
+      "effective_time": "2026-09-06 22:55:35",
+      "start_date": null,
+      "target_ou": null
+    }
+  ],
+  "confirmation": {
+    "confirmed_at": null,
+    "created_requests": []
+  }
+}
