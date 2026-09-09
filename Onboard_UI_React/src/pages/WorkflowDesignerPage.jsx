@@ -641,32 +641,35 @@ export default function WorkflowDesignerPage() {
         parameterName,
         currentValue
     ) {
-
         const objectType =
             getResolveObjectType(
                 parameterName
             );
 
-        if (
-            !objectType
-        ) {
+        if (!objectType) {
             return;
         }
 
         try {
-
-            const result =
+            const response =
                 await tempResolveObject(
                     objectType,
                     currentValue
                 );
+
+            const result =
+                response?.data ?? response;
+
+            console.log(
+                "Resolve parameter result:",
+                result
+            );
 
             if (
                 result.resolved
                 &&
                 result.distinguished_name
             ) {
-
                 handleParameterChange(
                     stepId,
                     parameterName,
@@ -676,10 +679,7 @@ export default function WorkflowDesignerPage() {
                 return;
             }
 
-            if (
-                result.multiple
-            ) {
-
+            if (result.multiple) {
                 setResolveOptions(
                     result.results || []
                 );
@@ -696,15 +696,35 @@ export default function WorkflowDesignerPage() {
                 result.message
                 || "Object not found"
             );
-
         }
         catch (error) {
-
             alert(
                 error?.response?.data?.detail
                 || error.message
             );
         }
+    }
+
+    function handleSelectResolvedObject(
+        option
+    ) {
+        if (!resolveContext) {
+            return;
+        }
+
+        handleParameterChange(
+            resolveContext.stepId,
+            resolveContext.parameterName,
+            option.distinguished_name
+        );
+
+        setResolveOptions([]);
+        setResolveContext(null);
+    }
+
+    function closeResolveOptions() {
+        setResolveOptions([]);
+        setResolveContext(null);
     }
 
 
@@ -1538,6 +1558,59 @@ export default function WorkflowDesignerPage() {
                             );
 
                         })
+                    }
+
+                    {
+                        resolveContext
+                        &&
+                        resolveOptions.length > 0
+                        &&
+                        (
+                            <div className="resolve-selection-panel">
+                                <div className="resolve-selection-header">
+                                    <div>
+                                        <strong>
+                                            Select resolved object
+                                        </strong>
+                                        <span>
+                                            Choose a DN to fill the parameter
+                                        </span>
+                                    </div>
+
+                                    <button
+                                        type="button"
+                                        className="resolve-close-button"
+                                        onClick={closeResolveOptions}
+                                    >
+                                        Close
+                                    </button>
+                                </div>
+
+                                <div className="resolve-option-list">
+                                    {
+                                        resolveOptions.map(option => (
+                                            <button
+                                                type="button"
+                                                className="resolve-option"
+                                                key={option.distinguished_name}
+                                                onClick={() =>
+                                                    handleSelectResolvedObject(
+                                                        option
+                                                    )
+                                                }
+                                            >
+                                                <strong>
+                                                    {option.name || "Object"}
+                                                </strong>
+                                                <span>
+                                                    {option.distinguished_name}
+                                                </span>
+                                            </button>
+                                        ))
+                                    }
+                                </div>
+                            </div>
+                        )
                     }
 
                 </div>
