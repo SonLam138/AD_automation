@@ -20,6 +20,12 @@ ACTION_MAPPING = {
 
     (
         "USER",
+        "ENABLE"
+    ):
+        "enable_user",
+
+    (
+        "USER",
         "MOVE"
     ):
         "move_user_to_ou",

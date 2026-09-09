@@ -456,6 +456,7 @@ export default function WorkflowDesignerPage() {
 
         const actionsRequireConfirmation = [
             "CREATE",
+            "ENABLE",
             "MOVE",
             "ADD_GROUP",
             "REMOVE_GROUP"

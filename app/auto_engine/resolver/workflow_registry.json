@@ -449,5 +449,82 @@
         }
       }
     ]
+  },
+  {
+    "match": {
+      "request_type": "custom_workflow",
+      "contexts": [
+        "CUSTOM_WF_1788939566151_Test"
+      ]
+    },
+    "workflow_id": "WF_1788939566151",
+    "workflow_name": "Test",
+    "object_resolver": "resolve_user",
+    "workflow_complete": true,
+    "metadata": {
+      "target_object_type": "USER",
+      "schedule_mode": "AT_EFFECTIVE_TIME",
+      "trigger_field": "start_date",
+      "priority": "NORMAL",
+      "allow_retry": true,
+      "max_retry": 3
+    },
+    "actions": [
+      {
+        "id": "STEP_01",
+        "action_code": "enable_user",
+        "display_name": "ENABLE",
+        "execution": {
+          "execute_time": "2026-09-09T14:41",
+          "depends_on": [],
+          "retry_count": 3,
+          "continue_on_error": false
+        }
+      }
+    ]
+  },
+  {
+    "match": {
+      "request_type": "custom_workflow",
+      "contexts": [
+        "CUSTOM_WF_1788941534778_Test"
+      ]
+    },
+    "workflow_id": "WF_1788941534778",
+    "workflow_name": "Test_lan2",
+    "object_resolver": "resolve_user",
+    "workflow_complete": true,
+    "metadata": {
+      "target_object_type": "USER",
+      "schedule_mode": "AT_EFFECTIVE_TIME",
+      "trigger_field": "start_date",
+      "priority": "NORMAL",
+      "allow_retry": true,
+      "max_retry": 3
+    },
+    "actions": [
+      {
+        "id": "STEP_01",
+        "action_code": "disable_user",
+        "display_name": "DISABLE",
+        "execution": {
+          "execute_time": "2026-09-09T15:14",
+          "depends_on": [],
+          "retry_count": 3,
+          "continue_on_error": false
+        }
+      },
+      {
+        "id": "STEP_02",
+        "action_code": "enable_user",
+        "display_name": "ENABLE",
+        "execution": {
+          "execute_time": "2026-09-09T15:15",
+          "depends_on": [],
+          "retry_count": 3,
+          "continue_on_error": false
+        }
+      }
+    ]
   }
 ]

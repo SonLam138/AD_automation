@@ -37,8 +37,7 @@ def build_empty_runtime_job_snapshot():
             None,
 
         #
-        # Toàn bộ Job chưa chạy.
-        # API chỉ trả 5 Job có execute_at gần nhất.
+        # Chỉ giữ 5 Job mới nhất trong queue.
         #
 
         "queued_jobs":
@@ -223,6 +222,36 @@ def build_snapshot_job_view(
     }
 
 
+def normalize_queued_jobs(
+    queued_jobs,
+):
+    unique_jobs = {}
+
+    for job in queued_jobs:
+        job_id = job.get("job_id")
+
+        if not job_id:
+            continue
+
+        if job_id not in unique_jobs:
+            unique_jobs[job_id] = job
+
+    return list(
+        unique_jobs.values()
+    )[:5]
+
+
+def remove_job_from_queue(
+    queued_jobs,
+    job_id,
+):
+    return [
+        item
+        for item in queued_jobs
+        if item.get("job_id") != job_id
+    ]
+
+
 def update_runtime_job_from_event(
     event: dict,
 ):
@@ -300,30 +329,20 @@ def update_runtime_job_from_event(
                 )
             ]
 
-            queued_jobs.append(
-                created_job
+            queued_jobs.insert(
+                0,
+                created_job,
             )
 
             #
-            # Queue luôn được sort theo thời gian chạy.
+            # Queue giữ 5 Job mới nhất theo thứ tự event.
             #
-
-            queued_jobs.sort(
-                key=lambda item: (
-                    item.get(
-                        "execute_at"
-                    )
-                    or "",
-                    item.get(
-                        "job_id"
-                    )
-                    or "",
-                )
-            )
 
             data[
                 "queued_jobs"
-            ] = queued_jobs
+            ] = normalize_queued_jobs(
+                queued_jobs
+            )
 
         #
         # JOB_STARTED
@@ -349,17 +368,10 @@ def update_runtime_job_from_event(
 
             data[
                 "queued_jobs"
-            ] = [
-                item
-                for item in queued_jobs
-                if (
-                    item.get(
-                        "job_id"
-                    )
-                    !=
-                    started_job_id
-                )
-            ]
+            ] = remove_job_from_queue(
+                queued_jobs,
+                started_job_id,
+            )
 
         #
         # JOB_COMPLETED
@@ -369,12 +381,28 @@ def update_runtime_job_from_event(
 
         elif event_name == "JOB_COMPLETED":
 
+            completed_job_id = (
+                event.get(
+                    "job_id"
+                )
+            )
+
             data[
                 "last_executed_job"
             ] = (
                 build_snapshot_job_view(
                     event
                 )
+            )
+
+            data[
+                "queued_jobs"
+            ] = remove_job_from_queue(
+                data.get(
+                    "queued_jobs",
+                    []
+                ),
+                completed_job_id,
             )
 
         #
@@ -392,6 +420,18 @@ def update_runtime_job_from_event(
                 build_snapshot_job_view(
                     event
                 )
+            )
+
+            data[
+                "queued_jobs"
+            ] = remove_job_from_queue(
+                data.get(
+                    "queued_jobs",
+                    []
+                ),
+                failed_job.get(
+                    "job_id"
+                ),
             )
 
             data[
@@ -445,6 +485,15 @@ def update_runtime_job_from_event(
                 ]
             )
 
+        data[
+            "queued_jobs"
+        ] = normalize_queued_jobs(
+            data.get(
+                "queued_jobs",
+                []
+            )
+        )
+
         result = (
             write_runtime_job_snapshot(
                 data
@@ -471,17 +520,16 @@ def get_runtime_job_snapshot():
             )
         )
 
-        queued_jobs.sort(
-            key=lambda item: (
-                item.get(
-                    "execute_at"
-                )
-                or "",
-                item.get(
-                    "job_id"
-                )
-                or "",
-            )
+        queued_jobs = normalize_queued_jobs(
+            queued_jobs
+        )
+
+        data[
+            "queued_jobs"
+        ] = queued_jobs
+
+        write_runtime_job_snapshot(
+            data
         )
 
         return {
@@ -508,9 +556,7 @@ def get_runtime_job_snapshot():
             #
 
             "next_jobs":
-                queued_jobs[
-                    :5
-                ],
+                queued_jobs,
 
             "recent_failed_jobs":
                 data.get(

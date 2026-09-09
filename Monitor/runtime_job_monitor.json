@@ -1,16 +1,16 @@
 {
-    "total_jobs_created": 67,
+    "total_jobs_created": 70,
     "failed_jobs_count": 5,
     "last_executed_job": {
-        "job_id": "REQ_07092026_7D73:STEP_01",
-        "action_code": "add_group_by_dn",
-        "display_name": "Add user to group to grant permission",
-        "object_name": "sonnm",
-        "target": "CN=Test_grp,OU=HO,DC=automate,DC=com,DC=vn",
-        "execute_at": "2026-09-07T03:06:00",
-        "status": "FAILED",
-        "error_message": "Thiếu group_name trong target_object",
-        "timestamp": "2026-09-06T20:06:07.953125"
+        "job_id": "REQ_09092026_5FA8:STEP_02",
+        "action_code": "enable_user",
+        "display_name": "ENABLE",
+        "object_name": "CN=AD Automation 2,OU=HO,DC=automate,DC=com,DC=vn",
+        "target": null,
+        "execute_at": "2026-09-09T15:15:00",
+        "status": "COMPLETED",
+        "error_message": null,
+        "timestamp": "2026-09-09T08:15:13.180745"
     },
     "recent_failed_jobs": [
         {
@@ -71,180 +71,15 @@
     ],
     "queued_jobs": [
         {
-            "job_id": "REQ_06092026_1FE9:STEP_01",
-            "action_code": "disable_user",
-            "display_name": "Disable User",
-            "object_name": "AD Automation 2",
+            "job_id": "REQ_09092026_5FA8:STEP_02",
+            "action_code": "enable_user",
+            "display_name": "ENABLE",
+            "object_name": "CN=AD Automation 2,OU=HO,DC=automate,DC=com,DC=vn",
             "target": null,
-            "execute_at": "2026-09-06T23:01:46",
+            "execute_at": "2026-09-09T15:15:00",
             "status": null,
             "error_message": null,
-            "timestamp": "2026-09-06T15:32:01.166284"
-        },
-        {
-            "job_id": "REQ_06092026_2A9E:STEP_01",
-            "action_code": "disable_user",
-            "display_name": "Disable User",
-            "object_name": "AD Automation(Test)",
-            "target": null,
-            "execute_at": "2026-09-06T23:01:46",
-            "status": null,
-            "error_message": null,
-            "timestamp": "2026-09-06T15:32:01.260461"
-        },
-        {
-            "job_id": "REQ_06092026_3B28:STEP_01",
-            "action_code": "disable_user",
-            "display_name": "Disable User",
-            "object_name": "AD Automation 12",
-            "target": null,
-            "execute_at": "2026-09-06T23:01:46",
-            "status": null,
-            "error_message": null,
-            "timestamp": "2026-09-06T15:32:01.359858"
-        },
-        {
-            "job_id": "REQ_06092026_3FB6:STEP_01",
-            "action_code": "disable_user",
-            "display_name": "Disable User",
-            "object_name": "AD Automation 3",
-            "target": null,
-            "execute_at": "2026-09-06T23:01:46",
-            "status": null,
-            "error_message": null,
-            "timestamp": "2026-09-06T15:32:01.491266"
-        },
-        {
-            "job_id": "REQ_06092026_48C9:STEP_01",
-            "action_code": "disable_user",
-            "display_name": "Disable User",
-            "object_name": "AD Automation 10",
-            "target": null,
-            "execute_at": "2026-09-06T23:01:46",
-            "status": null,
-            "error_message": null,
-            "timestamp": "2026-09-06T15:32:01.585960"
-        },
-        {
-            "job_id": "REQ_06092026_1FE9:STEP_02",
-            "action_code": "remove_all_groups",
-            "display_name": "Remove user from all Groups",
-            "object_name": "AD Automation 2",
-            "target": null,
-            "execute_at": "2026-09-06T23:03:46",
-            "status": null,
-            "error_message": null,
-            "timestamp": "2026-09-06T15:32:01.172440"
-        },
-        {
-            "job_id": "REQ_06092026_2A9E:STEP_02",
-            "action_code": "remove_all_groups",
-            "display_name": "Remove user from all Groups",
-            "object_name": "AD Automation(Test)",
-            "target": null,
-            "execute_at": "2026-09-06T23:03:46",
-            "status": null,
-            "error_message": null,
-            "timestamp": "2026-09-06T15:32:01.277750"
-        },
-        {
-            "job_id": "REQ_06092026_3B28:STEP_02",
-            "action_code": "remove_all_groups",
-            "display_name": "Remove user from all Groups",
-            "object_name": "AD Automation 12",
-            "target": null,
-            "execute_at": "2026-09-06T23:03:46",
-            "status": null,
-            "error_message": null,
-            "timestamp": "2026-09-06T15:32:01.409610"
-        },
-        {
-            "job_id": "REQ_06092026_3FB6:STEP_02",
-            "action_code": "remove_all_groups",
-            "display_name": "Remove user from all Groups",
-            "object_name": "AD Automation 3",
-            "target": null,
-            "execute_at": "2026-09-06T23:03:46",
-            "status": null,
-            "error_message": null,
-            "timestamp": "2026-09-06T15:32:01.506476"
-        },
-        {
-            "job_id": "REQ_06092026_48C9:STEP_02",
-            "action_code": "remove_all_groups",
-            "display_name": "Remove user from all Groups",
-            "object_name": "AD Automation 10",
-            "target": null,
-            "execute_at": "2026-09-06T23:03:46",
-            "status": null,
-            "error_message": null,
-            "timestamp": "2026-09-06T15:32:01.614444"
-        },
-        {
-            "job_id": "REQ_06092026_1FE9:STEP_03",
-            "action_code": "move_user_to_ou",
-            "display_name": "Move To Disabled OU",
-            "object_name": "AD Automation 2",
-            "target": null,
-            "execute_at": "2026-09-06T23:06:46",
-            "status": null,
-            "error_message": null,
-            "timestamp": "2026-09-06T15:32:01.193500"
-        },
-        {
-            "job_id": "REQ_06092026_2A9E:STEP_03",
-            "action_code": "move_user_to_ou",
-            "display_name": "Move To Disabled OU",
-            "object_name": "AD Automation(Test)",
-            "target": null,
-            "execute_at": "2026-09-06T23:06:46",
-            "status": null,
-            "error_message": null,
-            "timestamp": "2026-09-06T15:32:01.300749"
-        },
-        {
-            "job_id": "REQ_06092026_3B28:STEP_03",
-            "action_code": "move_user_to_ou",
-            "display_name": "Move To Disabled OU",
-            "object_name": "AD Automation 12",
-            "target": null,
-            "execute_at": "2026-09-06T23:06:46",
-            "status": null,
-            "error_message": null,
-            "timestamp": "2026-09-06T15:32:01.430947"
-        },
-        {
-            "job_id": "REQ_06092026_3FB6:STEP_03",
-            "action_code": "move_user_to_ou",
-            "display_name": "Move To Disabled OU",
-            "object_name": "AD Automation 3",
-            "target": null,
-            "execute_at": "2026-09-06T23:06:46",
-            "status": null,
-            "error_message": null,
-            "timestamp": "2026-09-06T15:32:01.530913"
-        },
-        {
-            "job_id": "REQ_06092026_48C9:STEP_03",
-            "action_code": "move_user_to_ou",
-            "display_name": "Move To Disabled OU",
-            "object_name": "AD Automation 10",
-            "target": null,
-            "execute_at": "2026-09-06T23:06:46",
-            "status": null,
-            "error_message": null,
-            "timestamp": "2026-09-06T15:32:01.638635"
-        },
-        {
-            "job_id": "REQ_07092026_7D73:STEP_02",
-            "action_code": "remove_group_by_dn",
-            "display_name": "Remove user to group to remove permission",
-            "object_name": "sonnm",
-            "target": "CN=Test_grp,OU=HO,DC=automate,DC=com,DC=vn",
-            "execute_at": "2026-09-07T03:07:00",
-            "status": null,
-            "error_message": null,
-            "timestamp": "2026-09-06T20:05:07.779267"
+            "timestamp": "2026-09-09T08:13:08.913469"
         }
     ]
 }
