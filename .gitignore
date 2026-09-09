@@ -1,9 +1,9 @@
-	**/__pycache__/
-	*.pyc
-	.env
-	venv/
-	sessions.json
-	data/
-	config.py
-	app/config.py
-	**/config.py
+**/__pycache__/
+*.pyc
+.env
+venv/
+sessions.json
+data/
+config.py
+app/config.py
+**/config.py
