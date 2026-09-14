@@ -32,13 +32,6 @@ from app.adapters.ldap_container import (
 
 router = APIRouter()
 
-# ldap = LDAPAdapter()
-
-# ldap.connect(
-#     LDAP_HOST,
-#     LDAP_USER,
-#     LDAP_PASSWORD
-# )
 
 @router.post("/message")
 def assistant_message(

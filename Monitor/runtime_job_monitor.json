@@ -1,16 +1,16 @@
 {
-    "total_jobs_created": 70,
+    "total_jobs_created": 86,
     "failed_jobs_count": 5,
     "last_executed_job": {
-        "job_id": "REQ_09092026_5FA8:STEP_02",
-        "action_code": "enable_user",
-        "display_name": "ENABLE",
-        "object_name": "CN=AD Automation 2,OU=HO,DC=automate,DC=com,DC=vn",
+        "job_id": "REQ_14092026_596C:STEP_03",
+        "action_code": "move_user_to_ou",
+        "display_name": "Move To Disabled OU",
+        "object_name": "AD Auto test Dashboard",
         "target": null,
-        "execute_at": "2026-09-09T15:15:00",
+        "execute_at": "2026-09-14T22:13:00",
         "status": "COMPLETED",
         "error_message": null,
-        "timestamp": "2026-09-09T08:15:13.180745"
+        "timestamp": "2026-09-14T15:13:11.641926"
     },
     "recent_failed_jobs": [
         {
@@ -71,15 +71,48 @@
     ],
     "queued_jobs": [
         {
-            "job_id": "REQ_09092026_5FA8:STEP_02",
-            "action_code": "enable_user",
-            "display_name": "ENABLE",
-            "object_name": "CN=AD Automation 2,OU=HO,DC=automate,DC=com,DC=vn",
+            "job_id": "REQ_AD_AUTO2_MAILBOX_TEST:STEP_03",
+            "action_code": "move_user_to_ou",
+            "display_name": "Move To Disabled OU",
+            "object_name": "AD Automation 2",
             "target": null,
-            "execute_at": "2026-09-09T15:15:00",
+            "execute_at": "2026-09-15T19:07:00",
             "status": null,
             "error_message": null,
-            "timestamp": "2026-09-09T08:13:08.913469"
+            "timestamp": "2026-09-14T16:11:08.304506"
+        },
+        {
+            "job_id": "REQ_AD_AUTO2_MAILBOX_TEST:STEP_02",
+            "action_code": "remove_all_groups",
+            "display_name": "Remove user from all Groups",
+            "object_name": "AD Automation 2",
+            "target": null,
+            "execute_at": "2026-09-15T19:07:00",
+            "status": null,
+            "error_message": null,
+            "timestamp": "2026-09-14T16:11:08.259282"
+        },
+        {
+            "job_id": "REQ_AD_AUTO2_MAILBOX_TEST:STEP_MAILBOX",
+            "action_code": "onprem_disable_mailbox",
+            "display_name": "Disable On-Prem Mailbox",
+            "object_name": "AD Automation 2",
+            "target": null,
+            "execute_at": "2026-09-15T19:06:00",
+            "status": null,
+            "error_message": null,
+            "timestamp": "2026-09-14T16:11:08.238554"
+        },
+        {
+            "job_id": "REQ_AD_AUTO2_MAILBOX_TEST:STEP_01",
+            "action_code": "disable_user",
+            "display_name": "Disable User",
+            "object_name": "AD Automation 2",
+            "target": null,
+            "execute_at": "2026-09-15T19:06:00",
+            "status": null,
+            "error_message": null,
+            "timestamp": "2026-09-14T16:11:08.230758"
         }
     ]
 }

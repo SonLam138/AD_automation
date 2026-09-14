@@ -14,13 +14,7 @@ from app.config import (
 
 router = APIRouter()
 
-# ldap = LDAPAdapter()
 
-# ldap.connect(
-#     LDAP_HOST,
-#     LDAP_USER,
-#     LDAP_PASSWORD
-# )
 
 
 @router.get("/{sam_account_name}")

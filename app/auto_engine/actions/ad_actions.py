@@ -4,7 +4,7 @@ from typing import Any, Dict
 from app.adapters.ldap_container import (
     ldap,
 )
-
+import requests
 
 class BaseAdAction(ABC):
 
@@ -297,6 +297,41 @@ class DisableUserAction(
                 sam_account_name,
             "execution_result": result,
         }
+
+
+class OnpremDisableMailboxAction(
+    BaseAdAction
+):
+
+    def execute(
+        self,
+        business_data: Dict[str, Any],
+        execution_context:
+            Dict[str, Any] | None = None,
+    ) -> Dict[str, Any]:
+
+        action_data = (
+            business_data["action_data"]
+            ["STEP_MAILBOX"]
+        )
+
+        response = requests.post(
+            "http://localhost:8001/api/v1/actions/execute",
+            json={
+                "action_code":
+                    "ONPREM_DISABLE_MAILBOX",
+
+                "parameters": {
+                    "identity":
+                        action_data["identity"]
+                }
+            },
+            timeout=60,
+        )
+
+        response.raise_for_status()
+
+        return response.json()
 
 
 class EnableUserAction(

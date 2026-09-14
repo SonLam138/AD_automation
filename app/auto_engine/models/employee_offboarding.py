@@ -16,6 +16,8 @@ class TargetObject(
 
     dn: str
 
+    is_remote_mailbox: bool = False
+
     member_of: list[str] = Field(
         default_factory=list
         )

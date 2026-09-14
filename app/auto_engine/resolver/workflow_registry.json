@@ -13,6 +13,10 @@
       "target_object_type": "USER",
       "schedule_mode": "AT_EFFECTIVE_TIME",
       "trigger_field": "start_date",
+      "schedule_policy": {
+        "start_hour": 17,
+        "end_hour": 20
+      },
       "priority": "NORMAL",
       "allow_retry": true,
       "max_retry": 3
@@ -30,14 +34,27 @@
         }
       },
       {
+        "id": "STEP_MAILBOX",
+        "action_code": "onprem_disable_mailbox",
+        "display_name": "Disable On-Prem Mailbox",
+        "execution": {
+          "depends_on": [
+            "STEP_01"
+          ],
+          "delay_minutes": 0,
+          "retry_count": 3,
+          "continue_on_error": false
+        }
+      },
+      {
         "id": "STEP_02",
         "action_code": "remove_all_groups",
         "display_name": "Remove user from all Groups",
         "execution": {
           "depends_on": [
-            "STEP_01"
+            "STEP_MAILBOX"
           ],
-          "delay_minutes": 2,
+          "delay_minutes": 1,
           "retry_count": 3,
           "continue_on_error": false
         }
@@ -50,7 +67,7 @@
           "depends_on": [
             "STEP_02"
           ],
-          "delay_minutes": 5,
+          "delay_minutes": 1,
           "retry_count": 3,
           "continue_on_error": false
         }

@@ -160,6 +160,11 @@ action_registry.register(
 )
 
 action_registry.register(
+    "onprem_disable_mailbox",
+    OnpremDisableMailboxAction(),
+)
+
+action_registry.register(
     "enable_user",
     EnableUserAction(),
 )
@@ -244,4 +249,3 @@ workflow_runtime = WorkflowRuntime(
 
     scan_interval_seconds=10,
 )
-

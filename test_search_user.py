@@ -1,174 +1,107 @@
-from app.auto_engine.models.wf_with_newvalue_adapter import (
-    TargetObjectWithNewValueAdapter
-)
-from app.auto_engine.resolver.workflow_registry import WORKFLOW_REGISTRY
-from app.auto_engine.resolver.workflow_resolver import WorkflowResolver
-from app.auto_engine.resolver.workflow_plan_engine import WorkflowPlanEngine
-from app.auto_engine.runtime.runtime_container import (
-    workflow_plan_engine,
-    workflow_runtime,
-    scheduler
-)
-source_data = {
-    "request_type":
-        "temp_access_computer",
+from app.adapters.ldap_container import ldap
 
-    "context":
-        "TEMP_ACCESS_COMPUTER",
-
-    "computer_name":
-        "Client-01",
-
-    "start_date":
-        "2026-08-23T23:00:00",
-
-    "step_execute_times": [
-        {
-            "step_id":
-                "STEP_02",
-
-            "execute_at":
-                "2026-08-24T23:00:00"
-        }
-    ],
-
-    "step_new_values": [
-        {
-            "step_id":
-                "STEP_01",
-
-            "parameter_name":
-                "target_ou",
-
-            "new_value":
-                (
-                    "OU=Disabled Account,"
-                    "DC=automate,"
-                    "DC=com,"
-                    "DC=vn"
-                )
-        },
-
-        {
-            "step_id":
-                "STEP_02",
-
-            "parameter_name":
-                "target_ou",
-
-            "new_value":
-                (
-                    "OU=HO,"
-                    "DC=automate,"
-                    "DC=com,"
-                    "DC=vn"
-                )
-        }
-    ]
-}
-
-adapter = (
-    TargetObjectWithNewValueAdapter()
+from app.search_tools.workflow_search_user import (
+    workflow_search_user
 )
 
-request = (
-    adapter.parse(
-        source_data
-    )
-)
+print(type(ldap))
+print(vars(ldap))
+def print_user(result):
 
-print("=" * 80)
-print("REQUEST")
-print(
-    request.model_dump(
-        mode="json"
-    )
-)
-print("=" * 80)
+    if not result["success"]:
+        print(result)
+        return
 
-resolver = WorkflowResolver()
+    if result["count"] != 1:
+        print(result)
+        return
 
-workflow_definition = (
-    resolver.resolve(
-        request
-    )
-)
-print("=" * 80)
-print("WORKFLOW")
-print(
-    workflow_definition
-        .model_dump(
-            mode="json"
-        )
-)
-print("=" * 80)
+    user = result["results"][0]
 
-plan = workflow_plan_engine.process(
-    request
-)
+    print("========================================")
+    print("USER")
+    print("========================================")
 
-print("=" * 80)
-print("PLAN")
-print(
-    plan.model_dump(
-        mode="json"
-    )
-)
-print("=" * 80)
-
-active_execution = (
-    workflow_runtime.plan_to_active(
-        plan
-    )
-)
-
-print("=" * 80)
-print("ACTIVE EXECUTION")
-
-print(
-    active_execution.model_dump(
-        mode="json"
-    )
-)
-
-print("=" * 80)
-
-print("=" * 80)
-print("BUILD JOB TEST")
-
-jobs = []
-
-for action in active_execution.actions:
-
-    job = scheduler._build_job(
-        active_execution=
-            active_execution,
-
-        action=
-            action,
-    )
-
-    jobs.append(
-        job
+    print(
+        "DISPLAY NAME:",
+        user["display_name"]
     )
 
     print(
-        action.id,
-        "=>",
-        job.execute_at
+        "SAM ACCOUNT:",
+        user["sam_account_name"]
     )
 
-print("=" * 80)
-
-
-for job in jobs:
-
-    print("=" * 80)
+    print(
+        "MAIL:",
+        user["mail"]
+    )
 
     print(
-        job.model_dump(
-            mode="json"
+        "IS DISABLED:",
+        user["is_disabled"]
+    )
+
+    print(
+        "REMOTE RECIPIENT TYPE:",
+        user.get(
+            "ms_exch_remote_recipient_type"
         )
     )
 
-print("=" * 80)
+    print(
+        "TARGET ADDRESS:",
+        user.get(
+            "target_address"
+        )
+    )
+
+    print(
+        "IS REMOTE MAILBOX:",
+        user.get(
+            "is_remote_mailbox"
+        )
+    )
+
+    print()
+
+
+def main():
+
+    #connection = get_connection()
+
+    # ==========================================
+    # USER THƯỜNG
+    # ==========================================
+
+    print()
+    print("========================================")
+    print("NORMAL USER")
+    print("========================================")
+
+    result = workflow_search_user(
+        ldap.connection,
+        email="ad.auto1@automate.com.vn"
+    )
+
+    print_user(result)
+
+    # ==========================================
+    # REMOTE MAILBOX
+    # ==========================================
+
+    print()
+    print("========================================")
+    print("REMOTE MAILBOX USER")
+    print("========================================")
+
+    result = workflow_search_user(
+        ldap.connection,
+        email="ad.auto2@automate.com.vn"
+    )
+
+    print_user(result)
+
+
+if __name__ == "__main__":
+    main()

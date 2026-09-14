@@ -245,6 +245,37 @@ class Scheduler:
             "action_data"
         ] = action_data
 
+        if action.action_code == "onprem_disable_mailbox":
+            target_object = (
+                job_business_data.get(
+                    "target_object"
+                )
+                or {}
+            )
+            target_business_data = (
+                target_object.get(
+                    "business_data"
+                )
+                or target_object
+            )
+            identity = (
+                target_business_data.get(
+                    "sam_account_name"
+                )
+            )
+
+            if not identity:
+                raise ValueError(
+                    "Thiếu identity cho "
+                    "onprem_disable_mailbox"
+                )
+
+            job_business_data[
+                "action_data"
+            ][action.id] = {
+                "identity": identity,
+            }
+
 
 
         return Job(

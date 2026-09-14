@@ -93,7 +93,27 @@ def _is_disabled(
     except Exception:
         return None
 
+def _is_remote_mailbox(
+    remote_recipient_type
+):
+    """
+    Exchange Hybrid Remote Mailbox.
 
+    True nếu user đã được
+    Enable-RemoteMailbox.
+    """
+
+    try:
+
+        value = int(
+            remote_recipient_type
+        )
+
+        return value > 0
+
+    except Exception:
+
+        return False
 # ==================================================
 # WORKFLOW SEARCH USER
 # ==================================================
@@ -208,6 +228,8 @@ def workflow_search_user(
             "department",
             "title",
             "memberOf",
+            "msExchRemoteRecipientType",
+            "targetAddress",
         ],
         size_limit=2,
     )
@@ -238,6 +260,13 @@ def workflow_search_user(
             _get_attr_value(
                 entry,
                 "userAccountControl",
+                "",
+            )
+        )
+        remote_recipient_type = (
+            _get_attr_value(
+                entry,
+                "msExchRemoteRecipientType",
                 "",
             )
         )
@@ -301,6 +330,20 @@ def workflow_search_user(
                     _get_attr_values(
                         entry,
                         "memberOf",
+                    ),
+                    
+                "ms_exch_remote_recipient_type":
+                    remote_recipient_type,
+
+                "target_address":
+                    _get_attr_value(
+                        entry,
+                        "targetAddress",
+                    ),
+
+                "is_remote_mailbox":
+                    _is_remote_mailbox(
+                        remote_recipient_type
                     ),
             }
         )

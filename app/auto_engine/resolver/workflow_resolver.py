@@ -9,6 +9,42 @@ from copy import deepcopy
 
 class WorkflowResolver:
     @staticmethod
+    def _is_remote_mailbox(
+        business_data: dict,
+    ) -> bool:
+        target_object = (
+            business_data.get("target_object")
+            or {}
+        )
+
+        return bool(
+            target_object.get(
+                "is_remote_mailbox",
+                False,
+            )
+        )
+
+    @classmethod
+    def _filter_conditional_actions(
+        cls,
+        workflow_id: str,
+        actions: list,
+        business_data: dict,
+    ) -> list:
+        if workflow_id != "OFFBOARDING_RESIGNED":
+            return actions
+
+        if cls._is_remote_mailbox(business_data):
+            return [
+                action
+                for action in actions
+                if action.action_code
+                != "onprem_disable_mailbox"
+            ]
+
+        return actions
+
+    @staticmethod
     def _materialize_actions(
         actions: list,
         business_data: dict
@@ -122,6 +158,13 @@ class WorkflowResolver:
                     self._materialize_actions(
                         workflow_definition.actions,
                         request.business_data
+                    )
+                )
+                workflow_definition.actions = (
+                    self._filter_conditional_actions(
+                        workflow_definition.workflow_id,
+                        workflow_definition.actions,
+                        request.business_data,
                     )
                 )
 

@@ -198,6 +198,12 @@ class EmployeeOffboardingApiAdapter(
                         target_object[
                             "dn"
                         ],
+
+                    is_remote_mailbox=
+                        target_object.get(
+                            "is_remote_mailbox",
+                            False,
+                        ),
                 )
             )
         )
@@ -279,6 +285,12 @@ class EmployeeOffboardingUIAdapter(
                         target_object[
                             "dn"
                         ],
+
+                    is_remote_mailbox=
+                        target_object.get(
+                            "is_remote_mailbox",
+                            False,
+                        ),
                 )
             )
         )
@@ -394,6 +406,12 @@ class EmployeeOffboardingEmailAdapter(
                         target_object[
                             "dn"
                         ],
+
+                    is_remote_mailbox=
+                        target_object.get(
+                            "is_remote_mailbox",
+                            False,
+                        ),
                 )
             )
         )

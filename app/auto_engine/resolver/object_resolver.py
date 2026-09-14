@@ -120,6 +120,12 @@ def resolve_user(
                 "member_of",
                 []
             ),
+
+        "is_remote_mailbox":
+            user.get(
+                "is_remote_mailbox",
+                False,
+            ),
     }
 
 

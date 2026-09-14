@@ -19,14 +19,6 @@ from app.config import *
 
 router = APIRouter()
 
-# ldap = LDAPAdapter()
-
-# ldap.connect(
-#     LDAP_HOST,
-#     LDAP_USER,
-#     LDAP_PASSWORD
-# )
-
 def get_current_user_value(
     current_user,
     key,
