@@ -6,6 +6,7 @@ class WorkflowExecution(BaseModel):
     depends_on: List[str] = []
     delay_minutes: int = 0
     execute_time: str | None = None
+    target_group: str | None = None
     retry_count: int = 3
     continue_on_error: bool = False
 

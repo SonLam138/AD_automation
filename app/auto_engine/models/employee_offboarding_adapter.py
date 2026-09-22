@@ -33,10 +33,14 @@ OFFBOARDING_CONTEXT_MAPPING = {
         "thai sản",
     ],
 
-    "SUSPENDED": [
-        "kỷ luật",
-        "đình chỉ",
-    ],
+}
+
+OFFBOARDING_TARGET_OU_MAPPING = {
+    "RESIGNED":
+        "OU=Disabled Account, DC=automate, DC=com, DC=vn",
+
+    "LONG_LEAVE":
+        "OU=Nghi che do, DC=automate, DC=com, DC=vn",
 }
 
 
@@ -48,6 +52,25 @@ SUPPORTED_DATETIME_FORMATS = [
     "%Y-%m-%dT%H:%M",
     "%Y-%m-%dT%H:%M:%S"
 ]
+
+def extract_ou_dn(
+    distinguished_name: str,
+) -> str:
+
+    if not distinguished_name:
+        return ""
+
+    parts = (
+        distinguished_name.split(",")
+    )
+
+    return ",".join(
+        part
+        for part in parts
+        if not part.upper().startswith(
+            "CN="
+        )
+    )
 
 def normalize_datetime(
     value: str,
@@ -86,6 +109,21 @@ def normalize_context(
 
     raise ValueError(
         f"Unsupported offboarding form: {form_value}"
+    )
+
+def normalize_target_ou(
+    source_data: dict,
+    context: RequestContext,
+) -> str:
+
+    return (
+        OFFBOARDING_TARGET_OU_MAPPING
+        .get(
+            context,
+            OFFBOARDING_TARGET_OU_MAPPING[
+                "RESIGNED"
+            ],
+        )
     )
 
 
@@ -161,23 +199,72 @@ class EmployeeOffboardingApiAdapter(
         context = normalize_context(
             reason
         )
+        target_ou = normalize_target_ou(
+            source_data,
+            context,
+        )
 
         target_object = (
             resolve_user(
                 source_data
             )
         )
-        print("=" * 80)
         print(target_object)
-        print("=" * 80)
+        snapshot_data = {
+
+            "request_context":
+                reason,
+
+            "employee_id":
+                source_data[
+                    "employee_id"
+                ],
+
+            "sam_account_name":
+                target_object[
+                    "sam_account_name"
+                ],
+
+            "snapshot_json": {
+
+                "ou_dn":
+                    extract_ou_dn(
+                        target_object[
+                            "dn"
+                        ]
+                    ),
+
+                "groups":
+                    target_object[
+                        "member_of"
+                    ]
+            }
+        }
 
         business_data = (
             EmployeeOffboardingData(
                 employee_id=source_data["employee_id"],
                 email=source_data["email"],
                 start_date=normalize_start_date(source_data),
+                is_emergency=bool(
+                    source_data.get(
+                        "is_emergency",
+                        False,
+                    )
+                ),
+                emergency_execute_at=(
+                    normalize_datetime(
+                        source_data[
+                            "emergency_execute_at"
+                        ]
+                    )
+                    if source_data.get(
+                        "emergency_execute_at"
+                    )
+                    else None
+                ),
                 reason=reason,
-                target_ou="OU=Disabled Account,DC=automate,DC=com,DC=vn",
+                target_ou=target_ou,
 
                 target_object=TargetObject(
                     object_type="user",
@@ -204,17 +291,35 @@ class EmployeeOffboardingApiAdapter(
                             "is_remote_mailbox",
                             False,
                         ),
+
+                    member_of=
+                        target_object.get(
+                            "member_of",
+                            []
+                        ),
                 )
             )
         )
-        print("=" * 80)
-        print("BUSINESS DATA")
-        print(
-            business_data.model_dump(
-                mode="json"
+
+        source_type = (
+            source_data.get(
+                "source_type"
             )
         )
-        print("=" * 80)
+
+        if source_type:
+
+            source_type = (
+                SourceType(
+                    source_type.lower()
+                )
+            )
+
+        else:
+
+            source_type = (
+                SourceType.API
+            )
 
         return Request(
 
@@ -225,14 +330,23 @@ class EmployeeOffboardingApiAdapter(
             context=context,
 
             source=RequestSource(
+
                 source_type=
-                    SourceType.API
+                    source_type,
+
+                source_reference=
+                    source_data.get(
+                        "source_reference"
+                    )
             ),
 
             business_data=
                 business_data.model_dump(
                     mode="json"
-                )
+            ),
+
+            snapshot_data=
+                snapshot_data
         )
 
 class EmployeeOffboardingUIAdapter(

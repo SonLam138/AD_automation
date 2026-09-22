@@ -1400,6 +1400,36 @@ class LDAPAdapter:
             "user_dn": user_dn
         }
 
+    def get_user_status(
+        self,
+        sam_account_name: str
+    ):
+        self.connection.search(
+            search_base=LDAP_BASE_DN,
+            search_filter=(
+                f"(sAMAccountName={sam_account_name})"
+            ),
+            attributes=[
+                "userAccountControl"
+            ]
+        )
+
+        if not self.connection.entries:
+            raise Exception(
+                f"User not found: {sam_account_name}"
+            )
+
+        current_uac = int(
+            self.connection.entries[0]
+            .userAccountControl.value
+        )
+
+        return (
+            "disabled"
+            if current_uac & 2
+            else "enabled"
+        )
+
     #===================================
     # AD TOOL - UPDATE USER DISPLAYNAME
     #===================================

@@ -55,6 +55,8 @@ class Request(BaseModel):
     created_at: datetime = Field(
         default_factory=datetime.utcnow
     )
+    
+    snapshot_data: dict | None = None
 
 class BulkConfirmRequest(
     BaseModel

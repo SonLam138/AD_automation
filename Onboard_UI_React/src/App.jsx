@@ -22,6 +22,7 @@ import WorkflowJournalPage from "./pages/WorkflowJournalPage";
 import WorkflowJournalDetailPage from "./pages/WorkflowJournalDetailPage";
 import TempAccessPage from "./pages/TempAccessPage";
 import OffboardingReviewPage from "./pages/OffboardingReviewPage";
+import QuayXePage from "./pages/QuayxePage";
 
 function App() {
 
@@ -104,6 +105,12 @@ function App() {
                     path="/portal/workflow/temp-access"
                     element={
                         <TempAccessPage />
+                    }
+                />
+                <Route
+                    path="/portal/workflow/quayxe"
+                    element={
+                        <QuayXePage />
                     }
                 />
 

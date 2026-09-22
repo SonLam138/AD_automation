@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import List
 
 from app.auto_engine.models.job import (
@@ -15,6 +15,8 @@ from app.event.job_monitor_payload import (build_job_monitor_payload)
 
 class JobManager:
 
+    RETRY_DELAYS_MINUTES = (1, 5, 15)
+
     def __init__(
         self,
         job_repository: JobRepository,
@@ -30,6 +32,75 @@ class JobManager:
         Dành cho retry và recovery ở CP sau.
         """
         pass
+
+    def handle_failure(
+        self,
+        job: Job,
+        error: str = "",
+    ) -> Job:
+        if job.status != JobStatus.RUNNING:
+            raise ValueError(
+                "Chỉ Job RUNNING mới được "
+                "xử lý lỗi. "
+                f"job_id={job.job_id}, "
+                f"status={job.status}"
+            )
+
+        if job.retry_count >= job.max_retry:
+            return self.mark_failed(
+                job=job,
+                error=error,
+            )
+
+        job.retry_count += 1
+        delay_index = min(
+            job.retry_count - 1,
+            len(self.RETRY_DELAYS_MINUTES) - 1,
+        )
+        delay_minutes = (
+            self.RETRY_DELAYS_MINUTES[delay_index]
+        )
+
+        now = (
+            datetime.now(job.execute_at.tzinfo)
+            if job.execute_at.tzinfo is not None
+            else datetime.now()
+        )
+
+        job.status = JobStatus.PENDING
+        job.execute_at = (
+            now
+            + timedelta(minutes=delay_minutes)
+        )
+        job.started_at = None
+        job.completed_at = None
+        job.result_message = None
+        job.error_message = error
+
+        saved_job = self.job_repository.save(
+            job
+        )
+
+        job_monitor_payload = (
+            build_job_monitor_payload(
+                saved_job
+            )
+        )
+
+        emit_event(
+            event_name="JOB_RETRY_SCHEDULED",
+            source="WORKFLOW_ENGINE",
+            status="PENDING",
+            retry_count=saved_job.retry_count,
+            max_retry=saved_job.max_retry,
+            next_execute_at=(
+                saved_job.execute_at.isoformat()
+            ),
+            error_message=saved_job.error_message,
+            **job_monitor_payload,
+        )
+
+        return saved_job
 
     def claim_executable_jobs(
         self,

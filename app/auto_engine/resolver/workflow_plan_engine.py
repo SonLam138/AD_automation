@@ -1,6 +1,6 @@
 from datetime import datetime
 import uuid
-
+import json
 from app.auto_engine.models.request_models import Request
 from app.auto_engine.models.execution_plan import ExecutionPlan
 
@@ -16,19 +16,19 @@ from app.auto_engine.services.execution_plan_repository import (
     ExecutionPlanRepository
 )
 
-
 class WorkflowPlanEngine:
 
     def __init__(
         self,
         workflow_resolver: WorkflowResolver,
         plan_generator: PlanGenerator,
-        plan_repository: ExecutionPlanRepository
+        plan_repository: ExecutionPlanRepository,
     ):
         self.workflow_resolver = workflow_resolver
         self.plan_generator = plan_generator
         self.plan_repository = plan_repository
 
+    
     def _generate_request_id(
         self
     ) -> str:

@@ -17,6 +17,10 @@ class MoveUserRequest(BaseModel):
     sam_account_name: str
     target_ou_dn: str
 
+class RestoreGroupsRequest(BaseModel):
+    sam_account_name: str
+    group_dns: list[str]
+
 
 from pydantic import BaseModel
 

@@ -10,6 +10,11 @@ from app.auto_engine.sqlite.execution_plan_record import (
 from app.auto_engine.sqlite.workflow_journal_record import (
     WorkflowJournalRecord,
 )
+from app.auto_engine.sqlite.mail_request_audit_record import (
+    MailRequestAuditRecord,
+)
+
+from app.auto_engine.sqlite.access_snapshot import AccessSnapshot
 
 def create_database():
 

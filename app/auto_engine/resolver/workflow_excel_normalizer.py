@@ -25,8 +25,11 @@ COLUMN_MAPPING = {
     "effective_time": [
         "effective_time",
         "effectived_time",     # HR typo 😎
+        "effective time",
         "effective date",
         "effective_datetime",
+        "start_date",
+        "start date",
         "ngay hieu luc",
         "ngày hiệu lực"
     ]

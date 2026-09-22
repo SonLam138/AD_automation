@@ -30,6 +30,7 @@ from app.models.ad_tool import (
     AddGroupRequest,
     RemoveGroupRequest,
     MoveUserRequest,
+    RestoreGroupsRequest,
     VerifySecretRequest,
     DisableComputerRequest,
     UpdateUserDisplayNameRequest,
@@ -53,10 +54,20 @@ from app.config import *
 from app.adapters.ldap_container import (
     ldap,
 )
-
+from app.auto_engine.sqlite.access_snapshot_repository import AccessSnapshotRepository
+from app.auto_engine.services.access_snapshot_service import AccessSnapshotService
+from app.auto_engine.models.access_snapshot_response import AccessSnapshotResponse
 router = APIRouter()
 
+access_snapshot_repository = (
+AccessSnapshotRepository()
+)
 
+access_snapshot_service = (
+    AccessSnapshotService(
+    AccessSnapshotRepository()
+    )
+    )
 
 @router.post("/disable-user")
 def disable_user(
@@ -375,6 +386,88 @@ def remove_group(
             status_code=500,
             detail=str(ex)
         )
+
+
+@router.post("/restore-groups")
+def restore_groups(
+    request: RestoreGroupsRequest,
+
+    current_user=Depends(
+        require_group(
+            [
+                "ad_group_member"
+            ]
+        )
+    )
+):
+    restored_groups = []
+    failed_groups = []
+
+    for group_dn in request.group_dns:
+        group_request = {
+            "sam_account_name": request.sam_account_name,
+            "group_dn": group_dn
+        }
+
+        emit_event(
+            event_name="CONFIRM_ACCEPTED",
+            action="restore_group_member",
+            request=group_request
+        )
+
+        emit_event(
+            event_name="ACTION_STARTED",
+            action="restore_group_member",
+            request=group_request
+        )
+
+        try:
+            result = ldap.add_group_member_by_dn(
+                request.sam_account_name,
+                group_dn
+            )
+
+            restored_groups.append(
+                {
+                    "group_dn": group_dn,
+                    "execution_result": result
+                }
+            )
+
+            emit_event(
+                event_name="ACTION_COMPLETED",
+                action="restore_group_member",
+                request=group_request,
+                execution_result=result
+            )
+        except Exception as ex:
+            error_message = str(ex)
+            failed_groups.append(
+                {
+                    "group_dn": group_dn,
+                    "error": error_message
+                }
+            )
+
+            emit_event(
+                event_name="ACTION_FAILED",
+                action="restore_group_member",
+                request=group_request,
+                error=error_message
+            )
+
+    success = len(failed_groups) == 0
+
+    return {
+        "success": success,
+        "message": (
+            "All groups restored successfully."
+            if success
+            else "Some groups could not be restored."
+        ),
+        "restored_groups": restored_groups,
+        "failed_groups": failed_groups
+    }
 
 
 @router.post("/move-user")
@@ -1134,4 +1227,70 @@ def search_monitor(
         object_name=object_name,
         from_date=from_date,
         to_date=to_date
+    )
+
+@router.get(
+    "/access-snapshots/{sam_account_name}"
+)
+def get_access_snapshot(
+    sam_account_name: str,
+    response_model=AccessSnapshotResponse,
+    current_user=Depends(
+        require_group(
+            [
+                "ad_modify_user"
+            ]
+        )
+    )
+):
+
+    snapshot = (
+        access_snapshot_service
+        .get_latest_by_sam_account_name(
+            sam_account_name
+        )
+    )
+
+    if not snapshot:
+
+        raise HTTPException(
+            status_code=404,
+            detail=(
+                "Access snapshot not found."
+            )
+        )
+
+    snapshot_data = (
+        json.loads(
+            snapshot.snapshot_json
+        )
+    )
+
+    user_status = ldap.get_user_status(
+        snapshot.sam_account_name
+    )
+
+    return AccessSnapshotResponse(
+        success=True,
+
+        request_id=snapshot.request_id,
+
+        request_context=snapshot.request_context,
+
+        employee_id=snapshot.employee_id,
+
+        sam_account_name=snapshot.sam_account_name,
+
+        captured_at=snapshot.captured_at,
+
+        user_status=user_status,
+
+        ou_dn=snapshot_data.get(
+            "ou_dn"
+        ),
+
+        groups=snapshot_data.get(
+            "groups",
+            []
+        ),
     )

@@ -48,6 +48,13 @@ Worker,
 from app.auto_engine.sqlite.sql_execution_plan_repository import (
     SqlExecutionPlanRepository,
 )
+from app.auto_engine.sqlite.access_snapshot_repository import (
+    AccessSnapshotRepository,
+)
+
+from app.auto_engine.services.access_snapshot_service import (
+    AccessSnapshotService,
+)
 
 # ==================================================
 # REPOSITORIES
@@ -57,9 +64,16 @@ execution_plan_repository = (
     SqlExecutionPlanRepository()
 )
 
-# execution_plan_repository = (
-#     ExecutionPlanRepository()
-# )
+access_snapshot_repository = (
+    AccessSnapshotRepository()
+)
+
+access_snapshot_service = (
+    AccessSnapshotService(
+        access_snapshot_repository
+    )
+)
+
 
 active_execution_repository = (
     ActiveExecutionRepository()
@@ -85,7 +99,7 @@ workflow_plan_engine = WorkflowPlanEngine(
 
     plan_repository=(
         execution_plan_repository
-    ),
+    )
 )
 
 

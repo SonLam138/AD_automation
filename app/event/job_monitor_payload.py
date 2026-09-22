@@ -187,4 +187,18 @@ def build_job_monitor_payload(
 
         "execute_at":
             execute_at,
+
+        "retry_count":
+            getattr(
+                job,
+                "retry_count",
+                0,
+            ),
+
+        "max_retry":
+            getattr(
+                job,
+                "max_retry",
+                0,
+            ),
     }

@@ -8,9 +8,10 @@ from app.config import (
     LDAP_HOST,
     LDAP_BASE_DN,
     LDAP_USER,
-    LDAP_PASSWORD
 )
-
+from app.security.ldap_credential_provider import (
+    LdapCredentialProvider
+)
 def authenticate_and_get_profile(
     username: str,
     password: str
@@ -28,7 +29,7 @@ def authenticate_and_get_profile(
         svc_conn = Connection(
             server,
             user=LDAP_USER,
-            password=LDAP_PASSWORD,
+            password=LdapCredentialProvider.get_password(),
             auto_bind=True
         )
 

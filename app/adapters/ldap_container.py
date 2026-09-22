@@ -5,14 +5,23 @@ from app.adapters.ldap_adapter import (
 from app.config import (
     LDAP_HOST,
     LDAP_USER,
-    LDAP_PASSWORD,
 )
+
+from app.security.ldap_credential_provider import (
+    LdapCredentialProvider
+)
+
+
+
+
 
 
 ldap = LDAPAdapter()
 
 ldap.connect(
     LDAP_HOST,
+
     LDAP_USER,
-    LDAP_PASSWORD,
+
+    LdapCredentialProvider.get_password(),
 )

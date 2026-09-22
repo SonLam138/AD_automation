@@ -245,6 +245,14 @@ class Scheduler:
             "action_data"
         ] = action_data
 
+        if action.execution.target_group:
+            job_business_data[
+                "action_data"
+            ][action.id] = {
+                "target_group":
+                    action.execution.target_group,
+            }
+
         if action.action_code == "onprem_disable_mailbox":
             target_object = (
                 job_business_data.get(

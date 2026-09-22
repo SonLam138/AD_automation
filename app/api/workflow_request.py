@@ -66,13 +66,13 @@ from app.auto_engine.services.plan_generator import (
     PlanGenerator
 )
 
-from app.auto_engine.services.execution_plan_repository import (
-    ExecutionPlanRepository
-)
+# from app.auto_engine.services.execution_plan_repository import (
+#     ExecutionPlanRepository
+# )
 
-from app.auto_engine.services.request_service import (
-    RequestService
-)
+# from app.auto_engine.services.request_service import (
+#     RequestService
+# )
 
 from app.auto_engine.resolver.workflow_plan_engine import (
     WorkflowPlanEngine
@@ -83,7 +83,10 @@ from app.auto_engine.resolver.custom_workflow_validation_service import (
     CustomWorkflowValidationService
 )
 from app.auto_engine.sqlite.sql_execution_plan_repository import (SqlExecutionPlanRepository,)
-
+from app.auto_engine.sqlite.mail_request_audit_repository import MailRequestAuditRepository
+from app.auto_engine.sqlite.mail_request_audit_record import MailRequestAuditRecord
+from app.auto_engine.sqlite.access_snapshot_repository import AccessSnapshotRepository
+from app.auto_engine.services.access_snapshot_service import AccessSnapshotService
 router = APIRouter(
     dependencies=[
         Depends(
@@ -98,9 +101,22 @@ router = APIRouter(
 employee_offboarding_api_adapter = (
     EmployeeOffboardingApiAdapter()
 )
+mail_request_audit_repository = (
+    MailRequestAuditRepository()
+)
 
 wf_with_newvalue_adapter = (TargetObjectWithNewValueAdapter())
 
+
+access_snapshot_repository = (
+AccessSnapshotRepository()
+)
+
+access_snapshot_service = (
+    AccessSnapshotService(
+    AccessSnapshotRepository()
+    )
+    )
 
 workflow_plan_engine = WorkflowPlanEngine(
     workflow_resolver=WorkflowResolver(),
@@ -109,6 +125,127 @@ workflow_plan_engine = WorkflowPlanEngine(
 
     plan_repository=SqlExecutionPlanRepository()
 )
+
+def create_offboarding_plan(
+    source_request:
+        EmployeeOffboardingApiRequest
+):
+
+    #
+    # Generate Plan
+    #
+    plan = (
+        workflow_runtime.run_plan_engine(
+            adapter=(
+                employee_offboarding_api_adapter
+            ),
+
+            source_data=(
+                source_request.model_dump()
+            ),
+        )
+    )
+
+    #
+    # Build Snapshot
+    #
+    request = (
+        employee_offboarding_api_adapter.parse(
+            source_request.model_dump()
+        )
+    )
+
+    request.request_id = (
+        plan.request_id
+    )
+
+    #
+    # Save Snapshot
+    #
+    access_snapshot_service.save_snapshot(
+        request
+    )
+
+
+    #
+    # Audit riêng cho Mail Platform
+    #
+    source_type = str(
+        getattr(
+            source_request,
+            "source_type",
+            ""
+        )
+    ).lower()
+
+    print(
+        f"SOURCE TYPE = {source_type}"
+    )
+
+    if source_type == "email":
+
+        print("=" * 80)
+        print("MAIL AUDIT START")
+        print("=" * 80)
+
+        mail_request_audit_repository.save(
+
+                MailRequestAuditRecord(
+
+                    request_id=
+                        plan.request_id,
+
+                    workflow_id=
+                        plan.workflow_id,
+
+                    request_type=
+                        "EMPLOYEE_OFFBOARDING",
+
+                    reason=
+                        source_request.reason,
+
+                    employee_id=
+                        source_request.employee_id,
+
+                    email=
+                        source_request.email,
+
+                    source_reference=
+                        source_request.source_reference,
+
+                    sender=
+                        source_request.sender,
+
+                    subject=
+                        source_request.subject,
+
+                    is_emergency=
+                        source_request.is_emergency,
+
+                    created_at=
+                        datetime.now()
+                )
+            )
+
+
+        print(
+                "MAIL REQUEST AUDIT SAVED: "
+                f"{plan.request_id}"
+            )
+
+    return {
+
+        "success": True,
+
+        "request_id":
+            plan.request_id,
+
+        "workflow_id":
+            plan.workflow_id,
+
+        "execute_at":
+            plan.execute_at,
+    }
 
 
 @router.post(
@@ -121,30 +258,9 @@ def employee_offboarding(
 
     try:
 
-        plan = (
-            workflow_runtime.run_plan_engine(
-                adapter=(
-                    employee_offboarding_api_adapter
-                ),
-
-                source_data=(
-                    source_request.model_dump()
-                ),
-            )
+        return create_offboarding_plan(
+            source_request
         )
-
-        return {
-            "success": True,
-
-            "request_id":
-                plan.request_id,
-
-            "workflow_id":
-                plan.workflow_id,
-
-            "execute_at":
-                plan.execute_at,
-        }
 
     except ValueError as ex:
 
@@ -159,6 +275,7 @@ def employee_offboarding(
             status_code=500,
             detail=str(ex),
         )
+
 
 @router.post(
     "/ra_soat/analyze"

@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.api.auth import router as auth_router
+#from app.api.auth import router as auth_router
 from app.api.admin import router as admin_router
 from app.api.users import router as user_router
 #from app.api.create_user import router as create_user_router
@@ -15,7 +15,8 @@ from app.api import chat
 from app.api.workflow_request import router as workflow_request
 from app.auto_engine.runtime.runtime_container import workflow_runtime
 from contextlib import asynccontextmanager
-
+from app.api.service_controller import router as service_router
+from app.api.mail_report_controller import router as report_router
 
 @asynccontextmanager
 async def lifespan(
@@ -49,9 +50,9 @@ app.add_middleware(
 )
 
 app.include_router(
-    auth_router,
-    prefix="/auth",
-    tags=["Authentication"]
+    report_router,
+    prefix="/api/v1/mail-report",
+    tags=["Reporting"]
 )
 
 app.include_router(
@@ -98,6 +99,12 @@ app.include_router(
     tool_ad_router,
     prefix="/api/ad",
     tags=["AD Tools"]
+)
+
+app.include_router(
+    service_router,
+    prefix="/api/v1/service",
+    tags=["Service"]
 )
 
 app.include_router(

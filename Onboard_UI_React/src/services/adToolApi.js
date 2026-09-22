@@ -30,6 +30,16 @@ export async function addGroup(payload) {
     return response.data;
 }
 
+export async function restoreGroups(payload) {
+
+    const response = await axiosClient.post(
+        "/api/ad/restore-groups",
+        payload
+    );
+
+    return response.data;
+}
+
 export async function removeGroup(payload) {
 
     const response = await axiosClient.post(
@@ -248,3 +258,15 @@ export async function confirmOffboardingReview(
     return response.data;
 }
 
+export async function getAccessSnapshot(
+    samAccountName
+) {
+
+    const response =
+        await axiosClient.get(
+            `/api/ad/access-snapshots/${samAccountName}`
+        );
+
+    return response.data;
+
+}

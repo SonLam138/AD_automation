@@ -6,6 +6,8 @@ from app.adapters.ldap_container import (
 )
 import requests
 
+from app.auth.jwt_handler import create_service_token
+
 class BaseAdAction(ABC):
 
     @abstractmethod
@@ -315,17 +317,45 @@ class OnpremDisableMailboxAction(
             ["STEP_MAILBOX"]
         )
 
+        request_id = None
+
+        if execution_context:
+
+            request_id = (
+                execution_context.get(
+                    "request_id"
+                )
+            )
+
+        token = create_service_token()
+
+        headers = {
+
+            "Authorization":
+                f"Bearer {token}"
+        }
+
         response = requests.post(
+
             "http://localhost:8001/api/v1/actions/execute",
+
+            headers=headers,
+
             json={
+
+                "request_id":
+                    request_id,
+
                 "action_code":
                     "ONPREM_DISABLE_MAILBOX",
 
                 "parameters": {
+
                     "identity":
                         action_data["identity"]
                 }
             },
+
             timeout=60,
         )
 
@@ -629,7 +659,7 @@ class RemoveAllGroupsAction(
                 .replace("CN=", "")
             )
 
-            self.ldap_service.remove_group_member(
+            ldap.remove_group_member(
                 sam_account_name=sam_account_name,
                 group_name=group_name
             )
@@ -681,71 +711,6 @@ class MoveUserToOuAction(
             "target_ou": target_ou,
             "execution_result": result,
         }
-
-    # @staticmethod
-    # def _get_sam_account_name(
-    #     business_data: Dict[str, Any],
-    # ) -> str:
-
-    #     target_object = (
-    #         business_data.get(
-    #             "target_object"
-    #         )
-    #         or {}
-    #     )
-
-    #     sam_account_name = (
-    #         target_object.get(
-    #             "sam_account_name"
-    #         )
-    #         or business_data.get(
-    #             "sam_account_name"
-    #         )
-    #     )
-
-    #     if not sam_account_name:
-    #         raise ValueError(
-    #             "Thiếu "
-    #             "target_object.sam_account_name "
-    #             "trong business_data"
-    #         )
-
-    #     return sam_account_name
-
-    # @staticmethod
-    # def _get_target_ou(
-    #     business_data: Dict[str, Any],
-    # ) -> str:
-
-    #     action_data = (
-    #         business_data.get(
-    #             "action_data"
-    #         )
-    #         or {}
-    #     )
-
-    #     target_ou = (
-    #         action_data.get(
-    #             "target_ou"
-    #         )
-    #         or action_data.get(
-    #             "target_ou_dn"
-    #         )
-    #         or business_data.get(
-    #             "target_ou"
-    #         )
-    #         or business_data.get(
-    #             "target_ou_dn"
-    #         )
-    #     )
-
-    #     if not target_ou:
-    #         raise ValueError(
-    #             "Thiếu target OU trong "
-    #             "business_data.action_data"
-    #         )
-
-    #     return target_ou
 
 # ==================================================
 # COMPUTER ACTIONS

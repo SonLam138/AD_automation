@@ -1,18 +1,65 @@
 {
-    "total_jobs_created": 86,
-    "failed_jobs_count": 5,
+    "total_jobs_created": 206,
+    "failed_jobs_count": 10,
     "last_executed_job": {
-        "job_id": "REQ_14092026_596C:STEP_03",
+        "job_id": "REQ_21092026_5986:STEP_03",
         "action_code": "move_user_to_ou",
         "display_name": "Move To Disabled OU",
-        "object_name": "AD Auto test Dashboard",
+        "object_name": "AD Automation 2",
         "target": null,
-        "execute_at": "2026-09-14T22:13:00",
+        "execute_at": "2026-09-21T15:35:00",
         "status": "COMPLETED",
         "error_message": null,
-        "timestamp": "2026-09-14T15:13:11.641926"
+        "retry_count": 0,
+        "max_retry": 3,
+        "next_execute_at": null,
+        "timestamp": "2026-09-21T08:35:09.619988"
     },
     "recent_failed_jobs": [
+        {
+            "job_id": "r:s",
+            "action_code": "x",
+            "display_name": "X",
+            "object_name": "Unknown",
+            "target": null,
+            "execute_at": "2026-09-20T17:56:37.532043",
+            "status": "FAILED",
+            "error_message": "final",
+            "timestamp": "2026-09-20T10:55:37.533559"
+        },
+        {
+            "job_id": "REQ_LONG_LEAVE_FAIL:STEP_02",
+            "action_code": "remove_all_groups",
+            "display_name": "Remove user from all Groups",
+            "object_name": "B",
+            "target": null,
+            "execute_at": "2026-09-20T16:03:20.376360",
+            "status": "FAILED",
+            "error_message": "'RemoveAllGroupsAction' object has no attribute 'ldap_service'",
+            "timestamp": "2026-09-20T09:03:21.402958"
+        },
+        {
+            "job_id": "REQ_15092026_CDE2:STEP_MAILBOX",
+            "action_code": "onprem_disable_mailbox",
+            "display_name": "Disable On-Prem Mailbox",
+            "object_name": "AD Automation 2",
+            "target": null,
+            "execute_at": "2026-09-17T17:01:00",
+            "status": "FAILED",
+            "error_message": "HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /api/v1/actions/execute (Caused by NewConnectionError(\"HTTPConnection(host='localhost', port=8001): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it\"))",
+            "timestamp": "2026-09-17T16:57:45.655272"
+        },
+        {
+            "job_id": "REQ_15092026_A2F9:STEP_01",
+            "action_code": "disable_user",
+            "display_name": "Disable User",
+            "object_name": "AD Auto test Dashboard",
+            "target": null,
+            "execute_at": "2026-09-15T22:22:00",
+            "status": "FAILED",
+            "error_message": "('socket sending errorEOF occurred in violation of protocol (_ssl.c:2396)',)",
+            "timestamp": "2026-09-15T15:22:00.262641"
+        },
         {
             "job_id": "REQ_07092026_7D73:STEP_01",
             "action_code": "add_group_by_dn",
@@ -23,96 +70,22 @@
             "status": "FAILED",
             "error_message": "Thiếu group_name trong target_object",
             "timestamp": "2026-09-06T20:06:07.953125"
-        },
-        {
-            "job_id": "REQ_02092026_924F:STEP_03",
-            "action_code": "move_group_to_ou",
-            "display_name": "MOVE",
-            "object_name": "CN=TestGroup,OU=HO,DC=automate,DC=com,DC=vn",
-            "target": "OU=PVCB Khanh Hoa,OU=CN-Azure,OU=Chi Nhanh,DC=automate,DC=com,DC=vn",
-            "execute_at": "2026-09-01T23:05:00",
-            "status": "FAILED",
-            "error_message": "Thiếu group_name trong business_data.action_data",
-            "timestamp": "2026-09-01T17:00:56.903783"
-        },
-        {
-            "job_id": "REQ_02092026_924F:STEP_01",
-            "action_code": "move_group_to_ou",
-            "display_name": "MOVE",
-            "object_name": "CN=TestGroup,OU=HO,DC=automate,DC=com,DC=vn",
-            "target": "OU=Disabled Account,DC=automate,DC=com,DC=vn",
-            "execute_at": "2026-09-01T23:03:00",
-            "status": "FAILED",
-            "error_message": "Thiếu group_name trong business_data.action_data",
-            "timestamp": "2026-09-01T17:00:36.198187"
-        },
-        {
-            "job_id": "REQ_01092026_F2DE:STEP_03",
-            "action_code": "move_user_to_ou",
-            "display_name": "Move To Disabled OU",
-            "object_name": "AD Automation 3",
-            "target": null,
-            "execute_at": "2026-09-01T15:27:00",
-            "status": "FAILED",
-            "error_message": "DEBUG ==> {'employee_id': '', 'email': 'ad.auto3@automate.com.vn', 'reason': 'Nghỉ việc', 'effective_time': None, 'start_date': '2026-09-01T15:22:00', 'target_ou': 'OU=Disabled Account,DC=automate,DC=com,DC=vn', 'target_object': {'object_type': 'user', 'sam_account_name': 'ad.auto3', 'display_name': 'AD Automation 3', 'email': 'ad.auto3@automate.com.vn', 'dn': 'CN=AD Automation 3,OU=HO,DC=automate,DC=com,DC=vn', 'member_of': []}, 'action_data': {}}",
-            "timestamp": "2026-09-01T08:27:05.556693"
-        },
-        {
-            "job_id": "REQ_26082026_E18F:STEP_02",
-            "action_code": "move_computer_to_ou",
-            "display_name": "Move computer to OU to remove permission",
-            "object_name": null,
-            "target": null,
-            "execute_at": null,
-            "status": null,
-            "error_message": "('socket sending errorEOF occurred in violation of protocol (_ssl.c:2396)',)",
-            "timestamp": "2026-08-26T16:42:02.521903"
         }
     ],
     "queued_jobs": [
         {
-            "job_id": "REQ_AD_AUTO2_MAILBOX_TEST:STEP_03",
+            "job_id": "REQ_21092026_D6F8:STEP_03",
             "action_code": "move_user_to_ou",
             "display_name": "Move To Disabled OU",
             "object_name": "AD Automation 2",
             "target": null,
-            "execute_at": "2026-09-15T19:07:00",
+            "execute_at": "2026-09-21T18:14:00",
             "status": null,
             "error_message": null,
-            "timestamp": "2026-09-14T16:11:08.304506"
-        },
-        {
-            "job_id": "REQ_AD_AUTO2_MAILBOX_TEST:STEP_02",
-            "action_code": "remove_all_groups",
-            "display_name": "Remove user from all Groups",
-            "object_name": "AD Automation 2",
-            "target": null,
-            "execute_at": "2026-09-15T19:07:00",
-            "status": null,
-            "error_message": null,
-            "timestamp": "2026-09-14T16:11:08.259282"
-        },
-        {
-            "job_id": "REQ_AD_AUTO2_MAILBOX_TEST:STEP_MAILBOX",
-            "action_code": "onprem_disable_mailbox",
-            "display_name": "Disable On-Prem Mailbox",
-            "object_name": "AD Automation 2",
-            "target": null,
-            "execute_at": "2026-09-15T19:06:00",
-            "status": null,
-            "error_message": null,
-            "timestamp": "2026-09-14T16:11:08.238554"
-        },
-        {
-            "job_id": "REQ_AD_AUTO2_MAILBOX_TEST:STEP_01",
-            "action_code": "disable_user",
-            "display_name": "Disable User",
-            "object_name": "AD Automation 2",
-            "target": null,
-            "execute_at": "2026-09-15T19:06:00",
-            "status": null,
-            "error_message": null,
-            "timestamp": "2026-09-14T16:11:08.230758"
+            "retry_count": 0,
+            "max_retry": 3,
+            "next_execute_at": null,
+            "timestamp": "2026-09-21T08:29:10.449697"
         }
     ]
 }

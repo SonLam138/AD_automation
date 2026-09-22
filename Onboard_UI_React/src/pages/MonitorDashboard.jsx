@@ -395,8 +395,19 @@ return (
                                             </div>
 
                                             <div className="runtime-job-meta">
-                                                {job.execute_at || job.timestamp}
+                                                {job.next_execute_at || job.execute_at || job.timestamp}
                                             </div>
+
+                                            {
+                                                job.status === "PENDING"
+                                                    && job.retry_count
+                                                    ? (
+                                                        <div className="runtime-job-meta">
+                                                            Retry {job.retry_count}/{job.max_retry}
+                                                        </div>
+                                                    )
+                                                    : null
+                                            }
                                     </div>
                                 )
                             )

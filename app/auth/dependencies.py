@@ -3,8 +3,13 @@ from fastapi import HTTPException
 
 from fastapi.security import HTTPBearer
 from fastapi.security import HTTPAuthorizationCredentials
+from app.auth.jwt_handler import (verify_integration_token)
 
 import jwt
+
+from app.auth.jwt_handler import (
+    verify_service_token,
+)
 
 from app.auth.jwt_handler import (
     SECRET_KEY,
@@ -38,4 +43,46 @@ def get_current_user(
         raise HTTPException(
             status_code=401,
             detail="Invalid token"
+        )
+
+
+def require_service_token(
+    credentials:
+        HTTPAuthorizationCredentials
+        = Depends(security)
+):
+
+    try:
+
+        return verify_service_token(
+            credentials.credentials
+        )
+
+    except Exception as ex:
+
+        raise HTTPException(
+            status_code=401,
+            detail=str(ex)
+        )
+
+def require_integration_token(
+
+    credentials:
+        HTTPAuthorizationCredentials
+        = Depends(
+            security
+        )
+):
+
+    try:
+
+        return verify_integration_token(
+            credentials.credentials
+        )
+
+    except Exception as ex:
+
+        raise HTTPException(
+            status_code=401,
+            detail=str(ex)
         )

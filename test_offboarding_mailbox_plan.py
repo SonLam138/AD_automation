@@ -109,6 +109,95 @@ class OffboardingMailboxAdIntegrationTests(unittest.TestCase):
             ),
         )
 
+    def test_schedule_policy_accepts_api_iso_datetime_string(self):
+        generator = PlanGenerator()
+
+        with patch(
+            "app.auto_engine.services.plan_generator.random.randint",
+            return_value=30,
+        ):
+            execute_at = generator._get_scheduled_execute_at(
+                trigger_value="2026-09-01T00:00:00",
+                schedule_policy={
+                    "start_hour": 17,
+                    "end_hour": 20,
+                },
+                now=datetime(
+                    2026,
+                    9,
+                    1,
+                    12,
+                    0,
+                ),
+            )
+
+        self.assertEqual(
+            execute_at,
+            datetime(
+                2026,
+                9,
+                1,
+                17,
+                30,
+            ),
+        )
+
+    def test_emergency_execute_at_overrides_schedule_policy(self):
+        generator = PlanGenerator()
+
+        with patch(
+            "app.auto_engine.services.plan_generator.random.randint",
+            side_effect=AssertionError(
+                "random schedule must not be used"
+            ),
+        ):
+            plan = generator.generate(
+                request=type(
+                    "RequestStub",
+                    (),
+                    {
+                        "request_id": "REQ_EMERGENCY",
+                        "business_data": {
+                            "start_date": (
+                                "2026-09-01T00:00:00"
+                            ),
+                            "is_emergency": True,
+                            "emergency_execute_at": (
+                                "2026-09-15T22:45:00"
+                            ),
+                        },
+                    },
+                )(),
+                workflow=type(
+                    "WorkflowStub",
+                    (),
+                    {
+                        "workflow_id": (
+                            "OFFBOARDING_RESIGNED"
+                        ),
+                        "metadata": {
+                            "trigger_field": "start_date",
+                            "schedule_policy": {
+                                "start_hour": 17,
+                                "end_hour": 20,
+                            },
+                        },
+                        "actions": [],
+                    },
+                )(),
+            )
+
+        self.assertEqual(
+            plan.execute_at,
+            datetime(
+                2026,
+                9,
+                15,
+                22,
+                45,
+            ),
+        )
+
     def test_ad_auto2_creates_jobs_from_offboarding_registry(self):
         target_object = resolve_user(
             {

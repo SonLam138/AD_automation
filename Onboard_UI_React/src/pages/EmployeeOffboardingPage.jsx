@@ -8,7 +8,9 @@ export default function EmployeeOffboardingPage() {
             employee_id: "",
             email: "",
             reason: "",
-            effective_time: ""
+            effective_time: "",
+            is_emergency: false,
+            emergency_execute_at: ""
         });
     const [submitResult, setSubmitResult] =
         useState(null);
@@ -136,6 +138,48 @@ export default function EmployeeOffboardingPage() {
                         />
 
                     </div>
+
+                    <div className="form-group">
+                        <label className="offboarding-label">
+                            Emergency Request
+                        </label>
+                        <label>
+                            <input
+                                type="checkbox"
+                                name="is_emergency"
+                                checked={
+                                    formData.is_emergency
+                                }
+                                onChange={e =>
+                                    setFormData({
+                                        ...formData,
+                                        is_emergency:
+                                            e.target.checked
+                                    })
+                                }
+                            />
+                            Run at a specific time
+                        </label>
+                    </div>
+
+                    {
+                        formData.is_emergency && (
+                            <div className="form-group">
+                                <label className="offboarding-label">
+                                    Emergency Execute At
+                                </label>
+                                <input
+                                    type="datetime-local"
+                                    name="emergency_execute_at"
+                                    value={
+                                        formData.emergency_execute_at
+                                    }
+                                    onChange={handleChange}
+                                    required
+                                />
+                            </div>
+                        )
+                    }
                 
                     <button
                         className="submit-request-btn"
@@ -232,6 +276,5 @@ export default function EmployeeOffboardingPage() {
         </div>
     );
 }
-
 
 

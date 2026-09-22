@@ -24,7 +24,6 @@ from app.auth.rbac import (
 from app.config import (
     LDAP_HOST,
     LDAP_USER,
-    LDAP_PASSWORD
 )
 from app.adapters.ldap_container import (
     ldap,

@@ -30,9 +30,13 @@ class EmployeeOffboardingData(BaseModel):
 
     reason: str
 
-    effective_time: datetime | None = None
+    #effective_time: datetime | None = None
 
     start_date: datetime | None = None
+
+    is_emergency: bool = False
+
+    emergency_execute_at: datetime | None = None
 
     #end_date: datetime | None = None
 
@@ -52,9 +56,20 @@ class EmployeeOffboardingApiRequest(
 
     reason: str
 
-    effective_time: Optional[str] = None
+    subject: str | None = None
+
+    sender: str | None = None
 
     start_date: Optional[str] = None
 
-    #end_date: Optional[str] = None
+    effective_time: Optional[str] = None
+
+    is_emergency: bool = False
+
+    emergency_execute_at: Optional[str] = None
+
     target_ou : Optional[str] = None
+
+    source_type: str | None = None
+
+    source_reference: str | None = None
