@@ -592,7 +592,7 @@ class LDAPAdapter:
 
         step_started = datetime.utcnow()
 
-        enable_result = self.enable_user(
+        enable_result = self._enable_user_by_dn(
             user_dn
         )
 
@@ -1059,7 +1059,7 @@ class LDAPAdapter:
 
         return result
     
-    def enable_user(
+    def _enable_user_by_dn(
         self,
         user_dn
     ):

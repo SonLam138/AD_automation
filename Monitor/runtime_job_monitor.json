@@ -1,21 +1,49 @@
 {
-    "total_jobs_created": 206,
-    "failed_jobs_count": 10,
+    "total_jobs_created": 242,
+    "failed_jobs_count": 12,
     "last_executed_job": {
-        "job_id": "REQ_21092026_5986:STEP_03",
-        "action_code": "move_user_to_ou",
-        "display_name": "Move To Disabled OU",
-        "object_name": "AD Automation 2",
+        "job_id": "REQ_01102026_B2C1:STEP_MAILBOX",
+        "action_code": "onprem_disable_mailbox",
+        "display_name": "Disable On-Prem Mailbox",
+        "object_name": "AD Automation 9",
         "target": null,
-        "execute_at": "2026-09-21T15:35:00",
-        "status": "COMPLETED",
-        "error_message": null,
-        "retry_count": 0,
+        "execute_at": "2026-10-02T10:17:23.829146",
+        "status": "FAILED",
+        "error_message": "HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /api/v1/actions/execute (Caused by NewConnectionError(\"HTTPConnection(host='localhost', port=8001): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it\"))",
+        "retry_count": 3,
         "max_retry": 3,
         "next_execute_at": null,
-        "timestamp": "2026-09-21T08:35:09.619988"
+        "timestamp": "2026-10-02T03:17:29.854332"
     },
     "recent_failed_jobs": [
+        {
+            "job_id": "REQ_01102026_B2C1:STEP_MAILBOX",
+            "action_code": "onprem_disable_mailbox",
+            "display_name": "Disable On-Prem Mailbox",
+            "object_name": "AD Automation 9",
+            "target": null,
+            "execute_at": "2026-10-02T10:17:23.829146",
+            "status": "FAILED",
+            "error_message": "HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /api/v1/actions/execute (Caused by NewConnectionError(\"HTTPConnection(host='localhost', port=8001): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it\"))",
+            "retry_count": 3,
+            "max_retry": 3,
+            "next_execute_at": null,
+            "timestamp": "2026-10-02T03:17:29.854332"
+        },
+        {
+            "job_id": "REQ_21092026_D6F8:STEP_MAILBOX",
+            "action_code": "onprem_disable_mailbox",
+            "display_name": "Disable On-Prem Mailbox",
+            "object_name": "AD Automation 2",
+            "target": null,
+            "execute_at": "2026-09-23T08:54:20.620457",
+            "status": "FAILED",
+            "error_message": "The operation couldn't be performed because object 'ad.auto2' couldn't be found on 'DC-01.automate.com.vn'.",
+            "retry_count": 3,
+            "max_retry": 3,
+            "next_execute_at": null,
+            "timestamp": "2026-09-23T01:55:16.612389"
+        },
         {
             "job_id": "r:s",
             "action_code": "x",
@@ -48,44 +76,50 @@
             "status": "FAILED",
             "error_message": "HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /api/v1/actions/execute (Caused by NewConnectionError(\"HTTPConnection(host='localhost', port=8001): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it\"))",
             "timestamp": "2026-09-17T16:57:45.655272"
-        },
-        {
-            "job_id": "REQ_15092026_A2F9:STEP_01",
-            "action_code": "disable_user",
-            "display_name": "Disable User",
-            "object_name": "AD Auto test Dashboard",
-            "target": null,
-            "execute_at": "2026-09-15T22:22:00",
-            "status": "FAILED",
-            "error_message": "('socket sending errorEOF occurred in violation of protocol (_ssl.c:2396)',)",
-            "timestamp": "2026-09-15T15:22:00.262641"
-        },
-        {
-            "job_id": "REQ_07092026_7D73:STEP_01",
-            "action_code": "add_group_by_dn",
-            "display_name": "Add user to group to grant permission",
-            "object_name": "sonnm",
-            "target": "CN=Test_grp,OU=HO,DC=automate,DC=com,DC=vn",
-            "execute_at": "2026-09-07T03:06:00",
-            "status": "FAILED",
-            "error_message": "Thiếu group_name trong target_object",
-            "timestamp": "2026-09-06T20:06:07.953125"
         }
     ],
     "queued_jobs": [
         {
-            "job_id": "REQ_21092026_D6F8:STEP_03",
+            "job_id": "REQ_01102026_B2C1:STEP_03",
             "action_code": "move_user_to_ou",
             "display_name": "Move To Disabled OU",
-            "object_name": "AD Automation 2",
+            "object_name": "AD Automation 9",
             "target": null,
-            "execute_at": "2026-09-21T18:14:00",
+            "execute_at": "2026-10-01T19:32:00",
             "status": null,
             "error_message": null,
             "retry_count": 0,
             "max_retry": 3,
             "next_execute_at": null,
-            "timestamp": "2026-09-21T08:29:10.449697"
+            "timestamp": "2026-10-01T04:40:26.509702"
+        },
+        {
+            "job_id": "REQ_01102026_B2C1:STEP_02",
+            "action_code": "remove_all_groups",
+            "display_name": "Remove user from all Groups",
+            "object_name": "AD Automation 9",
+            "target": null,
+            "execute_at": "2026-10-01T19:31:00",
+            "status": null,
+            "error_message": null,
+            "retry_count": 0,
+            "max_retry": 3,
+            "next_execute_at": null,
+            "timestamp": "2026-10-01T04:40:26.500984"
+        },
+        {
+            "job_id": "REQ_01102026_1B1A:STEP_03",
+            "action_code": "move_user_to_ou",
+            "display_name": "Move To Disabled OU",
+            "object_name": "AD Automation 9",
+            "target": null,
+            "execute_at": "2026-10-01T18:32:00",
+            "status": null,
+            "error_message": null,
+            "retry_count": 0,
+            "max_retry": 3,
+            "next_execute_at": null,
+            "timestamp": "2026-10-01T04:10:43.985453"
         }
     ]
 }
