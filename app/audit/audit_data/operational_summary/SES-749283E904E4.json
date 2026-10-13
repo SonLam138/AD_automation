@@ -1,0 +1,47 @@
+{
+  "session_id": "SES-749283E904E4",
+  "capability": "new_onboarding",
+  "result": "SUCCESS",
+  "summary_category": "SUCCESS",
+  "execution_time_ms": 122,
+  "generated_at": "2026-10-04T06:58:53.832992",
+  "business_summary": {
+    "case_type": "NEW_ONBOARDING",
+    "employee_id": "000686868",
+    "employee_name": "ADAutomation NewCreate",
+    "department": "test_dep",
+    "title": "Test",
+    "requested_account": "auto_create_test",
+    "actual_account": "auto_create_test",
+    "requested_display_name": "ADAutomation NewCreate",
+    "actual_display_name": "ADAutomation NewCreate",
+    "requested_ou": "OU=HO,DC=automate,DC=com,DC=vn",
+    "actual_ou": "OU=HO,DC=automate,DC=com,DC=vn",
+    "result": "SUCCESS",
+    "added_groups": [
+      "Onboard_read",
+      "Onboard_execute"
+    ],
+    "failed_groups": []
+  },
+  "technical_summary": {
+    "total_steps": 5,
+    "success_steps": 5,
+    "failed_steps": 0,
+    "executed_steps": [
+      "add_user",
+      "set_password",
+      "enable_user",
+      "force_change_password",
+      "add_groups"
+    ],
+    "last_completed_step": "add_groups",
+    "failure_stage": null,
+    "execution_time_ms": 122
+  },
+  "error_summary": null,
+  "approved_by": "mail-platform-service",
+  "approved_name": "mail-platform-service",
+  "approval_type": "MAIL_PLATFORM",
+  "approval_time": "2026-10-04T06:58:53.710748"
+}

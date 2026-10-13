@@ -1,12 +1,24 @@
 import unittest
+import json
+from datetime import datetime, timedelta
 from types import SimpleNamespace
 from unittest.mock import patch
 
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
 from ldap3 import MODIFY_DELETE
+import jwt
+from sqlalchemy import create_engine, inspect, select
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy.pool import StaticPool
 
 from app.adapters.ldap_adapter import LDAPAdapter
+from app.auto_engine.sqlite import onboarding_audit_repository
+from app.auto_engine.sqlite.onboarding_audit_record import (
+    OnboardingAuditRecord,
+)
+from app.auth.jwt_handler import SERVICE_KEY
+from app.models.ad_tool import CreateAdUserRequest
 
 with patch.object(
     LDAPAdapter,
@@ -129,12 +141,19 @@ class FakeLdapAdapter:
     def __init__(self):
         self.calls = []
         self.connection = FakeConnection()
+        self.create_user_result = None
 
     def __getattr__(self, method_name):
         def action(*args, **kwargs):
             self.calls.append(
                 (method_name, args, kwargs)
             )
+            if (
+                method_name == "create_user"
+                and self.create_user_result is not None
+            ):
+                return self.create_user_result
+
             return {
                 "success": True,
                 "action": method_name,
@@ -152,6 +171,28 @@ class ServiceControllerAdTests(unittest.TestCase):
             self.fake_ldap,
         )
         self.ldap_patch.start()
+        self.audit_engine = create_engine(
+            "sqlite://",
+            connect_args={"check_same_thread": False},
+            poolclass=StaticPool,
+        )
+        self.audit_session_local = sessionmaker(
+            bind=self.audit_engine,
+            autoflush=False,
+            autocommit=False,
+        )
+        self.audit_engine_patch = patch.object(
+            onboarding_audit_repository,
+            "engine",
+            self.audit_engine,
+        )
+        self.audit_session_patch = patch.object(
+            onboarding_audit_repository,
+            "SessionLocal",
+            self.audit_session_local,
+        )
+        self.audit_engine_patch.start()
+        self.audit_session_patch.start()
 
         self.app = FastAPI()
         self.app.include_router(
@@ -161,17 +202,34 @@ class ServiceControllerAdTests(unittest.TestCase):
         self.app.dependency_overrides[
             service_controller.require_integration_token
         ] = lambda: {"sub": "test-client"}
+        self.app.dependency_overrides[
+            service_controller.require_service_token
+        ] = lambda: {"sub": "test-client"}
+        for route in service_controller.router.routes:
+            for dependency in route.dependant.dependencies:
+                if (
+                    dependency.name == "claims"
+                    and dependency.call
+                    is not service_controller.require_service_token
+                ):
+                    self.app.dependency_overrides[
+                        dependency.call
+                    ] = lambda: {"sub": "test-client"}
         self.client = TestClient(self.app)
 
     def tearDown(self):
         self.client.close()
         self.ldap_patch.stop()
+        self.audit_session_patch.stop()
+        self.audit_engine_patch.stop()
+        self.audit_engine.dispose()
 
     def test_kept_integration_routes_dispatch_as_before(self):
         routes = [
             (
-                "/integration/ad/users/create",
+                "/employee-onboarding",
                 {
+                    "source_request_id": "MAIL-REQ-ROUTE",
                     "employee_id": "E123",
                     "first_name": "A",
                     "last_name": "User",
@@ -181,6 +239,7 @@ class ServiceControllerAdTests(unittest.TestCase):
                     "target_ou_dn": "OU=Users,DC=example,DC=com",
                     "title": "Engineer",
                     "department": "IT",
+                    "dry_run": False,
                 },
                 "create_user",
             ),
@@ -246,19 +305,19 @@ class ServiceControllerAdTests(unittest.TestCase):
             [route[2] for route in routes],
         )
         self.assertEqual(
-            self.fake_ldap.calls[0][2],
-            {
-                "approved_by": "test-client",
-                "approved_name": "test-client",
-                "approval_type": "INTEGRATION",
-            },
+            set(self.fake_ldap.calls[0][2]),
+            {"audit"},
         )
         self.assertEqual(
             self.fake_ldap.calls[0][1][0].display_name,
             "A User",
         )
-        self.assertTrue(
+        self.assertFalse(
             self.fake_ldap.calls[0][1][0].dry_run
+        )
+        self.assertEqual(
+            self.fake_ldap.calls[0][1][0].description,
+            None,
         )
 
     def test_group_add_and_remove_resolve_email_before_name(self):
@@ -749,6 +808,428 @@ class ServiceControllerAdTests(unittest.TestCase):
         )
 
         self.assertEqual(response.status_code, 401)
+        self.assertEqual(self.fake_ldap.calls, [])
+
+    def test_employee_onboarding_requires_service_token(self):
+        self.app.dependency_overrides.clear()
+
+        response = self.client.post(
+            "/api/v1/service/employee-onboarding",
+            json={
+                "source_request_id": "MAIL-REQ-AUTH",
+                "employee_id": "E123",
+                "first_name": "A",
+                "last_name": "User",
+                "full_name": "A User",
+                "sam_account_name": "auser",
+                "password": "Example-password-123!",
+                "target_ou_dn": "OU=Users,DC=example,DC=com",
+                "title": "Engineer",
+                "department": "IT",
+            },
+            headers={"Authorization": "Bearer invalid"},
+        )
+
+        self.assertEqual(response.status_code, 401)
+        self.assertEqual(self.fake_ldap.calls, [])
+
+    def test_employee_onboarding_accepts_service_token_claim_contract(self):
+        self.app.dependency_overrides.pop(
+            service_controller.require_service_token,
+            None,
+        )
+        token = jwt.encode(
+            {
+                "iss": "mail-platform",
+                "sub": "mail-platform-service",
+                "aud": "ad-automation",
+                "iat": datetime.utcnow(),
+                "exp": datetime.utcnow() + timedelta(minutes=5),
+            },
+            SERVICE_KEY,
+            algorithm="HS256",
+        )
+
+        response = self.client.post(
+            "/api/v1/service/employee-onboarding",
+            json={
+                "source_request_id": "MAIL-REQ-JWT",
+                "employee_id": "E123",
+                "first_name": "A",
+                "last_name": "User",
+                "full_name": "A User",
+                "sam_account_name": "auser",
+                "password": "Example-password-123!",
+                "target_ou_dn": "OU=Users,DC=example,DC=com",
+                "title": "Engineer",
+                "department": "IT",
+                "dry_run": False,
+            },
+            headers={"Authorization": f"Bearer {token}"},
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.json()["success"])
+        self.assertIn("audit", self.fake_ldap.calls[-1][2])
+
+    def test_employee_onboarding_replays_success_without_calling_ldap_twice(self):
+        payload = {
+            "source_request_id": "MAIL-REQ-IDEMPOTENT",
+            "employee_id": "E123",
+            "first_name": "A",
+            "last_name": "User",
+            "full_name": "A User",
+            "sam_account_name": "auser",
+            "password": "Example-password-123!",
+            "target_ou_dn": "OU=Users,DC=example,DC=com",
+            "title": "Engineer",
+            "department": "IT",
+        }
+
+        first_response = self.client.post(
+            "/api/v1/service/employee-onboarding",
+            json=payload,
+        )
+        retry_payload = dict(payload)
+        retry_payload["sam_account_name"] = "AUSER"
+        second_response = self.client.post(
+            "/api/v1/service/employee-onboarding",
+            json=retry_payload,
+        )
+
+        self.assertEqual(first_response.status_code, 200)
+        self.assertEqual(second_response.status_code, 200)
+        self.assertEqual(second_response.json(), first_response.json())
+        self.assertEqual(
+            len(
+                [
+                    call
+                    for call in self.fake_ldap.calls
+                    if call[0] == "create_user"
+                ]
+            ),
+            1,
+        )
+
+    def test_onboarding_repository_migrates_existing_audit_table(self):
+        with self.audit_engine.begin() as connection:
+            connection.exec_driver_sql(
+                "CREATE TABLE onboarding_request_audits ("
+                "id INTEGER PRIMARY KEY AUTOINCREMENT, "
+                "source_request_id VARCHAR NOT NULL, "
+                "employee_id VARCHAR NOT NULL, "
+                "requested_account VARCHAR NOT NULL, "
+                "actual_account VARCHAR, "
+                "status VARCHAR NOT NULL, "
+                "step_outcomes_json TEXT NOT NULL, "
+                "started_at DATETIME NOT NULL, "
+                "updated_at DATETIME NOT NULL, "
+                "completed_at DATETIME)"
+            )
+            connection.exec_driver_sql(
+                "CREATE INDEX ix_onboarding_request_audits_source_request_id "
+                "ON onboarding_request_audits (source_request_id)"
+            )
+
+        onboarding_audit_repository.OnboardingAuditRepository().ensure_schema()
+
+        columns = {
+            column["name"]
+            for column in inspect(self.audit_engine).get_columns(
+                "onboarding_request_audits"
+            )
+        }
+        indexes = inspect(self.audit_engine).get_indexes(
+            "onboarding_request_audits"
+        )
+
+        self.assertIn("response_json", columns)
+        self.assertIn("response_status", columns)
+        self.assertTrue(
+            any(
+                index["name"]
+                == "uq_onboarding_request_audits_source_request_id"
+                and index["unique"]
+                for index in indexes
+            )
+        )
+
+    def test_employee_onboarding_rejects_reused_id_with_different_identity(self):
+        payload = {
+            "source_request_id": "MAIL-REQ-IDEMPOTENCY-MISMATCH",
+            "employee_id": "E123",
+            "first_name": "A",
+            "last_name": "User",
+            "full_name": "A User",
+            "sam_account_name": "auser",
+            "password": "Example-password-123!",
+            "target_ou_dn": "OU=Users,DC=example,DC=com",
+            "title": "Engineer",
+            "department": "IT",
+        }
+
+        first_response = self.client.post(
+            "/api/v1/service/employee-onboarding",
+            json=payload,
+        )
+        payload["sam_account_name"] = "another-account"
+        second_response = self.client.post(
+            "/api/v1/service/employee-onboarding",
+            json=payload,
+        )
+
+        self.assertEqual(first_response.status_code, 200)
+        self.assertEqual(second_response.status_code, 409)
+        self.assertEqual(
+            second_response.json()["detail"]["code"],
+            "idempotency_key_payload_mismatch",
+        )
+        self.assertEqual(
+            sum(call[0] == "create_user" for call in self.fake_ldap.calls),
+            1,
+        )
+
+    def test_employee_onboarding_returns_in_progress_for_duplicate(self):
+        repository = onboarding_audit_repository.OnboardingAuditRepository()
+        repository.claim(
+            source_request_id="MAIL-REQ-IN-PROGRESS",
+            employee_id="E123",
+            requested_account="auser",
+        )
+        response = self.client.post(
+            "/api/v1/service/employee-onboarding",
+            json={
+                "source_request_id": "MAIL-REQ-IN-PROGRESS",
+                "employee_id": "E123",
+                "first_name": "A",
+                "last_name": "User",
+                "full_name": "A User",
+                "sam_account_name": "auser",
+                "password": "Example-password-123!",
+                "target_ou_dn": "OU=Users,DC=example,DC=com",
+                "title": "Engineer",
+                "department": "IT",
+            },
+        )
+
+        self.assertEqual(response.status_code, 409)
+        self.assertEqual(
+            response.json()["detail"]["code"],
+            "request_in_progress",
+        )
+        self.assertEqual(self.fake_ldap.calls, [])
+
+    def test_employee_onboarding_returns_failure_when_adapter_reports_failure(self):
+        self.fake_ldap.create_user_result = {
+            "success": False,
+            "error": {"description": "LDAP add failed"},
+        }
+
+        response = self.client.post(
+            "/api/v1/service/employee-onboarding",
+            json={
+                "source_request_id": "MAIL-REQ-FAIL",
+                "employee_id": "E123",
+                "first_name": "A",
+                "last_name": "User",
+                "full_name": "A User",
+                "sam_account_name": "auser",
+                "password": "Example-password-123!",
+                "target_ou_dn": "OU=Users,DC=example,DC=com",
+                "title": "Engineer",
+                "department": "IT",
+                "dry_run": False,
+            },
+        )
+
+        self.assertEqual(response.status_code, 500)
+
+    def test_employee_onboarding_replays_failure_without_calling_ldap_twice(self):
+        self.fake_ldap.create_user_result = {
+            "success": False,
+            "error": {"description": "LDAP add failed"},
+        }
+        payload = {
+            "source_request_id": "MAIL-REQ-FAILED-REPLAY",
+            "employee_id": "E123",
+            "first_name": "A",
+            "last_name": "User",
+            "full_name": "A User",
+            "sam_account_name": "auser",
+            "password": "Example-password-123!",
+            "target_ou_dn": "OU=Users,DC=example,DC=com",
+            "title": "Engineer",
+            "department": "IT",
+        }
+
+        first_response = self.client.post(
+            "/api/v1/service/employee-onboarding",
+            json=payload,
+        )
+        second_response = self.client.post(
+            "/api/v1/service/employee-onboarding",
+            json=payload,
+        )
+
+        self.assertEqual(first_response.status_code, 500)
+        self.assertEqual(second_response.status_code, 500)
+        self.assertEqual(second_response.json(), first_response.json())
+        self.assertEqual(
+            sum(call[0] == "create_user" for call in self.fake_ldap.calls),
+            1,
+        )
+
+    def test_create_user_persists_successful_step_audit_by_source_request_id(self):
+        class Connection:
+            result = {"result": 0, "description": "success"}
+
+            def add(self, **kwargs):
+                return True
+
+        adapter = LDAPAdapter()
+        adapter.connection = Connection()
+        with (
+            patch.object(
+                adapter,
+                "find_available_sam",
+                return_value="auser",
+            ),
+            patch.object(
+                adapter,
+                "find_available_display_name",
+                return_value="A User",
+            ),
+            patch.object(adapter, "set_password", return_value=True),
+            patch.object(adapter, "_enable_user_by_dn", return_value=True),
+            patch.object(
+                adapter,
+                "force_change_password_next_logon",
+                return_value=True,
+            ),
+            patch.object(
+                adapter,
+                "add_user_to_groups",
+                return_value={
+                    "success": True,
+                    "added_groups": ["Staff"],
+                    "failed_groups": [],
+                },
+            ),
+        ):
+            result = adapter.create_user(
+                CreateAdUserRequest(
+                    source_request_id="MAIL-REQ-AUDIT-SUCCESS",
+                    employee_id="E123",
+                    first_name="A",
+                    last_name="User",
+                    full_name="A User",
+                    sam_account_name="auser",
+                    password="Sensitive-password-123!",
+                    target_ou_dn="OU=Users,DC=example,DC=com",
+                    title="Engineer",
+                    department="IT",
+                    groups=["Staff"],
+                )
+            )
+
+        self.assertTrue(result["success"])
+        self.assertEqual(
+            result["source_request_id"],
+            "MAIL-REQ-AUDIT-SUCCESS",
+        )
+        with self.audit_session_local() as session:
+            record = session.execute(
+                select(OnboardingAuditRecord)
+            ).scalar_one()
+
+        self.assertEqual(
+            record.source_request_id,
+            "MAIL-REQ-AUDIT-SUCCESS",
+        )
+        self.assertEqual(record.status, "SUCCESS")
+        outcomes = json.loads(record.step_outcomes_json)
+        self.assertEqual(
+            [item["step"] for item in outcomes],
+            [
+                "resolve_sam_account_name",
+                "resolve_display_name",
+                "add_user",
+                "set_password",
+                "enable_user",
+                "force_change_password",
+                "add_groups",
+            ],
+        )
+        self.assertTrue(all(item["success"] for item in outcomes))
+        self.assertNotIn(
+            "Sensitive-password-123!",
+            record.step_outcomes_json,
+        )
+
+    def test_create_user_persists_failed_step_audit(self):
+        class Connection:
+            result = {"result": 50, "description": "LDAP add failed"}
+
+            def add(self, **kwargs):
+                return False
+
+        adapter = LDAPAdapter()
+        adapter.connection = Connection()
+        with (
+            patch.object(
+                adapter,
+                "find_available_sam",
+                return_value="auser",
+            ),
+            patch.object(
+                adapter,
+                "find_available_display_name",
+                return_value="A User",
+            ),
+        ):
+            result = adapter.create_user(
+                CreateAdUserRequest(
+                    source_request_id="MAIL-REQ-AUDIT-FAIL",
+                    employee_id="E123",
+                    first_name="A",
+                    last_name="User",
+                    full_name="A User",
+                    sam_account_name="auser",
+                    password="Sensitive-password-123!",
+                    target_ou_dn="OU=Users,DC=example,DC=com",
+                    title="Engineer",
+                    department="IT",
+                )
+            )
+
+        self.assertFalse(result["success"])
+        self.assertEqual(result["failed_step"], "add_user")
+        with self.audit_session_local() as session:
+            record = session.execute(
+                select(OnboardingAuditRecord)
+            ).scalar_one()
+        self.assertEqual(record.status, "FAILED")
+        outcomes = json.loads(record.step_outcomes_json)
+        self.assertEqual(outcomes[-1]["step"], "add_user")
+        self.assertFalse(outcomes[-1]["success"])
+
+    def test_employee_onboarding_rejects_missing_source_request_id(self):
+        response = self.client.post(
+            "/api/v1/service/employee-onboarding",
+            json={
+                "employee_id": "E123",
+                "first_name": "A",
+                "last_name": "User",
+                "full_name": "A User",
+                "sam_account_name": "auser",
+                "password": "Example-password-123!",
+                "target_ou_dn": "OU=Users,DC=example,DC=com",
+                "title": "Engineer",
+                "department": "IT",
+            },
+        )
+
+        self.assertEqual(response.status_code, 422)
         self.assertEqual(self.fake_ldap.calls, [])
 
     def test_create_user_enable_step_targets_the_new_user_dn(self):

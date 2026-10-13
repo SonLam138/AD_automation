@@ -8,3 +8,4 @@ config.py
 app/config.py
 **/config.py
 *.md
+!SAD_intergration.md

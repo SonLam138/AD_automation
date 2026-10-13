@@ -28,7 +28,10 @@ def export_daily_report():
         f"mail_daily_report_"
         f"{datetime.now():%Y%m%d}.csv"
     )
-
+    onboarding_filename = (
+        f"onboarding_daily_report_"
+        f"{datetime.now():%Y%m%d}.csv"
+    )
     return {
 
         "success": True,
@@ -38,6 +41,8 @@ def export_daily_report():
 
         "file_name":
             filename,
+
+        "onboarding_file_name": onboarding_filename,
 
         "body":
             report_service.to_text(
@@ -49,6 +54,11 @@ def export_daily_report():
             report_service
             .export_csv_content(
                 report
+            ),
+        "onboarding_csv_content":
+            report_service
+            .export_onboarding_csv_content(
+            report
             )
     }
 
@@ -66,6 +76,10 @@ def export_weekly_report():
         f"mail_weekly_report_"
         f"{datetime.now():%Y%m%d}.csv"
     )
+    onboarding_filename = (
+            f"onboarding_weekly_report_"
+            f"{datetime.now():%Y%m%d}.csv"
+        )
 
     return {
 
@@ -77,6 +91,8 @@ def export_weekly_report():
         "file_name":
             filename,
 
+        "onboarding_file_name": onboarding_filename,
+
         "body":
             report_service.to_text(
                 report,
@@ -87,6 +103,11 @@ def export_weekly_report():
             report_service
             .export_csv_content(
                 report
+            ),
+        "onboarding_csv_content":
+            report_service
+            .export_onboarding_csv_content(
+            report
             )
     }
 
@@ -119,7 +140,7 @@ def monthly_report():
     }
 
 @router.get(
-    "/mail-report/monthly/export"
+    "monthly/export"
 )
 def export_monthly_report():
 
@@ -132,6 +153,10 @@ def export_monthly_report():
         f"mail_report_"
         f"{datetime.now():%Y%m%d}.csv"
     )
+    onboarding_filename = (
+        f"onboarding_monthly_report_"
+        f"{datetime.now():%Y%m%d}.csv"
+        )
 
     return {
 
@@ -139,6 +164,8 @@ def export_monthly_report():
 
         "file_name":
             filename,
+
+        "onboarding_file_name": onboarding_filename,
 
         "body":
             report_service.to_text(
@@ -150,5 +177,10 @@ def export_monthly_report():
             report_service
             .export_csv_content(
                 report
+            ),
+        "onboarding_csv_content":
+            report_service
+            .export_onboarding_csv_content(
+            report
             )
     }

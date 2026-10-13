@@ -13,11 +13,18 @@ from app.auto_engine.sqlite.workflow_journal_record import (
 from app.auto_engine.sqlite.mail_request_audit_record import (
     MailRequestAuditRecord,
 )
+from app.auto_engine.sqlite.onboarding_audit_record import (
+    OnboardingAuditRecord,
+)
+from app.auto_engine.sqlite.onboarding_audit_repository import (
+    OnboardingAuditRepository,
+)
 
 from app.auto_engine.sqlite.access_snapshot import AccessSnapshot
 
 def create_database():
 
+    OnboardingAuditRepository().ensure_schema()
     Base.metadata.create_all(engine)
 
     print(

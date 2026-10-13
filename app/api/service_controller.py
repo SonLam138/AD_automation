@@ -1,3 +1,4 @@
+import json
 from fastapi import (
     APIRouter,
     Depends,
@@ -34,6 +35,10 @@ from app.models.ad_tool import (
     IntegrationGroupMemberRequest,
     IntegrationMoveToOuRequest,
     UpdateUserDisplayNameRequest,
+)
+from app.audit.onboarding_audit import OnboardingAudit
+from app.auto_engine.sqlite.onboarding_audit_repository import (
+    OnboardingAuditRepository,
 )
 from app.auth.integration_authorization import (require_integration_endpoint)
 
@@ -237,25 +242,105 @@ def service_employee_offboarding(
         )
 
 
-@router.post("/integration/ad/users/create")
-def integration_ad_create_user(
+@router.post("/employee-onboarding")
+def service_employee_onboarding(
     request: CreateAdUserRequest,
-    claims=Depends(require_integration_endpoint("create_object")),
+    claims=Depends(require_service_token),
 ):
     if not request.display_name:
         request.display_name = request.full_name
 
-    result = _execute_integration_ad_action(
-        lambda: ldap.create_user(
-            request,
-            approved_by=claims.get("sub"),
-            approved_name=claims.get("sub"),
-            approval_type="INTEGRATION",
-        ),
-        require_success=True,
+    repository = OnboardingAuditRepository()
+    record, claimed = _execute_integration_ad_action(
+        lambda: repository.claim(
+            source_request_id=request.source_request_id,
+            employee_id=request.employee_id.strip(),
+            requested_account=request.sam_account_name.strip(),
+        )
     )
 
-    return result
+    if not claimed:
+        same_employee = (
+            record.employee_id.strip() == request.employee_id.strip()
+        )
+        same_account = (
+            record.requested_account.strip().casefold()
+            == request.sam_account_name.strip().casefold()
+        )
+        if not same_employee or not same_account:
+            raise HTTPException(
+                status_code=409,
+                detail={
+                    "code": "idempotency_key_payload_mismatch",
+                    "message": (
+                        "source_request_id is already associated with "
+                        "a different employee_id or sam_account_name"
+                    ),
+                },
+            )
+
+        if record.status == "IN_PROGRESS":
+            raise HTTPException(
+                status_code=409,
+                detail={
+                    "code": "request_in_progress",
+                    "message": (
+                        "This onboarding request is already being processed"
+                    ),
+                },
+            )
+
+        if record.response_json is None or record.response_status is None:
+            raise HTTPException(
+                status_code=409,
+                detail={
+                    "code": "request_result_unavailable",
+                    "message": (
+                        "This request has an audit record but no stored "
+                        "response; reconcile it before retrying"
+                    ),
+                },
+            )
+
+        cached_response = json.loads(record.response_json)
+        if record.response_status >= 400:
+            raise HTTPException(
+                status_code=record.response_status,
+                detail=cached_response["detail"],
+            )
+        return cached_response
+
+    audit = OnboardingAudit(
+        source_request_id=request.source_request_id,
+        employee_id=request.employee_id.strip(),
+        requested_account=request.sam_account_name.strip(),
+        repository=repository,
+        audit_id=record.id,
+        defer_finish=True,
+    )
+
+    try:
+        result = _execute_integration_ad_action(
+            lambda: ldap.create_user(
+                request,
+                audit=audit,
+            ),
+            require_success=True,
+        )
+        status = "DRY_RUN" if result.get("dry_run") else "SUCCESS"
+        audit.complete(
+            status=status,
+            response=result,
+            response_status=200,
+        )
+        return result
+    except HTTPException as ex:
+        audit.complete(
+            status="FAILED",
+            response={"detail": ex.detail},
+            response_status=ex.status_code,
+        )
+        raise
 
 
 @router.post("/integration/ad/users/disable")

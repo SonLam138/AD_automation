@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 import csv
 import io
-
+import json
 from app.auto_engine.report.mail_request_report import (
     MailRequestReport,
 )
@@ -9,7 +9,9 @@ from app.auto_engine.report.mail_request_report import (
 from app.auto_engine.sqlite.mail_request_audit_repository import (
     MailRequestAuditRepository,
 )
-
+from app.auto_engine.sqlite.onboarding_audit_repository import (
+OnboardingAuditRepository,
+)
 
 class MailRequestReportService:
 
@@ -19,6 +21,9 @@ class MailRequestReportService:
 
         self.repository = (
             MailRequestAuditRepository()
+        )
+        self.onboarding_repository = (
+            OnboardingAuditRepository()
         )
 
     WORKFLOW_DISPLAY_NAMES = {
@@ -61,6 +66,45 @@ class MailRequestReportService:
         end_date: datetime,
     ) -> MailRequestReport:
 
+        onboarding_total = (
+            self.onboarding_repository
+            .count_between(
+                start_date,
+                end_date,
+            )
+        )
+
+        onboarding_success = 0
+        onboarding_failed = 0
+
+        for item in (
+            self.onboarding_repository
+            .group_by_status(
+                start_date,
+                end_date,
+            )
+        ):
+
+            if item["status"] == "SUCCESS":
+
+                onboarding_success = (
+                    item["total"]
+                )
+
+            elif item["status"] == "FAILED":
+
+                onboarding_failed = (
+                    item["total"]
+                )
+
+        onboarding_details = (
+            self.onboarding_repository
+            .get_between(
+                start_date,
+                end_date,
+            )
+        )
+
         return (
             MailRequestReport(
 
@@ -102,6 +146,18 @@ class MailRequestReportService:
                         start_date,
                         end_date,
                     ),
+
+                onboarding_total=
+                    onboarding_total,
+
+                onboarding_success=
+                    onboarding_success,
+
+                onboarding_failed=
+                    onboarding_failed,
+
+                onboarding_details=
+                    onboarding_details,
             )
         )
 
@@ -187,6 +243,31 @@ class MailRequestReportService:
 
         lines.append("")
 
+        lines.append("")
+
+        lines.append(
+            "Thông tin Onboarding"
+        )
+
+        lines.append(
+            "-" * 60
+        )
+
+        lines.append(
+            f"Tổng số yêu cầu cấp tài khoản mới: "
+            f"{report.onboarding_total}"
+        )
+
+        lines.append(
+            f"SUCCESS: "
+            f"{report.onboarding_success}"
+        )
+
+        lines.append(
+            f"FAILED: "
+            f"{report.onboarding_failed}"
+        )
+
         lines.append(
             "Thông tin chi tiết được đính kèm theo email."
         )
@@ -243,6 +324,93 @@ class MailRequestReportService:
                         item.created_at,
                     ]
                 )
+
+    def export_onboarding_csv_content(
+        self,
+        report: MailRequestReport,
+    ) -> str:
+
+        output = io.StringIO()
+
+        writer = csv.writer(
+            output
+        )
+
+        writer.writerow(
+            [
+                "source_request_id",
+                "employee_id",
+                "requested_account",
+                "actual_account",
+                "status",
+                "step_name",
+                "step_success",
+                "duration_ms",
+                "step_started_at",
+                "step_completed_at",
+            ]
+        )
+
+        for record in (
+            report.onboarding_details
+            or []
+        ):
+
+            outcomes = json.loads(
+                record.step_outcomes_json
+                or "[]"
+            )
+
+            #
+            # Không có step nào
+            #
+            if not outcomes:
+
+                writer.writerow(
+                    [
+                        record.source_request_id,
+                        record.employee_id,
+                        record.requested_account,
+                        record.actual_account,
+                        record.status,
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                    ]
+                )
+
+                continue
+
+            for outcome in outcomes:
+
+                writer.writerow(
+                    [
+                        record.source_request_id,
+                        record.employee_id,
+                        record.requested_account,
+                        record.actual_account,
+                        record.status,
+                        outcome.get(
+                            "step"
+                        ),
+                        outcome.get(
+                            "success"
+                        ),
+                        outcome.get(
+                            "duration_ms"
+                        ),
+                        outcome.get(
+                            "started_at"
+                        ),
+                        outcome.get(
+                            "completed_at"
+                        ),
+                    ]
+                )
+
+        return output.getvalue()
 
 
     def generate_daily_report(

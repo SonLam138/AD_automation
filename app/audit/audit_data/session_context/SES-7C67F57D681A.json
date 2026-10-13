@@ -1,0 +1,38 @@
+{
+  "schema_version": "1.0",
+  "session_id": "SES-7C67F57D681A",
+  "event_category": "IDENTITY",
+  "event_type": "NEW_ONBOARDING",
+  "source_type": "HR_EMAIL_SVD",
+  "source_id": null,
+  "capability": "new_onboarding",
+  "status": "RUNNING",
+  "started_at": "2026-10-04T06:58:18.809023",
+  "completed_at": null,
+  "duration_ms": null,
+  "requested": {
+    "employee_id": "000686868",
+    "first_name": "ADAutomation",
+    "last_name": "NewCreate",
+    "full_name": "ADAutomation NewCreate",
+    "department": "test_dep",
+    "title": "Test",
+    "account": "auto_create_test",
+    "display_name": "ADAutomation NewCreate",
+    "ou": "OU=HO,DC=automate,DC=com,DC=vn"
+  },
+  "actual": {
+    "account": null,
+    "display_name": null,
+    "user_dn": null,
+    "ou_dn": null
+  },
+  "failure_stage": null,
+  "failure_code": null,
+  "failure_reason": null,
+  "approved_by": "mail-platform-service",
+  "approved_name": "mail-platform-service",
+  "edited_by_approver": false,
+  "approval_type": "MAIL_PLATFORM",
+  "approval_time": "2026-10-04T06:58:18.809023"
+}

@@ -1,4 +1,4 @@
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 from pydantic import model_validator
 from typing import Literal
 
@@ -51,6 +51,7 @@ class DetectionFeedbackRequest(BaseModel):
 
 
 class CreateAdUserRequest(BaseModel):
+    source_request_id: str = Field(min_length=1)
     employee_id: str
     first_name: str
     last_name: str
@@ -62,9 +63,16 @@ class CreateAdUserRequest(BaseModel):
     department: str
     display_name: str | None = None
     description: str | None = None
-    edited_by_approver: bool = False
-    dry_run: bool = True
+    dry_run: bool = False
     groups: list[str] = Field(default_factory=list)
+
+    @field_validator("source_request_id")
+    @classmethod
+    def source_request_id_must_not_be_blank(cls, value: str) -> str:
+        value = value.strip()
+        if not value:
+            raise ValueError("source_request_id must not be blank")
+        return value
 
 
 class CreateGroupRequest(BaseModel):
