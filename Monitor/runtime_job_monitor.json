@@ -1,21 +1,35 @@
 {
-    "total_jobs_created": 242,
-    "failed_jobs_count": 12,
+    "total_jobs_created": 248,
+    "failed_jobs_count": 13,
     "last_executed_job": {
-        "job_id": "REQ_01102026_B2C1:STEP_MAILBOX",
-        "action_code": "onprem_disable_mailbox",
-        "display_name": "Disable On-Prem Mailbox",
-        "object_name": "AD Automation 9",
-        "target": null,
-        "execute_at": "2026-10-02T10:17:23.829146",
-        "status": "FAILED",
-        "error_message": "HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /api/v1/actions/execute (Caused by NewConnectionError(\"HTTPConnection(host='localhost', port=8001): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it\"))",
-        "retry_count": 3,
+        "job_id": "REQ_27102026_B3C9:STEP_02",
+        "action_code": "remove_group_by_dn",
+        "display_name": "Remove user to group to remove permission",
+        "object_name": "ad.auto1",
+        "target": "CN=Test_grp,OU=Hoi so chinh,DC=automate,DC=com,DC=vn",
+        "execute_at": "2026-10-27T14:29:00",
+        "status": "COMPLETED",
+        "error_message": null,
+        "retry_count": 0,
         "max_retry": 3,
         "next_execute_at": null,
-        "timestamp": "2026-10-02T03:17:29.854332"
+        "timestamp": "2026-10-27T07:29:00.844817"
     },
     "recent_failed_jobs": [
+        {
+            "job_id": "REQ_27102026_32E4:STEP_02",
+            "action_code": "remove_group_by_dn",
+            "display_name": "REMOVE_GROUP",
+            "object_name": "CN=AD Automation 1,OU=Hoi so chinh,DC=automate,DC=com,DC=vn",
+            "target": "CN=Test_grp,OU=Hoi so chinh,DC=automate,DC=com,DC=vn",
+            "execute_at": "2026-10-27T09:32:12.009327",
+            "status": "FAILED",
+            "error_message": "Thiếu target_group trong business_data.action_data",
+            "retry_count": 3,
+            "max_retry": 3,
+            "next_execute_at": null,
+            "timestamp": "2026-10-27T02:32:17.508825"
+        },
         {
             "job_id": "REQ_01102026_B2C1:STEP_MAILBOX",
             "action_code": "onprem_disable_mailbox",
@@ -65,17 +79,6 @@
             "status": "FAILED",
             "error_message": "'RemoveAllGroupsAction' object has no attribute 'ldap_service'",
             "timestamp": "2026-09-20T09:03:21.402958"
-        },
-        {
-            "job_id": "REQ_15092026_CDE2:STEP_MAILBOX",
-            "action_code": "onprem_disable_mailbox",
-            "display_name": "Disable On-Prem Mailbox",
-            "object_name": "AD Automation 2",
-            "target": null,
-            "execute_at": "2026-09-17T17:01:00",
-            "status": "FAILED",
-            "error_message": "HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /api/v1/actions/execute (Caused by NewConnectionError(\"HTTPConnection(host='localhost', port=8001): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it\"))",
-            "timestamp": "2026-09-17T16:57:45.655272"
         }
     ],
     "queued_jobs": [

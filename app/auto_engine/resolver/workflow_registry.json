@@ -222,7 +222,7 @@
         "action_code": "add_group_by_dn",
         "display_name": "Add user to group to grant permission",
         "execution": {
-          "target_group": "group_name",
+          "target_group": null,
           "depends_on": [],
           "delay_minutes": 0,
           "retry_count": 3,
@@ -234,7 +234,7 @@
         "action_code": "remove_group_by_dn",
         "display_name": "Remove user to group to remove permission",
         "execution": {
-          "target_group": "group_name",
+          "target_group": null,
           "depends_on": [
             "STEP_01"
           ],
@@ -613,6 +613,94 @@
         "display_name": "ENABLE",
         "execution": {
           "execute_time": "2026-09-09T15:15",
+          "depends_on": [],
+          "retry_count": 3,
+          "continue_on_error": false
+        }
+      }
+    ]
+  },
+  {
+    "match": {
+      "request_type": "custom_workflow",
+      "contexts": [
+        "CUSTOM_WF_1793066859918_Auto1"
+      ]
+    },
+    "workflow_id": "WF_1793066859918",
+    "workflow_name": "Test_2710",
+    "object_resolver": "resolve_user",
+    "workflow_complete": true,
+    "metadata": {
+      "target_object_type": "USER",
+      "schedule_mode": "AT_EFFECTIVE_TIME",
+      "trigger_field": "start_date",
+      "priority": "NORMAL",
+      "allow_retry": true,
+      "max_retry": 3
+    },
+    "actions": [
+      {
+        "id": "STEP_01",
+        "action_code": "disable_user",
+        "display_name": "DISABLE",
+        "execution": {
+          "execute_time": "2026-10-27T09:10",
+          "depends_on": [],
+          "retry_count": 3,
+          "continue_on_error": false
+        }
+      },
+      {
+        "id": "STEP_02",
+        "action_code": "remove_group_by_dn",
+        "display_name": "REMOVE_GROUP",
+        "execution": {
+          "execute_time": "2026-10-27T09:11",
+          "depends_on": [],
+          "retry_count": 3,
+          "continue_on_error": false
+        }
+      }
+    ]
+  },
+  {
+    "match": {
+      "request_type": "custom_workflow",
+      "contexts": [
+        "CUSTOM_WF_1793071216251_AdAuto1"
+      ]
+    },
+    "workflow_id": "WF_1793071216251",
+    "workflow_name": "Test_lân2",
+    "object_resolver": "resolve_user",
+    "workflow_complete": true,
+    "metadata": {
+      "target_object_type": "USER",
+      "schedule_mode": "AT_EFFECTIVE_TIME",
+      "trigger_field": "start_date",
+      "priority": "NORMAL",
+      "allow_retry": true,
+      "max_retry": 3
+    },
+    "actions": [
+      {
+        "id": "STEP_01",
+        "action_code": "enable_user",
+        "display_name": "ENABLE",
+        "execution": {
+          "execute_time": "2026-10-27T10:22",
+          "depends_on": [],
+          "retry_count": 3,
+          "continue_on_error": false
+        }
+      },
+      {
+        "id": "STEP_02",
+        "action_code": "remove_group_by_dn",
+        "display_name": "REMOVE_GROUP",
+        "execution": {
+          "execute_time": "2026-10-27T10:23",
           "depends_on": [],
           "retry_count": 3,
           "continue_on_error": false

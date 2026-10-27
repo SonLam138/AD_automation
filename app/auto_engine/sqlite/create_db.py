@@ -21,6 +21,7 @@ from app.auto_engine.sqlite.onboarding_audit_repository import (
 )
 
 from app.auto_engine.sqlite.access_snapshot import AccessSnapshot
+from app.mail_dashboard.record import MailDashboardRecord
 
 def create_database():
 

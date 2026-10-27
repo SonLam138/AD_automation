@@ -2,11 +2,23 @@ import { useEffect, useState } from "react";
 import axiosClient from "../api/axiosClient";
 import "./MonitorDashboard.css";
 
+function formatMailReceivedAt(receivedAt) {
+    if (!receivedAt) {
+        return "-";
+    }
+
+    const date = new Date(receivedAt);
+    return Number.isNaN(date.getTime())
+        ? "-"
+        : date.toLocaleString("vi-VN");
+}
 
 export default function MonitorDashboard() {
     console.log("MONITOR DASHBOARD RENDER");
     const [dashboard, setDashboard] = useState(null);
     const [jobDashboard,setJobDashboard] = useState(null);
+    const [mailDashboard, setMailDashboard] = useState(null);
+    const [mailDashboardError, setMailDashboardError] = useState("");
     const [objectType, setObjectType] =
     useState("ALL");
 
@@ -51,11 +63,31 @@ export default function MonitorDashboard() {
         );
     };
 
+    const loadMailDashboard = async () => {
+        try {
+            const response = await axiosClient.get(
+                "/api/v1/service/mail-dashboard/summary"
+            );
+
+            setMailDashboard(response.data);
+            setMailDashboardError("");
+        } catch (error) {
+            console.error(
+                "Failed to load mail dashboard summary",
+                error
+            );
+            setMailDashboardError(
+                "Mail summary could not be loaded."
+            );
+        }
+    };
+
     const loadRuntimeDashboard = async () => {
 
         await Promise.all([
             loadDashboard(),
-            loadJobDashboard()
+            loadJobDashboard(),
+            loadMailDashboard()
         ]);
     };
 
@@ -467,6 +499,99 @@ return (
             </div>
 
         </div>
+
+        <div className="monitor-section-title">
+            Mail Overview
+        </div>
+
+        {mailDashboardError && (
+            <div className="runtime-job-error" role="alert">
+                {mailDashboardError}
+            </div>
+        )}
+
+        {mailDashboard ? (
+            <>
+                <div className="monitor-cards">
+                    <div className="monitor-card card-requests">
+                        <div className="monitor-card-title">
+                            Total Mail
+                        </div>
+                        <div className="monitor-card-value">
+                            {mailDashboard.total_mail}
+                        </div>
+                    </div>
+
+                    <div className="monitor-card">
+                        <div className="monitor-card-title">
+                            Received in Last 24 Hours
+                        </div>
+                        <div className="monitor-card-value">
+                            {mailDashboard.mail_last_24h}
+                        </div>
+                    </div>
+
+                    <div className="monitor-card card-failed">
+                        <div className="monitor-card-title">
+                            Failed Mail
+                        </div>
+                        <div className="monitor-card-value">
+                            {mailDashboard.failed_mail}
+                        </div>
+                    </div>
+
+                    <div className="monitor-card card-success">
+                        <div className="monitor-card-title">
+                            Successful Mail
+                        </div>
+                        <div className="monitor-card-value">
+                            {mailDashboard.successful_mail}
+                        </div>
+                    </div>
+                </div>
+
+                <div className="runtime-panel monitor-mail-panel">
+                    <div className="runtime-panel-title">
+                        Five Most Recent Failed Mail
+                    </div>
+
+                    {mailDashboard.recent_failed_mail?.length ? (
+                        mailDashboard.recent_failed_mail.map(
+                            (mail, index) => (
+                                <div
+                                    key={`${mail.mailbox}-${mail.received_at}-${index}`}
+                                    className="runtime-job-item"
+                                >
+                                    <div className="runtime-job-name">
+                                        {mail.subject || "(No subject)"}
+                                    </div>
+                                    <div className="runtime-job-meta">
+                                        {mail.mailbox}
+                                    </div>
+                                    <div className="runtime-job-meta">
+                                        {formatMailReceivedAt(mail.received_at)}
+                                    </div>
+                                    <div className="runtime-job-status-failed">
+                                        {mail.processing_state}
+                                    </div>
+                                </div>
+                            )
+                        )
+                    ) : (
+                        <div>
+                            No recent failed mail
+                        </div>
+                    )}
+                </div>
+            </>
+        ) : (
+            !mailDashboardError && (
+                <div className="runtime-panel monitor-mail-panel">
+                    Loading mail summary...
+                </div>
+            )
+        )}
+
     </div>            
     </div>
 );

@@ -245,7 +245,7 @@ export default function WorkflowDesignerPage() {
         )
         {
             if (
-                !step.parameters.targetGroup?.trim()
+                !step.parameters.target_group?.trim()
             ) {
                 alert(
                     "Target Group is required"
@@ -258,7 +258,7 @@ export default function WorkflowDesignerPage() {
         )
         {
             if (
-                !step.parameters.targetGroup?.trim()
+                !step.parameters.target_group?.trim()
             ) {
                 alert(
                     "Target Group is required"
@@ -447,7 +447,7 @@ export default function WorkflowDesignerPage() {
         if (
             step.action === "ADD_GROUP"
             &&
-            !step.parameters.targetGroup?.trim()
+            !step.parameters.target_group?.trim()
         ) {
             errors.push(
                 `Step ${index + 1}: Target Group is required`
@@ -542,11 +542,7 @@ export default function WorkflowDesignerPage() {
 
     try {
 
-        const payload = {
-            workflowInfo,
-            objects,
-            steps
-        };
+        const payload = buildWorkflowPayload();
 
         const response =
             await axiosClient.post(
@@ -582,11 +578,7 @@ export default function WorkflowDesignerPage() {
 
         try {
 
-            const payload = {
-                workflowInfo,
-                objects,
-                steps
-            };
+            const payload = buildWorkflowPayload();
 
             const response =
                 await axiosClient.post(
@@ -618,6 +610,34 @@ export default function WorkflowDesignerPage() {
         }
     };
 
+    function buildWorkflowPayload() {
+        return {
+            workflowInfo,
+            objects,
+            steps: steps.map(step => {
+                const selectedObject = objects.find(
+                    obj => obj.alias === step.objectRef
+                );
+                const parameters = {
+                    ...step.parameters
+                };
+
+                if (
+                    selectedObject?.objectType === "GROUP"
+                    && step.action === "MOVE"
+                ) {
+                    parameters.group_name =
+                        selectedObject.group_name;
+                }
+
+                return {
+                    ...step,
+                    parameters
+                };
+            })
+        };
+    }
+
     function getResolveObjectType(
         parameterName
     ) {
@@ -629,7 +649,7 @@ export default function WorkflowDesignerPage() {
             case "targetOu":
                 return "OU";
 
-            case "targetGroup":
+            case "target_group":
                 return "GROUP";
 
             default:
@@ -1426,7 +1446,7 @@ export default function WorkflowDesignerPage() {
                                                         <input
                                                             type="text"
                                                             value={
-                                                                step.parameters.targetGroup
+                                                                step.parameters.target_group
                                                                 || ""
                                                             }
                                                             readOnly={
@@ -1436,7 +1456,7 @@ export default function WorkflowDesignerPage() {
                                                             onChange={(e) =>
                                                                 handleParameterChange(
                                                                     step.id,
-                                                                    "targetGroup",
+                                                                    "target_group",
                                                                     e.target.value
                                                                 )
                                                             }
@@ -1451,8 +1471,8 @@ export default function WorkflowDesignerPage() {
                                                             onClick={() =>
                                                                 handleResolveParameter(
                                                                     step.id,
-                                                                    "targetGroup",
-                                                                    step.parameters.targetGroup
+                                                                    "target_group",
+                                                                    step.parameters.target_group
                                                                 )
                                                             }
                                                         >
@@ -1483,7 +1503,7 @@ export default function WorkflowDesignerPage() {
                                                         <input
                                                             type="text"
                                                             value={
-                                                                step.parameters.targetGroup
+                                                                step.parameters.target_group
                                                                 || ""
                                                             }
                                                             readOnly={
@@ -1493,7 +1513,7 @@ export default function WorkflowDesignerPage() {
                                                             onChange={(e) =>
                                                                 handleParameterChange(
                                                                     step.id,
-                                                                    "targetGroup",
+                                                                    "target_group",
                                                                     e.target.value
                                                                 )
                                                             }
@@ -1508,8 +1528,8 @@ export default function WorkflowDesignerPage() {
                                                             onClick={() =>
                                                                 handleResolveParameter(
                                                                     step.id,
-                                                                    "targetGroup",
-                                                                    step.parameters.targetGroup
+                                                                    "target_group",
+                                                                    step.parameters.target_group
                                                                 )
                                                             }
                                                         >

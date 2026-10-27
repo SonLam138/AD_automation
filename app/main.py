@@ -12,12 +12,19 @@ from app.auto_engine.runtime.runtime_container import workflow_runtime
 from contextlib import asynccontextmanager
 from app.api.service_controller import router as service_router
 from app.api.mail_report_controller import router as report_router
+from app.api.mail_dashboard_controller import (
+    router as mail_dashboard_router,
+)
+from app.mail_dashboard.repository import (
+    MailDashboardRepository,
+)
 
 @asynccontextmanager
 async def lifespan(
     app: FastAPI,
 ):
 
+    MailDashboardRepository().ensure_schema()
     workflow_runtime.start_workflow_engine()
 
     try:
@@ -83,6 +90,12 @@ app.include_router(
     service_router,
     prefix="/api/v1/service",
     tags=["Service"]
+)
+
+app.include_router(
+    mail_dashboard_router,
+    prefix="/api/v1/service/mail-dashboard",
+    tags=["Mail Dashboard Integration"]
 )
 
 app.include_router(

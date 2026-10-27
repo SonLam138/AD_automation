@@ -40,6 +40,8 @@ INTEGRATION_CLIENTS = {
             "group_member_remove",
 
             "move_to_ou",
+
+            "mail_dashboard_snapshot",
         ],
 
         "enabled": True,

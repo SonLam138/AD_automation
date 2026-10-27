@@ -9,3 +9,4 @@ app/config.py
 **/config.py
 *.md
 !SAD_intergration.md
+!docs/mail-dashboard-contract.md
