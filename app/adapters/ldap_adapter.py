@@ -8,7 +8,7 @@ import ssl
 from app.audit.onboarding_audit import OnboardingAudit
 from datetime import datetime
 from ldap3.utils.conv import escape_filter_chars
-
+from ldap3 import RESTARTABLE
 from app.config import *
 
 class LDAPAdapter:
@@ -46,7 +46,8 @@ class LDAPAdapter:
             server,
             user=username,
             password=password,
-            auto_bind=True
+            auto_bind=True,
+            client_strategy=RESTARTABLE,
         )
 
         return self.connection.bound
