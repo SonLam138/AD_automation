@@ -24,12 +24,12 @@ class LDAPAdapter:
         password,
         port=636
     ):
-        print("=" * 80)
-        print("LDAP CONNECT")
-        print("HOST     =", host)
-        print("USER     =", username)
-        print("PORT     =", port)
-        print("=" * 80)
+        # print("=" * 80)
+        # print("LDAP CONNECT")
+        # print("HOST     =", host)
+        # print("USER     =", username)
+        # print("PORT     =", port)
+        # print("=" * 80)
         tls_config = Tls(
             validate=ssl.CERT_NONE
         )
