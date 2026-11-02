@@ -1,21 +1,52 @@
 {
     "total_jobs_created": 248,
-    "failed_jobs_count": 13,
+    "failed_jobs_count": 15,
     "last_executed_job": {
-        "job_id": "REQ_27102026_B3C9:STEP_02",
-        "action_code": "remove_group_by_dn",
-        "display_name": "Remove user to group to remove permission",
-        "object_name": "ad.auto1",
-        "target": "CN=Test_grp,OU=Hoi so chinh,DC=automate,DC=com,DC=vn",
-        "execute_at": "2026-10-27T14:29:00",
-        "status": "COMPLETED",
-        "error_message": null,
+        "job_id": "REQ_01102026_B2C1:STEP_03",
+        "action_code": "move_user_to_ou",
+        "display_name": "Move To Disabled OU",
+        "object_name": "AD Automation 9",
+        "target": null,
+        "execute_at": "2026-10-01T19:32:00",
+        "status": "FAILED",
+        "error_message": "Dependency job thất bại: STEP_02",
+        "failure_reason": "DEPENDENCY_FAILED",
         "retry_count": 0,
         "max_retry": 3,
         "next_execute_at": null,
-        "timestamp": "2026-10-27T07:29:00.844817"
+        "timestamp": "2026-11-02T07:51:31.744432"
     },
     "recent_failed_jobs": [
+        {
+            "job_id": "REQ_01102026_B2C1:STEP_03",
+            "action_code": "move_user_to_ou",
+            "display_name": "Move To Disabled OU",
+            "object_name": "AD Automation 9",
+            "target": null,
+            "execute_at": "2026-10-01T19:32:00",
+            "status": "FAILED",
+            "error_message": "Dependency job thất bại: STEP_02",
+            "failure_reason": "DEPENDENCY_FAILED",
+            "retry_count": 0,
+            "max_retry": 3,
+            "next_execute_at": null,
+            "timestamp": "2026-11-02T07:51:31.744432"
+        },
+        {
+            "job_id": "REQ_01102026_B2C1:STEP_02",
+            "action_code": "remove_all_groups",
+            "display_name": "Remove user from all Groups",
+            "object_name": "AD Automation 9",
+            "target": null,
+            "execute_at": "2026-10-01T19:31:00",
+            "status": "FAILED",
+            "error_message": "Dependency job thất bại: STEP_MAILBOX",
+            "failure_reason": "DEPENDENCY_FAILED",
+            "retry_count": 0,
+            "max_retry": 3,
+            "next_execute_at": null,
+            "timestamp": "2026-11-02T07:51:31.739429"
+        },
         {
             "job_id": "REQ_27102026_32E4:STEP_02",
             "action_code": "remove_group_by_dn",
@@ -57,59 +88,9 @@
             "max_retry": 3,
             "next_execute_at": null,
             "timestamp": "2026-09-23T01:55:16.612389"
-        },
-        {
-            "job_id": "r:s",
-            "action_code": "x",
-            "display_name": "X",
-            "object_name": "Unknown",
-            "target": null,
-            "execute_at": "2026-09-20T17:56:37.532043",
-            "status": "FAILED",
-            "error_message": "final",
-            "timestamp": "2026-09-20T10:55:37.533559"
-        },
-        {
-            "job_id": "REQ_LONG_LEAVE_FAIL:STEP_02",
-            "action_code": "remove_all_groups",
-            "display_name": "Remove user from all Groups",
-            "object_name": "B",
-            "target": null,
-            "execute_at": "2026-09-20T16:03:20.376360",
-            "status": "FAILED",
-            "error_message": "'RemoveAllGroupsAction' object has no attribute 'ldap_service'",
-            "timestamp": "2026-09-20T09:03:21.402958"
         }
     ],
     "queued_jobs": [
-        {
-            "job_id": "REQ_01102026_B2C1:STEP_03",
-            "action_code": "move_user_to_ou",
-            "display_name": "Move To Disabled OU",
-            "object_name": "AD Automation 9",
-            "target": null,
-            "execute_at": "2026-10-01T19:32:00",
-            "status": null,
-            "error_message": null,
-            "retry_count": 0,
-            "max_retry": 3,
-            "next_execute_at": null,
-            "timestamp": "2026-10-01T04:40:26.509702"
-        },
-        {
-            "job_id": "REQ_01102026_B2C1:STEP_02",
-            "action_code": "remove_all_groups",
-            "display_name": "Remove user from all Groups",
-            "object_name": "AD Automation 9",
-            "target": null,
-            "execute_at": "2026-10-01T19:31:00",
-            "status": null,
-            "error_message": null,
-            "retry_count": 0,
-            "max_retry": 3,
-            "next_execute_at": null,
-            "timestamp": "2026-10-01T04:40:26.500984"
-        },
         {
             "job_id": "REQ_01102026_1B1A:STEP_03",
             "action_code": "move_user_to_ou",

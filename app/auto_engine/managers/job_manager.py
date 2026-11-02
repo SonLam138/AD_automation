@@ -1,8 +1,9 @@
-from datetime import datetime, timedelta
-from typing import List
+from datetime import datetime
+from typing import Dict, List
 
 from app.auto_engine.models.job import (
     Job,
+    JobFailureReason,
     JobStatus,
 )
 from app.auto_engine.services.job_repository import (
@@ -15,8 +16,6 @@ from app.event.job_monitor_payload import (build_job_monitor_payload)
 
 class JobManager:
 
-    RETRY_DELAYS_MINUTES = (1, 5, 15)
-
     def __init__(
         self,
         job_repository: JobRepository,
@@ -28,79 +27,7 @@ class JobManager:
     def update(
         self,
     ) -> None:
-        """
-        Dành cho retry và recovery ở CP sau.
-        """
         pass
-
-    def handle_failure(
-        self,
-        job: Job,
-        error: str = "",
-    ) -> Job:
-        if job.status != JobStatus.RUNNING:
-            raise ValueError(
-                "Chỉ Job RUNNING mới được "
-                "xử lý lỗi. "
-                f"job_id={job.job_id}, "
-                f"status={job.status}"
-            )
-
-        if job.retry_count >= job.max_retry:
-            return self.mark_failed(
-                job=job,
-                error=error,
-            )
-
-        job.retry_count += 1
-        delay_index = min(
-            job.retry_count - 1,
-            len(self.RETRY_DELAYS_MINUTES) - 1,
-        )
-        delay_minutes = (
-            self.RETRY_DELAYS_MINUTES[delay_index]
-        )
-
-        now = (
-            datetime.now(job.execute_at.tzinfo)
-            if job.execute_at.tzinfo is not None
-            else datetime.now()
-        )
-
-        job.status = JobStatus.PENDING
-        job.execute_at = (
-            now
-            + timedelta(minutes=delay_minutes)
-        )
-        job.started_at = None
-        job.completed_at = None
-        job.result_message = None
-        job.error_message = error
-
-        saved_job = self.job_repository.save(
-            job
-        )
-
-        job_monitor_payload = (
-            build_job_monitor_payload(
-                saved_job
-            )
-        )
-
-        emit_event(
-            event_name="JOB_RETRY_SCHEDULED",
-            source="WORKFLOW_ENGINE",
-            status="PENDING",
-            retry_count=saved_job.retry_count,
-            max_retry=saved_job.max_retry,
-            next_execute_at=(
-                saved_job.execute_at.isoformat()
-            ),
-            error_message=saved_job.error_message,
-            **job_monitor_payload,
-        )
-
-        return saved_job
 
     def claim_executable_jobs(
         self,
@@ -134,20 +61,77 @@ class JobManager:
         )
 
         claimed_jobs: List[Job] = []
+        jobs_by_request: Dict[str, List[Job]] = {}
+        cycles_by_request: Dict[str, Dict[str, List[str]]] = {}
 
         for job in pending_jobs:
 
             if len(claimed_jobs) >= limit:
                 break
 
+            request_jobs = jobs_by_request.get(
+                job.request_id
+            )
+            if request_jobs is None:
+                request_jobs = (
+                    self.job_repository.list_by_request_id(
+                        job.request_id
+                    )
+                )
+                jobs_by_request[job.request_id] = (
+                    request_jobs
+                )
+                cycles_by_request[job.request_id] = (
+                    self._dependency_cycles(
+                        request_jobs
+                    )
+                )
+
+            cycle = cycles_by_request[
+                job.request_id
+            ].get(job.action_id)
+            if cycle is not None:
+                self.mark_dependency_failed(
+                    job=job,
+                    error=(
+                        "Dependency cycle detected: "
+                        + " -> ".join(cycle + [cycle[0]])
+                    ),
+                )
+                request_jobs[:] = [
+                    item
+                    for item in request_jobs
+                    if item.action_id != job.action_id
+                ]
+                request_jobs.append(job)
+                continue
+
             if not self._is_due(
                 job
             ):
                 continue
 
-            if not self._dependencies_completed(
-                job
-            ):
+            dependency_state, error = (
+                self._get_dependency_state(
+                    job,
+                    request_jobs,
+                )
+            )
+
+            if error is not None:
+                self.mark_dependency_failed(
+                    job=job,
+                    error=error,
+                )
+                request_jobs[:] = [
+                    item
+                    for item in request_jobs
+                    if item.action_id != job.action_id
+                ]
+                request_jobs.append(job)
+                continue
+
+            if not dependency_state:
                 continue
 
             self.mark_running(
@@ -181,6 +165,7 @@ class JobManager:
         job.completed_at = None
         job.result_message = None
         job.error_message = None
+        job.failure_reason = None
 
         saved_job = (
             self.job_repository.save(
@@ -220,6 +205,7 @@ class JobManager:
         job.completed_at = datetime.now()
         job.result_message = message
         job.error_message = None
+        job.failure_reason = None
 
         saved_job = (
             self.job_repository.save(
@@ -258,10 +244,36 @@ class JobManager:
         job: Job,
         error: str = "",
     ) -> Job:
+        return self._mark_failed(
+            job=job,
+            error=error,
+            failure_reason=JobFailureReason.ACTION_FAILED,
+            expected_status=JobStatus.RUNNING,
+        )
 
-        if job.status != JobStatus.RUNNING:
+    def mark_dependency_failed(
+        self,
+        job: Job,
+        error: str,
+    ) -> Job:
+        return self._mark_failed(
+            job=job,
+            error=error,
+            failure_reason=JobFailureReason.DEPENDENCY_FAILED,
+            expected_status=JobStatus.PENDING,
+        )
+
+    def _mark_failed(
+        self,
+        job: Job,
+        error: str,
+        failure_reason: JobFailureReason,
+        expected_status: JobStatus,
+    ) -> Job:
+
+        if job.status != expected_status:
             raise ValueError(
-                "Chỉ Job RUNNING mới được "
+                f"Chỉ Job {expected_status.value} mới được "
                 "chuyển sang FAILED. "
                 f"job_id={job.job_id}, "
                 f"status={job.status}"
@@ -271,6 +283,7 @@ class JobManager:
         job.completed_at = datetime.now()
         job.result_message = None
         job.error_message = error
+        job.failure_reason = failure_reason
 
         saved_job = (
             self.job_repository.save(
@@ -322,29 +335,25 @@ class JobManager:
 
         return job_execute_at <= now
 
-    def _dependencies_completed(
+    def _get_dependency_state(
         self,
         job: Job,
-    ) -> bool:
+        jobs_in_request: List[Job],
+    ) -> tuple[bool, str | None]:
 
         dependency_ids = (
             job.depends_on or []
         )
 
         if not dependency_ids:
-            return True
-
-        jobs_in_request = (
-            self.job_repository
-            .list_by_request_id(
-                job.request_id
-            )
-        )
+            return True, None
 
         jobs_by_action_id = {
             item.action_id: item
             for item in jobs_in_request
         }
+        failed_dependencies = []
+        waiting_dependencies = []
 
         for dependency_action_id in (
             dependency_ids
@@ -356,12 +365,78 @@ class JobManager:
             )
 
             if dependency_job is None:
-                return False
+                return False, (
+                    "Dependency job không tồn tại: "
+                    f"{dependency_action_id}"
+                )
 
             if (
                 dependency_job.status
-                != JobStatus.COMPLETED
+                in {JobStatus.PENDING, JobStatus.RUNNING}
             ):
-                return False
+                waiting_dependencies.append(
+                    dependency_action_id
+                )
+            elif dependency_job.status in {
+                JobStatus.FAILED,
+                JobStatus.CANCELLED,
+            }:
+                failed_dependencies.append(
+                    dependency_action_id
+                )
 
-        return True
+        if waiting_dependencies:
+            return False, None
+
+        if failed_dependencies and not job.continue_on_error:
+            return False, (
+                "Dependency job thất bại: "
+                + ", ".join(failed_dependencies)
+            )
+
+        return True, None
+
+    @staticmethod
+    def _dependency_cycles(
+        jobs: List[Job],
+    ) -> Dict[str, List[str]]:
+        jobs_by_action_id = {
+            job.action_id: job
+            for job in jobs
+        }
+        visit_states: Dict[str, int] = {}
+        action_stack: List[str] = []
+        cycles: Dict[str, List[str]] = {}
+
+        def visit(action_id: str) -> None:
+            visit_states[action_id] = 1
+            action_stack.append(action_id)
+
+            for dependency_action_id in (
+                jobs_by_action_id[action_id].depends_on
+            ):
+                if dependency_action_id not in jobs_by_action_id:
+                    continue
+
+                dependency_state = visit_states.get(
+                    dependency_action_id,
+                    0,
+                )
+                if dependency_state == 0:
+                    visit(dependency_action_id)
+                elif dependency_state == 1:
+                    cycle_start = action_stack.index(
+                        dependency_action_id
+                    )
+                    cycle = action_stack[cycle_start:]
+                    for cycle_action_id in cycle:
+                        cycles[cycle_action_id] = cycle
+
+            action_stack.pop()
+            visit_states[action_id] = 2
+
+        for action_id in jobs_by_action_id:
+            if visit_states.get(action_id, 0) == 0:
+                visit(action_id)
+
+        return cycles

@@ -10,7 +10,6 @@ from app.auto_engine.managers.job_manager import (
 )
 from app.auto_engine.models.job import (
     Job,
-    JobStatus,
 )
 
 
@@ -106,29 +105,16 @@ class Worker:
                     )
                 )
 
-                failed_job = (
-                    self.job_manager.handle_failure(
+                self.job_manager.mark_failed(
                     job=job,
                     error=error_message,
-                    )
                 )
 
-                if failed_job.status == JobStatus.PENDING:
-                    print(
-                        "[Worker] Job retry scheduled: "
-                        f"{job.job_id}, "
-                        f"retry={failed_job.retry_count}/"
-                        f"{failed_job.max_retry}, "
-                        f"next_execute_at="
-                        f"{failed_job.execute_at}, "
-                        f"error={error_message}"
-                    )
-                else:
-                    print(
-                        "[Worker] Job failed: "
-                        f"{job.job_id}, "
-                        f"error={error_message}"
-                    )
+                print(
+                    "[Worker] Job failed: "
+                    f"{job.job_id}, "
+                    f"error={error_message}"
+                )
 
                 return
 
@@ -151,23 +137,10 @@ class Worker:
         except Exception as ex:
 
             try:
-                failed_job = (
-                    self.job_manager.handle_failure(
-                        job=job,
-                        error=str(ex),
-                    )
+                self.job_manager.mark_failed(
+                    job=job,
+                    error=str(ex),
                 )
-
-                if failed_job.status == JobStatus.PENDING:
-                    print(
-                        "[Worker] Job retry scheduled: "
-                        f"{job.job_id}, "
-                        f"retry={failed_job.retry_count}/"
-                        f"{failed_job.max_retry}, "
-                        f"next_execute_at="
-                        f"{failed_job.execute_at}, "
-                        f"error={ex}"
-                    )
 
             except Exception:
                 print(

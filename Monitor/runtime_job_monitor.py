@@ -19,7 +19,6 @@ _snapshot_lock = threading.Lock()
 SUPPORTED_JOB_EVENTS = {
     "JOB_CREATED",
     "JOB_STARTED",
-    "JOB_RETRY_SCHEDULED",
     "JOB_COMPLETED",
     "JOB_FAILED",
 }
@@ -216,6 +215,11 @@ def build_snapshot_job_view(
                 "error_message"
             ),
 
+        "failure_reason":
+            event.get(
+                "failure_reason"
+            ),
+
         "retry_count":
             event.get(
                 "retry_count"
@@ -387,53 +391,6 @@ def update_runtime_job_from_event(
             ] = remove_job_from_queue(
                 queued_jobs,
                 started_job_id,
-            )
-
-        #
-        # JOB_RETRY_SCHEDULED
-        #
-        # Job đã lỗi tạm thời và được đưa lại vào queue.
-        # Không tăng failed count vì chưa thất bại cuối cùng.
-        #
-
-        elif event_name == "JOB_RETRY_SCHEDULED":
-
-            retry_job = (
-                build_snapshot_job_view(
-                    event
-                )
-            )
-
-            queued_jobs = list(
-                data.get(
-                    "queued_jobs",
-                    []
-                )
-            )
-
-            queued_jobs = [
-                item
-                for item in queued_jobs
-                if (
-                    item.get(
-                        "job_id"
-                    )
-                    !=
-                    retry_job.get(
-                        "job_id"
-                    )
-                )
-            ]
-
-            queued_jobs.insert(
-                0,
-                retry_job,
-            )
-
-            data[
-                "queued_jobs"
-            ] = normalize_queued_jobs(
-                queued_jobs
             )
 
         #

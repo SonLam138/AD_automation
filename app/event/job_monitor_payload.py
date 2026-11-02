@@ -1,5 +1,7 @@
 from typing import Any, Dict
 
+from app.auto_engine.models.job import JobFailureReason
+
 
 def build_job_monitor_payload(
     job,
@@ -201,4 +203,13 @@ def build_job_monitor_payload(
                 "max_retry",
                 0,
             ),
+
+        "failure_reason": (
+            job.failure_reason.value
+            if isinstance(
+                job.failure_reason,
+                JobFailureReason,
+            )
+            else job.failure_reason
+        ),
     }

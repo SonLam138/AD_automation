@@ -13,6 +13,11 @@ class JobStatus(str, Enum):
     CANCELLED = "CANCELLED"
 
 
+class JobFailureReason(str, Enum):
+    ACTION_FAILED = "ACTION_FAILED"
+    DEPENDENCY_FAILED = "DEPENDENCY_FAILED"
+
+
 class Job(BaseModel):
     job_id: str
 
@@ -56,3 +61,5 @@ class Job(BaseModel):
     result_message: str | None = None
 
     error_message: str | None = None
+
+    failure_reason: JobFailureReason | None = None

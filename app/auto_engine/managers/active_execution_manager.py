@@ -3,6 +3,7 @@ from app.auto_engine.models.active_execution import (
     ActiveExecutionStatus,
 )
 from app.auto_engine.models.job import (
+    Job,
     JobStatus,
 )
 from app.auto_engine.services.active_execution_repository import (
@@ -92,6 +93,12 @@ class ActiveExecutionManager:
                     job.action_id
                 )
 
+            elif job.status == JobStatus.CANCELLED:
+
+                failed_action_ids.append(
+                    job.action_id
+                )
+
             elif job.status == JobStatus.RUNNING:
 
                 current_action_id = (
@@ -111,79 +118,108 @@ class ActiveExecutionManager:
         )
 
         self._update_execution_status(
-            active_execution
+            active_execution,
+            jobs,
         )
 
     def _update_execution_status(
         self,
         active_execution: ActiveExecution,
+        jobs: list[Job],
     ) -> None:
 
         total_actions = len(
             active_execution.actions
         )
 
+        if total_actions == 0:
+            return
+
         completed_count = len(
             active_execution.completed_action_ids
         )
 
-        failed_count = len(
-            active_execution.failed_action_ids
+        jobs_by_action_id = {
+            job.action_id: job
+            for job in jobs
+        }
+
+        if active_execution.current_action_id is not None:
+            active_execution.status = ActiveExecutionStatus.RUNNING
+            return
+
+        terminal_statuses = {
+            JobStatus.COMPLETED,
+            JobStatus.FAILED,
+            JobStatus.CANCELLED,
+        }
+        expected_action_ids = {
+            action.id
+            for action in active_execution.actions
+        }
+        all_jobs_terminal = (
+            expected_action_ids.issubset(
+                jobs_by_action_id
+            )
+            and all(
+                jobs_by_action_id[action_id].status
+                in terminal_statuses
+                for action_id in expected_action_ids
+            )
         )
 
-        #
-        # COMPLETED
-        #
-        if (
-            total_actions > 0
-            and
-            completed_count == total_actions
-        ):
+        if not all_jobs_terminal:
+            if jobs:
+                active_execution.status = (
+                    ActiveExecutionStatus.JOB_CREATED
+                )
+            return
+
+        if total_actions > 0 and completed_count == total_actions:
             active_execution.status = (
                 ActiveExecutionStatus.COMPLETED
             )
             return
 
-        #
-        # FAILED
-        #
-        if failed_count > 0:
-            active_execution.status = (
-                ActiveExecutionStatus.FAILED
-            )
-            return
+        failed_action_ids = set(
+            active_execution.failed_action_ids
+        )
+        tolerated_failure_ids = set()
 
-        #
-        # RUNNING
-        #
+        for job in jobs:
+            if job.status != JobStatus.COMPLETED:
+                continue
+            if not job.continue_on_error:
+                continue
+
+            for dependency_action_id in job.depends_on:
+                dependency_job = jobs_by_action_id.get(
+                    dependency_action_id
+                )
+                if (
+                    dependency_job is not None
+                    and dependency_job.status
+                    in {
+                        JobStatus.FAILED,
+                        JobStatus.CANCELLED,
+                    }
+                ):
+                    tolerated_failure_ids.add(
+                        dependency_action_id
+                    )
+
         if (
-            active_execution.current_action_id
-            is not None
+            failed_action_ids
+            and failed_action_ids.issubset(
+                tolerated_failure_ids
+            )
         ):
             active_execution.status = (
-                ActiveExecutionStatus.RUNNING
+                ActiveExecutionStatus.COMPLETED_WITH_ERRORS
             )
             return
 
-        #
-        # JOB_CREATED
-        #
-        has_jobs = (
-            completed_count > 0
-            or
-            failed_count > 0
-            or
-            self.job_repository
-            .list_by_request_id(
-                active_execution.request_id
-            )
-        )
-
-        if has_jobs:
-            active_execution.status = (
-                ActiveExecutionStatus.JOB_CREATED
-            )
-            return
+        active_execution.status = ActiveExecutionStatus.FAILED
 
     def _should_cleanup(
         self,
@@ -192,7 +228,6 @@ class ActiveExecutionManager:
 
         return active_execution.status in [
             ActiveExecutionStatus.COMPLETED,
-            #ActiveExecutionStatus.FAILED,
             ActiveExecutionStatus.CANCELLED,
         ]
 

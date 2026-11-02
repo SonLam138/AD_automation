@@ -13,6 +13,7 @@ class ActiveExecutionStatus(str, Enum):
     PAUSED = "PAUSED"
     FAILED = "FAILED"
     COMPLETED = "COMPLETED"
+    COMPLETED_WITH_ERRORS = "COMPLETED_WITH_ERRORS"
     CANCELLED = "CANCELLED"
 
 

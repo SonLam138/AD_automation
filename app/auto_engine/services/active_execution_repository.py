@@ -86,6 +86,7 @@ class ActiveExecutionRepository:
 
             if active_execution.status not in {
                 ActiveExecutionStatus.COMPLETED,
+                ActiveExecutionStatus.COMPLETED_WITH_ERRORS,
                 ActiveExecutionStatus.CANCELLED,
             }:
                 active_executions.append(active_execution)
