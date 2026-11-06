@@ -171,6 +171,18 @@ class ServiceControllerAdTests(unittest.TestCase):
             self.fake_ldap,
         )
         self.ldap_patch.start()
+        self.workflow_runtime_patch = patch.object(
+            service_controller.workflow_runtime,
+            "run_plan_engine",
+            return_value=SimpleNamespace(
+                request_id="REQ_06112026_A1B2",
+                workflow_id="NEW_ONBOARDING",
+                execute_at=datetime(2026, 11, 6, 15, 0),
+            ),
+        )
+        self.workflow_runtime = (
+            self.workflow_runtime_patch.start()
+        )
         self.audit_engine = create_engine(
             "sqlite://",
             connect_args={"check_same_thread": False},
@@ -220,29 +232,13 @@ class ServiceControllerAdTests(unittest.TestCase):
     def tearDown(self):
         self.client.close()
         self.ldap_patch.stop()
+        self.workflow_runtime_patch.stop()
         self.audit_session_patch.stop()
         self.audit_engine_patch.stop()
         self.audit_engine.dispose()
 
     def test_kept_integration_routes_dispatch_as_before(self):
         routes = [
-            (
-                "/employee-onboarding",
-                {
-                    "source_request_id": "MAIL-REQ-ROUTE",
-                    "employee_id": "E123",
-                    "first_name": "A",
-                    "last_name": "User",
-                    "full_name": "A User",
-                    "sam_account_name": "auser",
-                    "password": "Example-password-123!",
-                    "target_ou_dn": "OU=Users,DC=example,DC=com",
-                    "title": "Engineer",
-                    "department": "IT",
-                    "dry_run": False,
-                },
-                "create_user",
-            ),
             (
                 "/integration/ad/users/disable",
                 {"sam_account_name": "auser"},
@@ -303,21 +299,6 @@ class ServiceControllerAdTests(unittest.TestCase):
         self.assertEqual(
             [call[0] for call in self.fake_ldap.calls],
             [route[2] for route in routes],
-        )
-        self.assertEqual(
-            set(self.fake_ldap.calls[0][2]),
-            {"audit"},
-        )
-        self.assertEqual(
-            self.fake_ldap.calls[0][1][0].display_name,
-            "A User",
-        )
-        self.assertFalse(
-            self.fake_ldap.calls[0][1][0].dry_run
-        )
-        self.assertEqual(
-            self.fake_ldap.calls[0][1][0].description,
-            None,
         )
 
     def test_group_add_and_remove_resolve_email_before_name(self):
@@ -859,7 +840,6 @@ class ServiceControllerAdTests(unittest.TestCase):
                 "last_name": "User",
                 "full_name": "A User",
                 "sam_account_name": "auser",
-                "password": "Example-password-123!",
                 "target_ou_dn": "OU=Users,DC=example,DC=com",
                 "title": "Engineer",
                 "department": "IT",
@@ -868,11 +848,56 @@ class ServiceControllerAdTests(unittest.TestCase):
             headers={"Authorization": f"Bearer {token}"},
         )
 
-        self.assertEqual(response.status_code, 200)
-        self.assertTrue(response.json()["success"])
-        self.assertIn("audit", self.fake_ldap.calls[-1][2])
+        self.assertEqual(response.status_code, 202)
+        self.assertEqual(
+            response.json(),
+            {
+                "success": True,
+                "accepted": True,
+                "status": "SCHEDULED",
+                "source_request_id": "MAIL-REQ-JWT",
+                "request_id": "REQ_06112026_A1B2",
+                "workflow_id": "NEW_ONBOARDING",
+                "execute_at": "2026-11-06T15:00:00",
+            },
+        )
+        self.workflow_runtime.assert_called_once()
+        self.assertEqual(self.fake_ldap.calls, [])
 
-    def test_employee_onboarding_replays_success_without_calling_ldap_twice(self):
+    def test_employee_onboarding_creates_plan_without_password_in_business_data(self):
+        response = self.client.post(
+            "/api/v1/service/employee-onboarding",
+            json={
+                "source_request_id": "MAIL-REQ-ROUTE",
+                "employee_id": "E123",
+                "first_name": "A",
+                "last_name": "User",
+                "full_name": "A User",
+                "sam_account_name": "auser",
+                "target_ou_dn": "OU=Users,DC=example,DC=com",
+                "title": "Engineer",
+                "department": "IT",
+            },
+        )
+
+        self.assertEqual(response.status_code, 202)
+        self.workflow_runtime.assert_called_once()
+        call = self.workflow_runtime.call_args
+        self.assertEqual(
+            call.kwargs["source_data"]["source_request_id"],
+            "MAIL-REQ-ROUTE",
+        )
+        self.assertNotIn(
+            "password",
+            call.kwargs["source_data"],
+        )
+        self.assertEqual(
+            type(call.kwargs["adapter"]).__name__,
+            "EmployeeOnboardingApiAdapter",
+        )
+        self.assertEqual(self.fake_ldap.calls, [])
+
+    def test_employee_onboarding_replays_scheduled_request_without_duplicate_plan(self):
         payload = {
             "source_request_id": "MAIL-REQ-IDEMPOTENT",
             "employee_id": "E123",
@@ -880,7 +905,6 @@ class ServiceControllerAdTests(unittest.TestCase):
             "last_name": "User",
             "full_name": "A User",
             "sam_account_name": "auser",
-            "password": "Example-password-123!",
             "target_ou_dn": "OU=Users,DC=example,DC=com",
             "title": "Engineer",
             "department": "IT",
@@ -897,18 +921,24 @@ class ServiceControllerAdTests(unittest.TestCase):
             json=retry_payload,
         )
 
-        self.assertEqual(first_response.status_code, 200)
-        self.assertEqual(second_response.status_code, 200)
+        self.assertEqual(first_response.status_code, 202)
+        self.assertEqual(second_response.status_code, 202)
         self.assertEqual(second_response.json(), first_response.json())
+        self.workflow_runtime.assert_called_once()
+        self.assertEqual(self.fake_ldap.calls, [])
+
+        repository = onboarding_audit_repository.OnboardingAuditRepository()
+        record, claimed = repository.claim(
+            source_request_id="MAIL-REQ-IDEMPOTENT",
+            employee_id="E123",
+            requested_account="auser",
+        )
+        self.assertFalse(claimed)
+        self.assertEqual(record.status, "SCHEDULED")
+        self.assertIsNone(record.completed_at)
         self.assertEqual(
-            len(
-                [
-                    call
-                    for call in self.fake_ldap.calls
-                    if call[0] == "create_user"
-                ]
-            ),
-            1,
+            json.loads(record.response_json)["request_id"],
+            "REQ_06112026_A1B2",
         )
 
     def test_onboarding_repository_migrates_existing_audit_table(self):
@@ -962,7 +992,6 @@ class ServiceControllerAdTests(unittest.TestCase):
             "last_name": "User",
             "full_name": "A User",
             "sam_account_name": "auser",
-            "password": "Example-password-123!",
             "target_ou_dn": "OU=Users,DC=example,DC=com",
             "title": "Engineer",
             "department": "IT",
@@ -978,16 +1007,14 @@ class ServiceControllerAdTests(unittest.TestCase):
             json=payload,
         )
 
-        self.assertEqual(first_response.status_code, 200)
+        self.assertEqual(first_response.status_code, 202)
         self.assertEqual(second_response.status_code, 409)
         self.assertEqual(
             second_response.json()["detail"]["code"],
             "idempotency_key_payload_mismatch",
         )
-        self.assertEqual(
-            sum(call[0] == "create_user" for call in self.fake_ldap.calls),
-            1,
-        )
+        self.workflow_runtime.assert_called_once()
+        self.assertEqual(self.fake_ldap.calls, [])
 
     def test_employee_onboarding_returns_in_progress_for_duplicate(self):
         repository = onboarding_audit_repository.OnboardingAuditRepository()
@@ -1005,7 +1032,6 @@ class ServiceControllerAdTests(unittest.TestCase):
                 "last_name": "User",
                 "full_name": "A User",
                 "sam_account_name": "auser",
-                "password": "Example-password-123!",
                 "target_ou_dn": "OU=Users,DC=example,DC=com",
                 "title": "Engineer",
                 "department": "IT",
@@ -1019,11 +1045,10 @@ class ServiceControllerAdTests(unittest.TestCase):
         )
         self.assertEqual(self.fake_ldap.calls, [])
 
-    def test_employee_onboarding_returns_failure_when_adapter_reports_failure(self):
-        self.fake_ldap.create_user_result = {
-            "success": False,
-            "error": {"description": "LDAP add failed"},
-        }
+    def test_employee_onboarding_records_plan_generation_failure(self):
+        self.workflow_runtime.side_effect = ValueError(
+            "Workflow not found"
+        )
 
         response = self.client.post(
             "/api/v1/service/employee-onboarding",
@@ -1034,7 +1059,6 @@ class ServiceControllerAdTests(unittest.TestCase):
                 "last_name": "User",
                 "full_name": "A User",
                 "sam_account_name": "auser",
-                "password": "Example-password-123!",
                 "target_ou_dn": "OU=Users,DC=example,DC=com",
                 "title": "Engineer",
                 "department": "IT",
@@ -1042,13 +1066,25 @@ class ServiceControllerAdTests(unittest.TestCase):
             },
         )
 
-        self.assertEqual(response.status_code, 500)
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(
+            response.json()["detail"],
+            "Workflow not found",
+        )
+        repository = onboarding_audit_repository.OnboardingAuditRepository()
+        record, claimed = repository.claim(
+            source_request_id="MAIL-REQ-FAIL",
+            employee_id="E123",
+            requested_account="auser",
+        )
+        self.assertFalse(claimed)
+        self.assertEqual(record.status, "FAILED")
+        self.assertEqual(record.response_status, 400)
 
-    def test_employee_onboarding_replays_failure_without_calling_ldap_twice(self):
-        self.fake_ldap.create_user_result = {
-            "success": False,
-            "error": {"description": "LDAP add failed"},
-        }
+    def test_employee_onboarding_replays_plan_generation_failure(self):
+        self.workflow_runtime.side_effect = RuntimeError(
+            "Workflow runtime unavailable"
+        )
         payload = {
             "source_request_id": "MAIL-REQ-FAILED-REPLAY",
             "employee_id": "E123",
@@ -1056,7 +1092,6 @@ class ServiceControllerAdTests(unittest.TestCase):
             "last_name": "User",
             "full_name": "A User",
             "sam_account_name": "auser",
-            "password": "Example-password-123!",
             "target_ou_dn": "OU=Users,DC=example,DC=com",
             "title": "Engineer",
             "department": "IT",
@@ -1074,10 +1109,8 @@ class ServiceControllerAdTests(unittest.TestCase):
         self.assertEqual(first_response.status_code, 500)
         self.assertEqual(second_response.status_code, 500)
         self.assertEqual(second_response.json(), first_response.json())
-        self.assertEqual(
-            sum(call[0] == "create_user" for call in self.fake_ldap.calls),
-            1,
-        )
+        self.workflow_runtime.assert_called_once()
+        self.assertEqual(self.fake_ldap.calls, [])
 
     def test_create_user_persists_successful_step_audit_by_source_request_id(self):
         class Connection:
@@ -1099,7 +1132,11 @@ class ServiceControllerAdTests(unittest.TestCase):
                 "find_available_display_name",
                 return_value="A User",
             ),
-            patch.object(adapter, "set_password", return_value=True),
+            patch.object(
+                adapter,
+                "set_password",
+                return_value=True,
+            ) as set_password_mock,
             patch.object(adapter, "_enable_user_by_dn", return_value=True),
             patch.object(
                 adapter,
@@ -1133,6 +1170,10 @@ class ServiceControllerAdTests(unittest.TestCase):
             )
 
         self.assertTrue(result["success"])
+        set_password_mock.assert_called_once_with(
+            "CN=A User,OU=Users,DC=example,DC=com",
+            "Mnv@E123",
+        )
         self.assertEqual(
             result["source_request_id"],
             "MAIL-REQ-AUDIT-SUCCESS",
@@ -1163,6 +1204,10 @@ class ServiceControllerAdTests(unittest.TestCase):
         self.assertTrue(all(item["success"] for item in outcomes))
         self.assertNotIn(
             "Sensitive-password-123!",
+            record.step_outcomes_json,
+        )
+        self.assertNotIn(
+            "Mnv@E123",
             record.step_outcomes_json,
         )
 

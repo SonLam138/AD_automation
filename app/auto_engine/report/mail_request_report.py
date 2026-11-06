@@ -30,4 +30,6 @@ class MailRequestReport:
 
     onboarding_failed: int = 0
 
+    onboarding_scheduled: int = 0
+
     onboarding_details: list = None

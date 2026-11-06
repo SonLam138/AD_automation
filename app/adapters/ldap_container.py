@@ -11,11 +11,6 @@ from app.security.ldap_credential_provider import (
     LdapCredentialProvider
 )
 
-
-
-
-
-
 ldap = LDAPAdapter()
 
 ldap.connect(

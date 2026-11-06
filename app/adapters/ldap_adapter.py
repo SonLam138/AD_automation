@@ -221,7 +221,10 @@ class LDAPAdapter:
 
             password_result = run_step(
                 "set_password",
-                lambda: self.set_password(user_dn, request.password),
+                lambda: self.set_password(
+                    user_dn,
+                    f"Mnv@{request.employee_id.strip()}",
+                ),
             )
             if not password_result:
                 return failure_result("set_password")

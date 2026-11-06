@@ -32,6 +32,9 @@ OFFBOARDING_CONTEXT_MAPPING = {
         "chế độ",
         "thai sản",
     ],
+    "RA_SOAT": [
+        "ra_soat",
+    ],
 
 }
 
@@ -41,6 +44,9 @@ OFFBOARDING_TARGET_OU_MAPPING = {
 
     "LONG_LEAVE":
         "OU=Nghi che do, DC=automate, DC=com, DC=vn",
+
+    "RA_SOAT":
+        "OU=Disabled Account, DC=automate, DC=com, DC=vn",
 }
 
 

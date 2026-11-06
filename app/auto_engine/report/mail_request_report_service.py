@@ -76,6 +76,7 @@ class MailRequestReportService:
 
         onboarding_success = 0
         onboarding_failed = 0
+        onboarding_scheduled = 0
 
         for item in (
             self.onboarding_repository
@@ -94,6 +95,12 @@ class MailRequestReportService:
             elif item["status"] == "FAILED":
 
                 onboarding_failed = (
+                    item["total"]
+                )
+
+            elif item["status"] == "SCHEDULED":
+
+                onboarding_scheduled = (
                     item["total"]
                 )
 
@@ -155,6 +162,9 @@ class MailRequestReportService:
 
                 onboarding_failed=
                     onboarding_failed,
+
+                onboarding_scheduled=
+                    onboarding_scheduled,
 
                 onboarding_details=
                     onboarding_details,
@@ -266,6 +276,11 @@ class MailRequestReportService:
         lines.append(
             f"FAILED: "
             f"{report.onboarding_failed}"
+        )
+
+        lines.append(
+            f"SCHEDULED: "
+            f"{report.onboarding_scheduled}"
         )
 
         lines.append(

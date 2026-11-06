@@ -169,6 +169,11 @@ action_registry = (
 # USER ACTIONS
 # ==================================================
 action_registry.register(
+    "create_user",
+    CreateUserAction(),
+)
+
+action_registry.register(
     "disable_user",
     DisableUserAction(),
 )
@@ -176,6 +181,16 @@ action_registry.register(
 action_registry.register(
     "onprem_disable_mailbox",
     OnpremDisableMailboxAction(),
+)
+
+action_registry.register(
+    "onprem_create_mailbox",
+    OnpremCreateMailboxAction(),
+)
+
+action_registry.register(
+    "online_create_mailbox",
+    OnlineCreateMailboxAction(),
 )
 
 action_registry.register(

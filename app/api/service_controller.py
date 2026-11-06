@@ -36,9 +36,15 @@ from app.models.ad_tool import (
     IntegrationMoveToOuRequest,
     UpdateUserDisplayNameRequest,
 )
+from app.auto_engine.models.employee_onboarding_adapter import (
+    EmployeeOnboardingApiAdapter,
+)
 from app.audit.onboarding_audit import OnboardingAudit
 from app.auto_engine.sqlite.onboarding_audit_repository import (
     OnboardingAuditRepository,
+)
+from app.auto_engine.runtime.runtime_container import (
+    workflow_runtime,
 )
 from app.auth.integration_authorization import (require_integration_endpoint)
 
@@ -242,7 +248,10 @@ def service_employee_offboarding(
         )
 
 
-@router.post("/employee-onboarding")
+@router.post(
+    "/employee-onboarding",
+    status_code=202,
+)
 def service_employee_onboarding(
     request: CreateAdUserRequest,
     claims=Depends(require_service_token),
@@ -306,7 +315,10 @@ def service_employee_onboarding(
         if record.response_status >= 400:
             raise HTTPException(
                 status_code=record.response_status,
-                detail=cached_response["detail"],
+                detail=cached_response.get(
+                    "detail",
+                    cached_response,
+                ),
             )
         return cached_response
 
@@ -320,27 +332,50 @@ def service_employee_onboarding(
     )
 
     try:
-        result = _execute_integration_ad_action(
-            lambda: ldap.create_user(
-                request,
-                audit=audit,
+        plan = workflow_runtime.run_plan_engine(
+            adapter=EmployeeOnboardingApiAdapter(),
+            source_data=request.model_dump(
+                mode="python"
             ),
-            require_success=True,
         )
-        status = "DRY_RUN" if result.get("dry_run") else "SUCCESS"
+
+        result = {
+            "success": True,
+            "accepted": True,
+            "status": "SCHEDULED",
+            "source_request_id": request.source_request_id,
+            "request_id": plan.request_id,
+            "workflow_id": plan.workflow_id,
+            "execute_at": plan.execute_at.isoformat(),
+        }
         audit.complete(
-            status=status,
+            status="SCHEDULED",
             response=result,
-            response_status=200,
+            response_status=202,
         )
         return result
-    except HTTPException as ex:
+    except ValueError as ex:
+        detail = str(ex)
         audit.complete(
             status="FAILED",
-            response={"detail": ex.detail},
-            response_status=ex.status_code,
+            response={"detail": detail},
+            response_status=400,
         )
-        raise
+        raise HTTPException(
+            status_code=400,
+            detail=detail,
+        ) from ex
+    except Exception as ex:
+        detail = str(ex)
+        audit.complete(
+            status="FAILED",
+            response={"detail": detail},
+            response_status=500,
+        )
+        raise HTTPException(
+            status_code=500,
+            detail=detail,
+        ) from ex
 
 
 @router.post("/integration/ad/users/disable")

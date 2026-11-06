@@ -130,6 +130,19 @@ class OnboardingAuditRepository:
             )
         return record.id
 
+    def get_by_source_request_id(
+        self,
+        source_request_id: str,
+    ) -> OnboardingAuditRecord | None:
+        self.ensure_schema()
+        with SessionLocal() as session:
+            return session.execute(
+                select(OnboardingAuditRecord).where(
+                    OnboardingAuditRecord.source_request_id
+                    == source_request_id
+                )
+            ).scalar_one_or_none()
+
     def complete(
         self,
         audit_id: int,
@@ -138,10 +151,15 @@ class OnboardingAuditRepository:
         response_status: int,
         actual_account: str | None = None,
     ) -> None:
-        if status not in {"SUCCESS", "FAILED", "DRY_RUN"}:
+        if status not in {
+            "SCHEDULED",
+            "SUCCESS",
+            "FAILED",
+            "DRY_RUN",
+        }:
             raise ValueError(f"Invalid onboarding audit status: {status}")
 
-        completed_at = datetime.utcnow()
+        updated_at = datetime.utcnow()
         with SessionLocal() as session:
             record = session.execute(
                 select(OnboardingAuditRecord).where(
@@ -152,8 +170,12 @@ class OnboardingAuditRepository:
             record.actual_account = actual_account
             record.response_json = json.dumps(response)
             record.response_status = response_status
-            record.updated_at = completed_at
-            record.completed_at = completed_at
+            record.updated_at = updated_at
+            record.completed_at = (
+                None
+                if status == "SCHEDULED"
+                else updated_at
+            )
             session.commit()
 
     def record_step(

@@ -52,12 +52,11 @@ class DetectionFeedbackRequest(BaseModel):
 
 class CreateAdUserRequest(BaseModel):
     source_request_id: str = Field(min_length=1)
-    employee_id: str
+    employee_id: str = Field(min_length=1)
     first_name: str
     last_name: str
     full_name: str
     sam_account_name: str
-    password: str
     target_ou_dn: str
     title: str
     department: str
@@ -65,6 +64,10 @@ class CreateAdUserRequest(BaseModel):
     description: str | None = None
     dry_run: bool = False
     groups: list[str] = Field(default_factory=list)
+    is_onprem: bool | None = None
+    user_principal_name: str | None = None
+    license_sku_id: str | None = None
+    disabled_plan_ids: list[str] = Field(default_factory=list)
 
     @field_validator("source_request_id")
     @classmethod
@@ -72,6 +75,14 @@ class CreateAdUserRequest(BaseModel):
         value = value.strip()
         if not value:
             raise ValueError("source_request_id must not be blank")
+        return value
+
+    @field_validator("employee_id")
+    @classmethod
+    def employee_id_must_not_be_blank(cls, value: str) -> str:
+        value = value.strip()
+        if not value:
+            raise ValueError("employee_id must not be blank")
         return value
 
 

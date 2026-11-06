@@ -5,8 +5,14 @@ from app.adapters.ldap_container import (
     ldap,
 )
 import requests
+from datetime import datetime
 
 from app.auth.jwt_handler import create_service_token
+from app.audit.onboarding_audit import OnboardingAudit
+from app.auto_engine.sqlite.onboarding_audit_repository import (
+    OnboardingAuditRepository,
+)
+from app.models.ad_tool import CreateAdUserRequest
 
 class BaseAdAction(ABC):
 
@@ -134,6 +140,47 @@ class BaseAdAction(ABC):
             "Không xác định được action_id "
             "trong execution_context"
         )
+
+    @staticmethod
+    def _execute_mail_platform_action(
+        request_id: str,
+        action_code: str,
+        parameters: Dict[str, Any],
+    ) -> Dict[str, Any]:
+        token = create_service_token()
+        response = requests.post(
+            "http://localhost:8001/api/v1/actions/execute",
+            headers={
+                "Authorization": f"Bearer {token}",
+            },
+            json={
+                "request_id": request_id,
+                "action_code": action_code,
+                "parameters": parameters,
+            },
+            timeout=60,
+        )
+        response.raise_for_status()
+
+        result = response.json()
+        if not isinstance(result, dict):
+            raise ValueError(
+                "Mail Platform action response must be an object"
+            )
+        return result
+
+    @staticmethod
+    def _get_workflow_request_id(
+        execution_context: Dict[str, Any] | None,
+    ) -> str:
+        request_id = (execution_context or {}).get(
+            "request_id"
+        )
+        if not isinstance(request_id, str) or not request_id.strip():
+            raise ValueError(
+                "request_id is required to call Mail Platform"
+            )
+        return request_id.strip()
 
     @classmethod
     def _get_group_name(
@@ -301,6 +348,77 @@ class DisableUserAction(
         }
 
 
+class CreateUserAction(BaseAdAction):
+
+    def execute(
+        self,
+        business_data: Dict[str, Any],
+        execution_context: Dict[str, Any] | None = None,
+    ) -> Dict[str, Any]:
+        source_request_id = business_data.get(
+            "source_request_id"
+        )
+        if (
+            not isinstance(source_request_id, str)
+            or not source_request_id.strip()
+        ):
+            raise ValueError(
+                "source_request_id is required for create_user"
+            )
+
+        request = CreateAdUserRequest(
+            source_request_id=source_request_id.strip(),
+            employee_id=business_data["employee_id"],
+            first_name=business_data["first_name"],
+            last_name=business_data["last_name"],
+            full_name=business_data["full_name"],
+            sam_account_name=business_data["sam_account_name"],
+            display_name=business_data.get("display_name"),
+            target_ou_dn=business_data["target_ou_dn"],
+            title=business_data["title"],
+            department=business_data["department"],
+            description=business_data.get("description"),
+            dry_run=bool(business_data.get("dry_run", False)),
+            groups=business_data.get("groups", []),
+            is_onprem=business_data.get("is_onprem"),
+            user_principal_name=business_data.get(
+                "user_principal_name"
+            ),
+            license_sku_id=business_data.get("license_sku_id"),
+            disabled_plan_ids=business_data.get(
+                "disabled_plan_ids",
+                [],
+            ),
+        )
+
+        audit_repository = OnboardingAuditRepository()
+        audit_record = audit_repository.get_by_source_request_id(
+            request.source_request_id
+        )
+        if audit_record is None:
+            raise ValueError(
+                "Onboarding audit record not found for "
+                f"source_request_id={request.source_request_id}"
+            )
+
+        audit = OnboardingAudit(
+            source_request_id=request.source_request_id,
+            employee_id=request.employee_id,
+            requested_account=request.sam_account_name,
+            repository=audit_repository,
+            audit_id=audit_record.id,
+        )
+        result = ldap.create_user(
+            request,
+            audit=audit,
+        )
+        if not isinstance(result, dict):
+            raise RuntimeError(
+                "LDAP create_user returned an invalid result"
+            )
+        return result
+
+
 class OnpremDisableMailboxAction(
     BaseAdAction
 ):
@@ -362,6 +480,150 @@ class OnpremDisableMailboxAction(
         response.raise_for_status()
 
         return response.json()
+
+
+class OnpremCreateMailboxAction(BaseAdAction):
+
+    def execute(
+        self,
+        business_data: Dict[str, Any],
+        execution_context: Dict[str, Any] | None = None,
+    ) -> Dict[str, Any]:
+        source_request_id = business_data.get(
+            "source_request_id"
+        )
+        if (
+            not isinstance(source_request_id, str)
+            or not source_request_id.strip()
+        ):
+            raise ValueError(
+                "source_request_id is required for mailbox creation"
+            )
+
+        audit_repository = OnboardingAuditRepository()
+        audit_record = audit_repository.get_by_source_request_id(
+            source_request_id.strip()
+        )
+        if audit_record is None or not audit_record.actual_account:
+            raise ValueError(
+                "Resolved AD account is not available for mailbox creation"
+            )
+
+        audit = OnboardingAudit(
+            source_request_id=source_request_id.strip(),
+            employee_id=audit_record.employee_id,
+            requested_account=audit_record.requested_account,
+            repository=audit_repository,
+            audit_id=audit_record.id,
+        )
+        audit.set_actual_account(
+            audit_record.actual_account
+        )
+        started_at = datetime.utcnow()
+
+        try:
+            result = self._execute_mail_platform_action(
+                request_id=self._get_workflow_request_id(
+                    execution_context
+                ),
+                action_code="ONPREM_ENABLE_MAILBOX",
+                parameters={
+                    "identity": audit_record.actual_account,
+                },
+            )
+        except Exception as ex:
+            completed_at = datetime.utcnow()
+            audit.record_step(
+                step_name="onprem_create_mailbox",
+                success=False,
+                started_at=started_at,
+                completed_at=completed_at,
+                details={"error_type": type(ex).__name__},
+            )
+            audit.finish("FAILED")
+            raise
+
+        success = result.get("success") is True
+        audit.record_step(
+            step_name="onprem_create_mailbox",
+            success=success,
+            started_at=started_at,
+            completed_at=datetime.utcnow(),
+            details={
+                "action_code": result.get("action_code"),
+                "error": result.get("error"),
+            },
+        )
+        audit.finish(
+            "SUCCESS" if success else "FAILED"
+        )
+        return result
+
+
+class OnlineCreateMailboxAction(BaseAdAction):
+
+    def execute(
+        self,
+        business_data: Dict[str, Any],
+        execution_context: Dict[str, Any] | None = None,
+    ) -> Dict[str, Any]:
+        user_principal_name = business_data.get(
+            "user_principal_name"
+        )
+        if (
+            not isinstance(user_principal_name, str)
+            or not user_principal_name.strip()
+        ):
+            raise ValueError(
+                "user_principal_name is required for online mailbox creation"
+            )
+
+        license_sku_id = business_data.get(
+            "license_sku_id"
+        )
+        if (
+            not isinstance(license_sku_id, str)
+            or not license_sku_id.strip()
+        ):
+            raise ValueError(
+                "license_sku_id is required for online mailbox creation"
+            )
+
+        disabled_plan_ids = business_data.get(
+            "disabled_plan_ids",
+            [],
+        )
+        if (
+            not isinstance(disabled_plan_ids, list)
+            or any(
+                not isinstance(plan_id, str)
+                or not plan_id.strip()
+                for plan_id in disabled_plan_ids
+            )
+        ):
+            raise ValueError(
+                "disabled_plan_ids must be a list of non-empty strings"
+            )
+
+        return self._execute_mail_platform_action(
+            request_id=self._get_workflow_request_id(
+                execution_context
+            ),
+            action_code="ONLINE_ENABLE_MAILBOX",
+            parameters={
+                "user_principal_name": user_principal_name.strip(),
+                "add_licenses": [
+                    {
+                        "sku_id": license_sku_id.strip(),
+                        "disabled_plan_ids": [
+                            plan_id.strip()
+                            for plan_id in disabled_plan_ids
+                        ],
+                    },
+                ],
+                "remove_licenses": [],
+            },
+        )
 
 
 class EnableUserAction(

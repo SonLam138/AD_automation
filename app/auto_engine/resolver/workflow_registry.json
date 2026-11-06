@@ -1,6 +1,51 @@
 [
   {
     "match": {
+      "request_type": "employee_onboarding",
+      "contexts": [
+        "newbie"
+      ]
+    },
+    "workflow_id": "NEW_ONBOARDING",
+    "workflow_name": "New Onboarding",
+    "object_resolver": "resolve_user",
+    "metadata": {
+      "target_object_type": "USER",
+      "schedule_mode": "AT_EFFECTIVE_TIME",
+      "trigger_field": "start_date",
+      "priority": "NORMAL",
+      "allow_retry": true,
+      "max_retry": 3
+    },
+    "actions": [
+      {
+        "id": "STEP_01",
+        "action_code": "create_user",
+        "display_name": "Create New User",
+        "execution": {
+          "depends_on": [],
+          "delay_minutes": 0,
+          "retry_count": 3,
+          "continue_on_error": false
+        }
+      },
+      {
+        "id": "STEP_MAILBOX",
+        "action_code": "onprem_create_mailbox",
+        "display_name": "Create On-Prem Mailbox",
+        "execution": {
+          "depends_on": [
+            "STEP_01"
+          ],
+          "delay_minutes": 0,
+          "retry_count": 0,
+          "continue_on_error": false
+        }
+      }
+    ]
+  },
+  {
+    "match": {
       "request_type": "employee_offboarding",
       "contexts": [
         "RESIGNED"
@@ -70,6 +115,78 @@
           "delay_minutes": 2,
           "retry_count": 3,
           "continue_on_error": false
+        }
+      }
+    ]
+  },
+  {
+    "match": {
+      "request_type": "employee_offboarding",
+      "contexts": [
+        "RA_SOAT"
+      ]
+    },
+    "workflow_id": "OFFBOARDING_RA_SOAT",
+    "workflow_name": "Employee Offboarding - RA_SOAT",
+    "object_resolver": "resolve_user",
+    "metadata": {
+      "target_object_type": "USER",
+      "schedule_mode": "AT_EFFECTIVE_TIME",
+      "trigger_field": "start_date",
+      "priority": "NORMAL",
+      "allow_retry": true,
+      "max_retry": 3
+    },
+    "actions": [
+      {
+        "id": "STEP_01",
+        "action_code": "disable_user",
+        "display_name": "Disable User",
+        "execution": {
+          "depends_on": [],
+          "delay_minutes": 0,
+          "retry_count": 3,
+          "continue_on_error": false
+        }
+      },
+      {
+        "id": "STEP_02",
+        "action_code": "remove_all_groups",
+        "display_name": "Remove user from all Groups",
+        "execution": {
+          "depends_on": [
+            "STEP_01"
+          ],
+          "delay_minutes": 3,
+          "retry_count": 3,
+          "continue_on_error": true
+        }
+      },
+      {
+        "id": "STEP_03",
+        "action_code": "move_user_to_ou",
+        "display_name": "Move To Nghi che do OU",
+        "execution": {
+          "depends_on": [
+            "STEP_01"
+          ],
+          "delay_minutes": 3,
+          "retry_count": 3,
+          "continue_on_error": false
+        }
+      },
+      {
+        "id": "STEP_04",
+        "action_code": "add_group_by_dn",
+        "display_name": "Add group retricted access",
+        "execution": {
+          "target_group": "CN=nghi_che_do,OU=Group,DC=automate,DC=com,DC=vn",
+          "depends_on": [
+            "STEP_03"
+          ],
+          "delay_minutes": 3,
+          "retry_count": 3,
+          "continue_on_error": true
         }
       }
     ]

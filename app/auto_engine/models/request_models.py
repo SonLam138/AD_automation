@@ -28,12 +28,11 @@ class RequestSource(BaseModel):
 class RequestContext(str, Enum):
     RESIGNED = "RESIGNED"
     LONG_LEAVE = "LONG_LEAVE"
-    TEMP_ACCESS_COMPUTER = (
-    "TEMP_ACCESS_COMPUTER"
-    )
-    TEMP_ACCESS_USER = (
-    "TEMP_ACCESS_USER"
-    )
+    NEWBIE = "newbie"
+    NEWBIE_365 = "newbie_365"
+    TEMP_ACCESS_COMPUTER = "TEMP_ACCESS_COMPUTER"
+    TEMP_ACCESS_USER = "TEMP_ACCESS_USER"
+    RA_SOAT = "RA_SOAT"
 
     
 
