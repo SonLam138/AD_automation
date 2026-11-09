@@ -1,8 +1,15 @@
+import { useEffect, useState } from "react";
 import {
     Outlet,
     useNavigate,
-    useLocation
+    useLocation,
+    Navigate,
 } from "react-router-dom";
+import {
+    clearAuthSession,
+    getAccessTokenExpiry,
+    getAccessTokenState,
+} from "../components/authSession";
 
 import "./PortalLayout.css";
 
@@ -10,6 +17,76 @@ export default function PortalLayout() {
 
     const navigate = useNavigate();
     const location = useLocation();
+    const [sessionValid, setSessionValid] = useState(
+        () => getAccessTokenState() === "valid"
+    );
+
+    useEffect(() => {
+        let expiryTimer;
+
+        const checkSession = () => {
+            const tokenState = getAccessTokenState();
+            if (tokenState !== "valid") {
+                clearAuthSession();
+                setSessionValid(false);
+                return;
+            }
+
+            setSessionValid(true);
+
+            const expiry = getAccessTokenExpiry();
+            if (expiry !== null) {
+                expiryTimer = window.setTimeout(
+                    checkSession,
+                    Math.max(0, expiry - Date.now())
+                );
+            }
+        };
+
+        const handleInvalidSession = () => {
+            clearAuthSession();
+            setSessionValid(false);
+            navigate("/login", {
+                replace: true,
+                state: { sessionExpired: true },
+            });
+        };
+
+        const handleStorageChange = (event) => {
+            if (event.key === "access_token") {
+                checkSession();
+            }
+        };
+
+        checkSession();
+        window.addEventListener(
+            "auth:session-invalid",
+            handleInvalidSession
+        );
+        window.addEventListener("storage", handleStorageChange);
+        window.addEventListener("focus", checkSession);
+        document.addEventListener(
+            "visibilitychange",
+            checkSession
+        );
+
+        return () => {
+            window.clearTimeout(expiryTimer);
+            window.removeEventListener(
+                "auth:session-invalid",
+                handleInvalidSession
+            );
+            window.removeEventListener(
+                "storage",
+                handleStorageChange
+            );
+            window.removeEventListener("focus", checkSession);
+            document.removeEventListener(
+                "visibilitychange",
+                checkSession
+            );
+        };
+    }, [navigate]);
 
     const menuItems = [
 
@@ -42,16 +119,20 @@ export default function PortalLayout() {
 
     const handleLogout = () => {
 
-        localStorage.removeItem(
-            "access_token"
-        );
-
-        localStorage.removeItem(
-            "landing_page"
-        );
+        clearAuthSession();
 
         navigate("/login");
     };
+
+    if (!sessionValid) {
+        return (
+            <Navigate
+                to="/login"
+                replace
+                state={{ sessionExpired: true }}
+            />
+        );
+    }
 
     return (
 

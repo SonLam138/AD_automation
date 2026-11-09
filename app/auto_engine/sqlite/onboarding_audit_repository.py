@@ -8,6 +8,12 @@ from app.auto_engine.sqlite.db import SessionLocal, engine
 from app.auto_engine.sqlite.onboarding_audit_record import (
     OnboardingAuditRecord,
 )
+from app.auto_engine.sqlite.mail_request_audit_record import (
+    HRRequestAuditRecord,
+)
+from app.auto_engine.sqlite.mail_request_audit_repository import (
+    HRRequestAuditRepository,
+)
 
 
 class OnboardingAuditRepository:
@@ -143,6 +149,33 @@ class OnboardingAuditRepository:
                 )
             ).scalar_one_or_none()
 
+    def get_plan_responses_by_source_request_ids(
+        self,
+        source_request_ids: list[str],
+    ) -> list[tuple[str, int | None, str | None]]:
+        self.ensure_schema()
+        request_ids = list(dict.fromkeys(source_request_ids))
+        responses = []
+
+        for offset in range(0, len(request_ids), 500):
+            batch = request_ids[offset:offset + 500]
+            with SessionLocal() as session:
+                rows = session.execute(
+                    select(
+                        OnboardingAuditRecord.source_request_id,
+                        OnboardingAuditRecord.response_status,
+                        OnboardingAuditRecord.response_json,
+                    ).where(
+                        OnboardingAuditRecord.source_request_id.in_(batch)
+                    )
+                ).all()
+                responses.extend(rows)
+
+        return [
+            (source_request_id, response_status, response_json)
+            for source_request_id, response_status, response_json in responses
+        ]
+
     def complete(
         self,
         audit_id: int,
@@ -176,6 +209,20 @@ class OnboardingAuditRepository:
                 if status == "SCHEDULED"
                 else updated_at
             )
+            if status == "SCHEDULED":
+                HRRequestAuditRecord.__table__.create(
+                    bind=engine,
+                    checkfirst=True,
+                )
+                HRRequestAuditRepository.record_plan_acceptance(
+                    session,
+                    source_request_id=record.source_request_id,
+                    employee_id=record.employee_id,
+                    request_type="EMPLOYEE_ONBOARDING",
+                    response=response,
+                    response_status=response_status,
+                    created_at=record.started_at,
+                )
             session.commit()
 
     def record_step(

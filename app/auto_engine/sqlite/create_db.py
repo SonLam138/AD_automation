@@ -19,6 +19,9 @@ from app.auto_engine.sqlite.onboarding_audit_record import (
 from app.auto_engine.sqlite.onboarding_audit_repository import (
     OnboardingAuditRepository,
 )
+from app.auto_engine.sqlite.offboarding_audit_repository import (
+    OffboardingAuditRepository,
+)
 
 from app.auto_engine.sqlite.access_snapshot import AccessSnapshot
 from app.mail_dashboard.record import MailDashboardRecord
@@ -26,6 +29,7 @@ from app.mail_dashboard.record import MailDashboardRecord
 def create_database():
 
     OnboardingAuditRepository().ensure_schema()
+    OffboardingAuditRepository().ensure_schema()
     Base.metadata.create_all(engine)
 
     print(

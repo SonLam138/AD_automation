@@ -1,5 +1,6 @@
 import json
 import traceback
+from datetime import datetime
 from typing import Any, Dict
 
 from app.auto_engine.actions.ad_actions import (
@@ -10,6 +11,10 @@ from app.auto_engine.managers.job_manager import (
 )
 from app.auto_engine.models.job import (
     Job,
+    JobStatus,
+)
+from app.auto_engine.sqlite.offboarding_audit_repository import (
+    OffboardingAuditRepository,
 )
 
 
@@ -25,6 +30,9 @@ class Worker:
 
         self.action_registry = (
             action_registry
+        )
+        self.offboarding_audit_repository = (
+            OffboardingAuditRepository()
         )
 
     def update(
@@ -109,6 +117,13 @@ class Worker:
                     job=job,
                     error=error_message,
                 )
+                self._record_offboarding_step(
+                    job=job,
+                    success=False,
+                    details={
+                        "error": error_message,
+                    },
+                )
 
                 print(
                     "[Worker] Job failed: "
@@ -128,6 +143,13 @@ class Worker:
                 job=job,
                 message=result_message,
             )
+            self._record_offboarding_step(
+                job=job,
+                success=True,
+                details={
+                    "result": result,
+                },
+            )
 
             print(
                 "[Worker] Job completed: "
@@ -137,10 +159,20 @@ class Worker:
         except Exception as ex:
 
             try:
-                self.job_manager.mark_failed(
-                    job=job,
-                    error=str(ex),
-                )
+                if job.status == JobStatus.RUNNING:
+                    self.job_manager.mark_failed(
+                        job=job,
+                        error=str(ex),
+                    )
+
+                if job.status == JobStatus.FAILED:
+                    self._record_offboarding_step(
+                        job=job,
+                        success=False,
+                        details={
+                            "error": job.error_message or str(ex),
+                        },
+                    )
 
             except Exception:
                 print(
@@ -158,6 +190,47 @@ class Worker:
             )
 
             traceback.print_exc()
+
+    def _record_offboarding_step(
+        self,
+        job: Job,
+        success: bool,
+        details: dict,
+    ) -> None:
+        if not job.workflow_id.startswith("OFFBOARDING_"):
+            return
+
+        source_request_id = job.business_data.get(
+            "source_request_id"
+        )
+        if not source_request_id:
+            raise RuntimeError(
+                "Offboarding job is missing source_request_id: "
+                f"request_id={job.request_id}, action_id={job.action_id}"
+            )
+
+        audit_record = (
+            self.offboarding_audit_repository
+            .get_by_source_request_id(
+                str(source_request_id)
+            )
+        )
+        if audit_record is None:
+            raise RuntimeError(
+                "Offboarding audit record was not found for "
+                f"source_request_id={source_request_id}"
+            )
+
+        started_at = job.started_at or job.created_at
+        completed_at = job.completed_at or datetime.utcnow()
+        self.offboarding_audit_repository.record_step(
+            audit_id=audit_record.id,
+            step_name=job.action_code,
+            success=success,
+            started_at=started_at,
+            completed_at=completed_at,
+            details=details,
+        )
 
     @staticmethod
     def _is_success(

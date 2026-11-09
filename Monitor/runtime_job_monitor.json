@@ -1,22 +1,37 @@
 {
-    "total_jobs_created": 248,
-    "failed_jobs_count": 15,
+    "total_jobs_created": 254,
+    "failed_jobs_count": 16,
     "last_executed_job": {
-        "job_id": "REQ_01102026_B2C1:STEP_03",
-        "action_code": "move_user_to_ou",
-        "display_name": "Move To Disabled OU",
-        "object_name": "AD Automation 9",
+        "job_id": "REQ_07112026_250D:STEP_MAILBOX",
+        "action_code": "onprem_create_mailbox",
+        "display_name": "Create On-Prem Mailbox",
+        "object_name": "Unknown",
         "target": null,
-        "execute_at": "2026-10-01T19:32:00",
-        "status": "FAILED",
-        "error_message": "Dependency job thất bại: STEP_02",
-        "failure_reason": "DEPENDENCY_FAILED",
+        "execute_at": "2026-11-07T16:43:07.819518",
+        "status": "COMPLETED",
+        "error_message": null,
+        "failure_reason": null,
         "retry_count": 0,
-        "max_retry": 3,
+        "max_retry": 0,
         "next_execute_at": null,
-        "timestamp": "2026-11-02T07:51:31.744432"
+        "timestamp": "2026-11-07T09:43:55.838583"
     },
     "recent_failed_jobs": [
+        {
+            "job_id": "REQ_07112026_E55C:STEP_MAILBOX",
+            "action_code": "onprem_create_mailbox",
+            "display_name": "Create On-Prem Mailbox",
+            "object_name": "Unknown",
+            "target": null,
+            "execute_at": "2026-11-07T15:27:07.359510",
+            "status": "FAILED",
+            "error_message": "Load balancing failed to find a valid mailbox database.",
+            "failure_reason": "ACTION_FAILED",
+            "retry_count": 0,
+            "max_retry": 0,
+            "next_execute_at": null,
+            "timestamp": "2026-11-07T08:28:14.421159"
+        },
         {
             "job_id": "REQ_01102026_B2C1:STEP_03",
             "action_code": "move_user_to_ou",
@@ -74,20 +89,6 @@
             "max_retry": 3,
             "next_execute_at": null,
             "timestamp": "2026-10-02T03:17:29.854332"
-        },
-        {
-            "job_id": "REQ_21092026_D6F8:STEP_MAILBOX",
-            "action_code": "onprem_disable_mailbox",
-            "display_name": "Disable On-Prem Mailbox",
-            "object_name": "AD Automation 2",
-            "target": null,
-            "execute_at": "2026-09-23T08:54:20.620457",
-            "status": "FAILED",
-            "error_message": "The operation couldn't be performed because object 'ad.auto2' couldn't be found on 'DC-01.automate.com.vn'.",
-            "retry_count": 3,
-            "max_retry": 3,
-            "next_execute_at": null,
-            "timestamp": "2026-09-23T01:55:16.612389"
         }
     ],
     "queued_jobs": [

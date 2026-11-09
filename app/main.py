@@ -18,6 +18,12 @@ from app.api.mail_dashboard_controller import (
 from app.mail_dashboard.repository import (
     MailDashboardRepository,
 )
+from app.auto_engine.sqlite.offboarding_audit_repository import (
+    OffboardingAuditRepository,
+)
+from app.auto_engine.sqlite.mail_request_audit_repository import (
+    HRRequestAuditRepository,
+)
 
 @asynccontextmanager
 async def lifespan(
@@ -25,6 +31,8 @@ async def lifespan(
 ):
 
     MailDashboardRepository().ensure_schema()
+    OffboardingAuditRepository().ensure_schema()
+    HRRequestAuditRepository().ensure_schema()
     workflow_runtime.start_workflow_engine()
 
     try:

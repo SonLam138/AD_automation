@@ -9,6 +9,7 @@ from sqlalchemy import (
 from sqlalchemy.orm import (
     Mapped,
     mapped_column,
+    synonym,
 )
 
 from app.auto_engine.sqlite.base import (
@@ -16,20 +17,30 @@ from app.auto_engine.sqlite.base import (
 )
 
 
-class MailRequestAuditRecord(
+class HRRequestAuditRecord(
     Base
 ):
 
     __tablename__ = (
-        "mail_request_audits"
+        "HR_request_audits"
     )
 
-    request_id: Mapped[str] = (
+    source_request_id: Mapped[str] = (
         mapped_column(
             String,
             primary_key=True,
         )
     )
+
+    plan_request_id: Mapped[str] = (
+        mapped_column(
+            String,
+            nullable=False,
+            unique=True,
+        )
+    )
+
+    request_id: Mapped[str] = synonym("plan_request_id")
 
     workflow_id: Mapped[str] = (
         mapped_column(
@@ -47,10 +58,10 @@ class MailRequestAuditRecord(
         )
     )
 
-    reason: Mapped[str] = (
+    reason: Mapped[str | None] = (
         mapped_column(
             String,
-            nullable=False,
+            nullable=True,
             index=True,
         )
     )
@@ -63,10 +74,10 @@ class MailRequestAuditRecord(
         )
     )
 
-    email: Mapped[str] = (
+    email: Mapped[str | None] = (
         mapped_column(
             String,
-            nullable=False,
+            nullable=True,
             index=True,
         )
     )
@@ -105,8 +116,10 @@ class MailRequestAuditRecord(
     created_at: Mapped[datetime] = (
         mapped_column(
             DateTime,
-            default=datetime.now,
             nullable=False,
             index=True,
         )
     )
+
+
+MailRequestAuditRecord = HRRequestAuditRecord

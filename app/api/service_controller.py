@@ -233,6 +233,10 @@ def service_employee_offboarding(
             source_request
         )
 
+    except HTTPException:
+
+        raise
+
     except ValueError as ex:
 
         raise HTTPException(
@@ -614,6 +618,10 @@ def integration_employee_offboarding(
         return create_offboarding_plan(
             source_request
         )
+
+    except HTTPException:
+
+        raise
 
     except ValueError as ex:
 

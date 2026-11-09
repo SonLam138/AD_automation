@@ -251,6 +251,9 @@ class EmployeeOffboardingApiAdapter(
             EmployeeOffboardingData(
                 employee_id=source_data["employee_id"],
                 email=source_data["email"],
+                source_request_id=source_data.get(
+                    "source_request_id"
+                ),
                 start_date=normalize_start_date(source_data),
                 is_emergency=bool(
                     source_data.get(

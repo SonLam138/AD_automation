@@ -33,3 +33,13 @@ class MailRequestReport:
     onboarding_scheduled: int = 0
 
     onboarding_details: list = None
+
+    offboarding_total: int = 0
+
+    offboarding_success: int = 0
+
+    offboarding_failed: int = 0
+
+    offboarding_scheduled: int = 0
+
+    offboarding_details: list = None

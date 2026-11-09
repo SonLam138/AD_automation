@@ -30,6 +30,8 @@ class EmployeeOffboardingData(BaseModel):
 
     reason: str
 
+    source_request_id: str | None = None
+
     #effective_time: datetime | None = None
 
     start_date: datetime | None = None
@@ -73,3 +75,5 @@ class EmployeeOffboardingApiRequest(
     source_type: str | None = None
 
     source_reference: str | None = None
+
+    source_request_id: str | None = None

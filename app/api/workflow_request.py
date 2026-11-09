@@ -2,6 +2,8 @@
 
 import os
 import tempfile
+import json
+import uuid
 
 from fastapi import (
     APIRouter,
@@ -22,7 +24,6 @@ from app.adapters.ldap_container import (
 )
 from app.search_tools.ou_search import search_ou
 from app.search_tools.group_search import search_group
-import json
 from pathlib import Path
 
 from app.auto_engine.services.review_session_container import (
@@ -85,6 +86,9 @@ from app.auto_engine.resolver.custom_workflow_validation_service import (
 from app.auto_engine.sqlite.sql_execution_plan_repository import (SqlExecutionPlanRepository,)
 from app.auto_engine.sqlite.mail_request_audit_repository import MailRequestAuditRepository
 from app.auto_engine.sqlite.mail_request_audit_record import MailRequestAuditRecord
+from app.auto_engine.sqlite.offboarding_audit_repository import (
+    OffboardingAuditRepository,
+)
 from app.auto_engine.sqlite.access_snapshot_repository import AccessSnapshotRepository
 from app.auto_engine.services.access_snapshot_service import AccessSnapshotService
 router = APIRouter(
@@ -103,6 +107,9 @@ employee_offboarding_api_adapter = (
 )
 mail_request_audit_repository = (
     MailRequestAuditRepository()
+)
+offboarding_audit_repository = (
+    OffboardingAuditRepository()
 )
 
 wf_with_newvalue_adapter = (TargetObjectWithNewValueAdapter())
@@ -126,126 +133,177 @@ workflow_plan_engine = WorkflowPlanEngine(
     plan_repository=SqlExecutionPlanRepository()
 )
 
+
+def _save_mail_offboarding_audit(
+    source_request: EmployeeOffboardingApiRequest,
+    response: dict,
+) -> None:
+    if str(source_request.source_type or "").lower() != "email":
+        return
+
+    request_id = response.get("request_id")
+    workflow_id = response.get("workflow_id")
+    if not request_id or not workflow_id:
+        raise RuntimeError(
+            "Offboarding response is missing request_id or workflow_id"
+        )
+
+    if mail_request_audit_repository.get_by_request_id(request_id):
+        return
+
+    mail_request_audit_repository.save(
+        MailRequestAuditRecord(
+            request_id=request_id,
+            workflow_id=workflow_id,
+            request_type="EMPLOYEE_OFFBOARDING",
+            reason=source_request.reason,
+            employee_id=source_request.employee_id,
+            email=str(source_request.email),
+            source_reference=source_request.source_reference,
+            sender=source_request.sender,
+            subject=source_request.subject,
+            is_emergency=source_request.is_emergency,
+            created_at=datetime.now(),
+        )
+    )
+
+
 def create_offboarding_plan(
     source_request:
         EmployeeOffboardingApiRequest
 ):
+    source_data = source_request.model_dump(
+        mode="python"
+    )
+    source_request_id = (
+        source_data.get("source_request_id")
+        or source_data.get("source_reference")
+        or f"OFFBOARDING-{uuid.uuid4()}"
+    )
+    source_request.source_request_id = str(
+        source_request_id
+    )
+    source_data["source_request_id"] = (
+        source_request.source_request_id
+    )
 
-    #
-    # Generate Plan
-    #
-    plan = (
-        workflow_runtime.run_plan_engine(
-            adapter=(
-                employee_offboarding_api_adapter
-            ),
+    parsed_request = employee_offboarding_api_adapter.parse(
+        source_data
+    )
+    business_data = parsed_request.business_data
+    requested_account = business_data[
+        "target_object"
+    ]["sam_account_name"]
+    record, claimed = offboarding_audit_repository.claim(
+        source_request_id=source_request.source_request_id,
+        employee_id=source_request.employee_id.strip(),
+        requested_account=requested_account.strip(),
+    )
 
-            source_data=(
-                source_request.model_dump()
-            ),
+    if not claimed:
+        same_employee = (
+            record.employee_id.strip()
+            == source_request.employee_id.strip()
         )
-    )
-
-    #
-    # Build Snapshot
-    #
-    request = (
-        employee_offboarding_api_adapter.parse(
-            source_request.model_dump()
+        same_account = (
+            record.requested_account.strip().casefold()
+            == requested_account.strip().casefold()
         )
-    )
+        if not same_employee or not same_account:
+            raise HTTPException(
+                status_code=409,
+                detail={
+                    "code": "idempotency_key_payload_mismatch",
+                    "message": (
+                        "source_request_id is already associated "
+                        "with a different employee or account"
+                    ),
+                },
+            )
 
-    request.request_id = (
-        plan.request_id
-    )
+        if record.status == "IN_PROGRESS":
+            raise HTTPException(
+                status_code=409,
+                detail={
+                    "code": "request_in_progress",
+                    "message": (
+                        "This offboarding request is already being processed"
+                    ),
+                },
+            )
 
-    #
-    # Save Snapshot
-    #
-    access_snapshot_service.save_snapshot(
-        request
-    )
+        if record.response_json is None or record.response_status is None:
+            raise HTTPException(
+                status_code=409,
+                detail={
+                    "code": "request_result_unavailable",
+                    "message": (
+                        "This request has an audit record but no stored "
+                        "response; reconcile it before retrying"
+                    ),
+                },
+            )
 
-
-    #
-    # Audit riêng cho Mail Platform
-    #
-    source_type = str(
-        getattr(
+        cached_response = json.loads(record.response_json)
+        if record.response_status >= 400:
+            raise HTTPException(
+                status_code=record.response_status,
+                detail=cached_response.get(
+                    "detail",
+                    cached_response,
+                ),
+            )
+        _save_mail_offboarding_audit(
             source_request,
-            "source_type",
-            ""
+            cached_response,
         )
-    ).lower()
+        return cached_response
 
-    print(
-        f"SOURCE TYPE = {source_type}"
-    )
+    try:
+        plan = workflow_runtime.run_plan_engine(
+            adapter=employee_offboarding_api_adapter,
+            source_data=source_data,
+        )
+    except ValueError as ex:
+        offboarding_audit_repository.complete(
+            audit_id=record.id,
+            status="FAILED",
+            response={"detail": str(ex)},
+            response_status=400,
+            actual_account=requested_account,
+        )
+        raise
+    except Exception as ex:
+        offboarding_audit_repository.complete(
+            audit_id=record.id,
+            status="FAILED",
+            response={"detail": str(ex)},
+            response_status=500,
+            actual_account=requested_account,
+        )
+        raise
 
-    if source_type == "email":
-
-        print("=" * 80)
-        print("MAIL AUDIT START")
-        print("=" * 80)
-
-        mail_request_audit_repository.save(
-
-                MailRequestAuditRecord(
-
-                    request_id=
-                        plan.request_id,
-
-                    workflow_id=
-                        plan.workflow_id,
-
-                    request_type=
-                        "EMPLOYEE_OFFBOARDING",
-
-                    reason=
-                        source_request.reason,
-
-                    employee_id=
-                        source_request.employee_id,
-
-                    email=
-                        source_request.email,
-
-                    source_reference=
-                        source_request.source_reference,
-
-                    sender=
-                        source_request.sender,
-
-                    subject=
-                        source_request.subject,
-
-                    is_emergency=
-                        source_request.is_emergency,
-
-                    created_at=
-                        datetime.now()
-                )
-            )
-
-
-        print(
-                "MAIL REQUEST AUDIT SAVED: "
-                f"{plan.request_id}"
-            )
-
-    return {
-
+    result = {
         "success": True,
-
-        "request_id":
-            plan.request_id,
-
-        "workflow_id":
-            plan.workflow_id,
-
-        "execute_at":
-            plan.execute_at,
+        "request_id": plan.request_id,
+        "workflow_id": plan.workflow_id,
+        "execute_at": plan.execute_at,
     }
+    offboarding_audit_repository.complete(
+        audit_id=record.id,
+        status="SCHEDULED",
+        response=result,
+        response_status=200,
+        actual_account=requested_account,
+    )
+    parsed_request.request_id = plan.request_id
+    access_snapshot_service.save_snapshot(parsed_request)
+
+    _save_mail_offboarding_audit(
+        source_request,
+        result,
+    )
+    return result
 
 
 @router.post(
@@ -261,6 +319,10 @@ def employee_offboarding(
         return create_offboarding_plan(
             source_request
         )
+
+    except HTTPException:
+
+        raise
 
     except ValueError as ex:
 
@@ -692,18 +754,19 @@ def confirm_offboarding(
         )
     )
 
-    for candidate in session[
-        "request_candidates"
-    ]:
-
-        workflow_runtime.run_plan_engine(
-
-            adapter=
-                employee_offboarding_api_adapter,
-
-            source_data=
-                candidate
+    for candidate_index, candidate in enumerate(
+        session["request_candidates"]
+    ):
+        source_data = dict(candidate)
+        source_data["source_type"] = "EXCEL"
+        source_data["source_request_id"] = (
+            f"OFFBOARDING-EXCEL-{request.session_id}-"
+            f"{candidate_index}"
         )
+        source_request = EmployeeOffboardingApiRequest.model_validate(
+            source_data
+        )
+        create_offboarding_plan(source_request)
 
     session["status"] = (
         "CONFIRMED"

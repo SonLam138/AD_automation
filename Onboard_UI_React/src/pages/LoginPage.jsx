@@ -1,9 +1,10 @@
 import { useState } from "react";
 import axiosClient from "../api/axiosClient";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import "./LoginPage.css";
 function LoginPage() {
     const navigate = useNavigate();
+    const location = useLocation();
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     // const [loginSuccess, setLoginSuccess]
@@ -100,6 +101,12 @@ function LoginPage() {
                             Đăng nhập thất bại
                         </div>
 
+                    )}
+
+                    {location.state?.sessionExpired && (
+                        <div className="login-error" role="alert">
+                            Phiên đăng nhập đã hết hạn hoặc không còn hợp lệ. Vui lòng đăng nhập lại.
+                        </div>
                     )}
 
                     <button type="submit">

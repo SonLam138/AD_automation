@@ -10,7 +10,10 @@ from app.auto_engine.sqlite.mail_request_audit_repository import (
     MailRequestAuditRepository,
 )
 from app.auto_engine.sqlite.onboarding_audit_repository import (
-OnboardingAuditRepository,
+    OnboardingAuditRepository,
+)
+from app.auto_engine.sqlite.offboarding_audit_repository import (
+    OffboardingAuditRepository,
 )
 
 class MailRequestReportService:
@@ -24,6 +27,9 @@ class MailRequestReportService:
         )
         self.onboarding_repository = (
             OnboardingAuditRepository()
+        )
+        self.offboarding_repository = (
+            OffboardingAuditRepository()
         )
 
     WORKFLOW_DISPLAY_NAMES = {
@@ -58,6 +64,14 @@ class MailRequestReportService:
                 workflow_id,
                 workflow_id,
             )
+        )
+
+    def get_plan_scheduled_source_request_ids(
+        self,
+        source_request_ids: list[str],
+    ) -> list[str]:
+        return self.repository.get_scheduled_source_request_ids(
+            source_request_ids
         )
 
     def generate(
@@ -110,6 +124,22 @@ class MailRequestReportService:
                 start_date,
                 end_date,
             )
+        )
+
+        offboarding_total = (
+            self.offboarding_repository
+            .count_between(start_date, end_date)
+        )
+        offboarding_status_counts = {
+            item["status"]: item["total"]
+            for item in self.offboarding_repository.group_by_status(
+                start_date,
+                end_date,
+            )
+        }
+        offboarding_details = (
+            self.offboarding_repository
+            .get_between(start_date, end_date)
         )
 
         return (
@@ -168,6 +198,30 @@ class MailRequestReportService:
 
                 onboarding_details=
                     onboarding_details,
+
+                offboarding_total=
+                    offboarding_total,
+
+                offboarding_success=
+                    offboarding_status_counts.get(
+                        "SUCCESS",
+                        0,
+                    ),
+
+                offboarding_failed=
+                    offboarding_status_counts.get(
+                        "FAILED",
+                        0,
+                    ),
+
+                offboarding_scheduled=
+                    offboarding_status_counts.get(
+                        "SCHEDULED",
+                        0,
+                    ),
+
+                offboarding_details=
+                    offboarding_details,
             )
         )
 
@@ -202,7 +256,7 @@ class MailRequestReportService:
         lines.append("")
 
         lines.append(
-            f"Tổng số yêu cầu tiếp nhận: "
+            f"Số request Onboarding/Offboarding đã được AD lên plan: "
             f"{report.total_requests}"
         )
 
@@ -283,6 +337,26 @@ class MailRequestReportService:
             f"{report.onboarding_scheduled}"
         )
 
+        lines.append(
+            "Thông tin chi tiết được đính kèm theo email."
+        )
+
+        lines.append("")
+        lines.append("Thông tin Offboarding")
+        lines.append("-" * 60)
+        lines.append(
+            "Tổng số yêu cầu offboarding: "
+            f"{report.offboarding_total}"
+        )
+        lines.append(
+            f"SUCCESS: {report.offboarding_success}"
+        )
+        lines.append(
+            f"FAILED: {report.offboarding_failed}"
+        )
+        lines.append(
+            f"SCHEDULED: {report.offboarding_scheduled}"
+        )
         lines.append(
             "Thông tin chi tiết được đính kèm theo email."
         )
@@ -422,6 +496,66 @@ class MailRequestReportService:
                         outcome.get(
                             "completed_at"
                         ),
+                    ]
+                )
+
+        return output.getvalue()
+
+    def export_offboarding_csv_content(
+        self,
+        report: MailRequestReport,
+    ) -> str:
+        output = io.StringIO()
+        writer = csv.writer(output)
+        writer.writerow(
+            [
+                "source_request_id",
+                "employee_id",
+                "requested_account",
+                "actual_account",
+                "status",
+                "step_name",
+                "step_success",
+                "duration_ms",
+                "step_started_at",
+                "step_completed_at",
+            ]
+        )
+
+        for record in report.offboarding_details or []:
+            outcomes = json.loads(
+                record.step_outcomes_json or "[]"
+            )
+            if not outcomes:
+                writer.writerow(
+                    [
+                        record.source_request_id,
+                        record.employee_id,
+                        record.requested_account,
+                        record.actual_account,
+                        record.status,
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                    ]
+                )
+                continue
+
+            for outcome in outcomes:
+                writer.writerow(
+                    [
+                        record.source_request_id,
+                        record.employee_id,
+                        record.requested_account,
+                        record.actual_account,
+                        record.status,
+                        outcome.get("step"),
+                        outcome.get("success"),
+                        outcome.get("duration_ms"),
+                        outcome.get("started_at"),
+                        outcome.get("completed_at"),
                     ]
                 )
 
