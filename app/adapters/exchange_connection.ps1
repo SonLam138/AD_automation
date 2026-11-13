@@ -9,7 +9,7 @@ param(
 $username = "AUTOMATE\administrator"
 
 $password = ConvertTo-SecureString `
-    "C0anhtien@123" `
+    "" `
     -AsPlainText `
     -Force
 
